@@ -16,18 +16,11 @@ being written to a file.
 | Chapter | Class | Notebook |
 |---|---|---|
 | [Multi-period production and inventory](production.md) | LP / convex QP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb) |
-| [Supply chain with congestion and sustainability](supplychain.md) | LP / convex NLP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_supplychain.ipynb) |
-| [The Markowitz portfolio](markowitz.md) | convex QP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_markowitz.ipynb) |
-| [Pricing and revenue management](pricing.md) | concave / non-convex NLP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_pricing.ipynb) |
-| [Advertising budget allocation](budget.md) | convex NLP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_budget.ipynb) |
-| [Continuous location of a service](location.md) | convex NLP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_location.ipynb) |
 | [Smart charging of electric vehicles](ev-charging.md) | LP / convex QP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb) |
-| [Service capacity and waiting times](queues.md) | convex NLP (M/M/1 queue) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab11_queues.ipynb) |
 | [Data Envelopment Analysis](dea.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb) |
 | [The Newsvendor and its variants](newsvendor.md) | 1D convex / scenario-based stochastic LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_newsvendor.ipynb) |
 | [VaR and CVaR: measuring and optimizing risk](var-cvar.md) | scenario-based LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_var_cvar.ipynb) |
 | [Arbitrage and arbitrage-free pricing](arbitrage.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_arbitrage.ipynb) |
-| [Support Vector Machine: optimization for machine learning](svm.md) | convex QP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab16_svm.ipynb) |
 | [Robust and quantile regression](regression.md) | LP (compared with a QP) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb) |
 
 ## How they are made

@@ -2,9 +2,11 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-02-background.pdf)
 
-The first subchapter of the background: duality, optimality conditions and
-sensitivity analysis of LPs. The nonlinear extension (convexity, QP, KKT) is in
-the [companion page](theory-nonlinear.md).
+The linear programming background used throughout the course: duality, optimality
+conditions, sensitivity analysis and the sensitivity protocol of every chapter. The
+complete theory, with proofs, is in the module *Linear Programming*:
+[“Duality theory”](https://fabiofurini.github.io/linear-programming/duality/09-duality/)
+and [“Sensitivity analysis”](https://fabiofurini.github.io/linear-programming/advanced-methods/14-sensitivity/).
 
 ## Linear programming and duality
 
@@ -274,3 +276,13 @@ Together with the solution, four numbers for each constraint and variable come f
     the coefficient would have to rise to at least 22. Counter-check with
     $c_3 = 23$: the solution changes to $(0, 5, 75)$, value 1975.
 
+## The sensitivity protocol (used in every chapter)
+
+1. **Base scenario**: solve, verify, identify the active constraints.
+2. **One-at-a-time**: vary one key parameter over a grid.
+3. **Shadow prices and reduced costs**: compare the dual with a re-optimization
+   after a perturbation; read the $\bar c_j$ of every variable at zero (its
+   profitability threshold).
+4. **Scenarios**: pessimistic, central, optimistic.
+5. **Trade-off**: trace a frontier (cost-service, risk-return…).
+6. **Stability**: data ±5% → does the recommendation hold?

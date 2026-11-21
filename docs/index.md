@@ -6,7 +6,7 @@ hide:
 
 <div class="hero" markdown>
 
-# Operations Research Lab
+# LP Modelling
 
 <!-- collana-riga -->
 <p class="collana-riga" markdown>A course of the <b>Operations Research and Mathematics</b> series · [all the courses](#the-series)</p>
@@ -15,29 +15,17 @@ hide:
 Teaching material designed and developed by **[Fabio Furini](https://fabiofurini.github.io/)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
-**Continuous optimization models** — the course lecture
+**Linear programming models** — the course lecture
 notes in online form, with Python/Gurobi code, data and reproducible case
 studies.
 
-Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) and [Convex Optimization](https://fabiofurini.github.io/convex-optimization/).
+Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 
 [Start :material-arrow-right:](tools.md){ .md-button .md-button--primary }
 [:material-clipboard-check-outline: Quiz](self-assessment.md){ .md-button }
 [:material-download: Downloads](downloads.md){ .md-button }
 
 </div>
-
-<!-- collana-app -->
-## Try it now
-
-Markowitz's efficient frontier: every point is an optimal portfolio for a level of risk. Open the notebook in Colab, change the data and solve it again with Gurobi, with nothing to install.
-
-[![](img/cap06_frontiera.png)](markowitz.md)
-
-[:simple-googlecolab: Open the notebook in Colab](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_markowitz.ipynb){ .md-button .md-button--primary }
-[:material-book-open-variant: The chapter](markowitz.md){ .md-button }
-[:material-language-python: All the notebooks](notebooks.md){ .md-button }
-<!-- /collana-app -->
 
 ## The parts of the course
 
@@ -50,16 +38,16 @@ Markowitz's efficient frontier: every point is an optimal portfolio for a level 
     How a model is built, how it is run, how to read the solution, the shadow
     prices and the reduced costs: the theory and the solver.
 
-    [:octicons-arrow-right-24: The four chapters](tools.md)
+    [:octicons-arrow-right-24: The three chapters](tools.md)
 
 -   :material-factory: **Deterministic models**
 
     ---
 
-    Production, supply chain, portfolio, pricing, budget, location, electric
-    vehicle charging, queues, branch efficiency: every datum is known.
+    Production and inventory, electric vehicle charging, branch efficiency:
+    every datum is known.
 
-    [:octicons-arrow-right-24: The nine problems](deterministic-models.md)
+    [:octicons-arrow-right-24: The three problems](deterministic-models.md)
 
 -   :material-dice-multiple: **Decisions under uncertainty**
 
@@ -74,10 +62,10 @@ Markowitz's efficient frontier: every point is an optimal portfolio for a level 
 
     ---
 
-    The SVM as a convex QP and robust regression as an LP: margin, dual, support
-    vectors and support points — without ML libraries.
+    Robust and quantile regression as an LP: absolute deviations, support
+    points from the duals and the quantile the newsvendor needs.
 
-    [:octicons-arrow-right-24: The two problems](optimization-ml.md)
+    [:octicons-arrow-right-24: The problem](optimization-ml.md)
 
 </div>
 

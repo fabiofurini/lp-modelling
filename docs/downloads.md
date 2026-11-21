@@ -1,6 +1,6 @@
 # Downloads
 
-All the material of the lab, in PDF, updated at every publication of the website.
+All the material of the course, in PDF, updated at every publication of the website.
 Text, figures and data are released under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en); the Python
 scripts under the
@@ -10,7 +10,7 @@ scripts under the
 
 <div class="grid cards" markdown>
 
--   :material-book-open-variant: **Lecture notes of the lab**
+-   :material-book-open-variant: **Lecture notes of the course**
 
     ---
 

@@ -1,4 +1,4 @@
-"""Chapter 12 — Data Envelopment Analysis (LP).
+"""Chapter 6 — Data Envelopment Analysis (LP).
 
 Case study: 12 branches of a bank (branches 1, 2, ..., 12) compared on
 2 inputs (staff in FTE, operating costs in thousands of €) and 2 outputs
@@ -332,4 +332,4 @@ ax.set_title("CCR and BCC efficiencies of the 12 branches")
 ax.legend(fontsize=8, loc="upper center", ncol=2)
 salva_figura(fig, "cap06_efficienze")
 
-print("\nDone: chapter 12.")
+print("\nDone: chapter 6.")

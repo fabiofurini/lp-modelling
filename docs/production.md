@@ -2,7 +2,7 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-production.pdf)
 
-**Class:** LP / convex QP · **Script:** `python/lab04_production.py`
+**Class:** LP · **Script:** `python/lab04_production.py`
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb)
 
@@ -112,17 +112,14 @@ to produce $1/a_3$ units of product 3 *one month later*, saving one month of
 holding. The capacity value curve is convex and decreasing; below 97%
 of the current capacity the problem becomes **infeasible**.
 
-![Effect of smoothing](img/cap04_smoothing.png)
-
-The QP variant adds to the objective $\gamma \sum_{t=2}^{m} (v_t - v_{t-1})^2$ with
-$v_t = \sum_{i=1}^{n} x_{it}$: with $\gamma = 0.5$ the production profile becomes almost
-flat (maximum monthly variation down from 81 to 1 units) at a cost of merely
-$33{,}003 - 32{,}889 = 114$ € (+0.35%).
-
 !!! tip "Managerial take-away"
     It is worth buying overtime hours in months 5–6 up to 3–3.8 €/hour below the
-    internal price; the levelled plan costs 0.35% more; below 97% of the
-    capacity full service cannot be guaranteed.
+    internal price; below 97% of the capacity full service cannot be guaranteed.
+
+A *smooth* plan, which penalizes the changes of production from one month to the
+next, requires a quadratic term in the objective and is no longer an LP: it is the
+quadratic variant of this model, in the module *NLP Modelling*, page
+[“Production and inventory: the quadratic variant”](https://fabiofurini.github.io/nlp-modelling/production-quadratic/).
 
 
 ## Code
@@ -136,7 +133,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
 ??? example "Show the full script — `lab04_production.py`"
 
     ```python
-    """Chapter 4 — Multi-period production and inventory planning (LP / convex QP).
+    """Chapter 4 — Multi-period production and inventory planning (LP).
 
     Case study: a company producing 3 components (products 1, 2, 3) over a 6-month
     horizon with one shared resource (machine hours).
@@ -144,8 +141,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
     Contents:
       1. Minimum-cost LP with mandatory service
       2. Shadow prices of capacity and analysis of the duals
-      3. QP variant with a smooth production plan (smoothing)
-      4. Sensitivity: optimal cost as capacity varies
+      3. Sensitivity: optimal cost as capacity varies
     """
     import gurobipy as gp
     import numpy as np
@@ -244,25 +240,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
           f"(change {m2.ObjVal - m.ObjVal:+.3f} = shadow price {pi_star:.3f})")
 
     # ----------------------------------------------------------------------
-    # 3. QP VARIANT: smooth plan (smoothing of total production)
-    # ----------------------------------------------------------------------
-    intestazione("QP variant: smooth plan (penalty on the changes)")
-    risultati_qp = {}
-    for gamma in [0.0, 0.5, 2.0]:
-        mq, xq, sq, _ = costruisci_lp()
-        mq.update()                       # required before getObjective()
-        tot = {t: gp.quicksum(xq[i, t] for i in prodotti) for t in mesi}
-        obj = mq.getObjective()
-        mq.setObjective(obj + gamma * gp.quicksum((tot[t] - tot[t - 1]) * (tot[t] - tot[t - 1])
-                                                  for t in mesi[1:]), GRB.MINIMIZE)
-        mq.optimize()
-        profilo = [sum(xq[i, t].X for i in prodotti) for t in mesi]
-        risultati_qp[gamma] = (mq.ObjVal, profilo)
-        var_max = max(abs(profilo[k] - profilo[k - 1]) for k in range(1, len(profilo)))
-        print(f"  gamma={gamma:4.1f}: cost {mq.ObjVal:10.2f} €, max monthly change {var_max:6.1f} units")
-
-    # ----------------------------------------------------------------------
-    # 4. FIGURES (data for pgfplots + matplotlib preview)
+    # 3. FIGURES (data for pgfplots + matplotlib preview)
     # ----------------------------------------------------------------------
     salva_dat(pd.DataFrame({
         "month": mesi,
@@ -270,12 +248,6 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
         **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
         "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
     }), "cap04_piano")
-    salva_dat(pd.DataFrame({
-        "month": mesi,
-        "gzero": risultati_qp[0.0][1],
-        "gmezzo": risultati_qp[0.5][1],
-        "gdue": risultati_qp[2.0][1],
-    }), "cap04_smoothing")
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.5, 4.0))
     larg = 0.26
@@ -293,15 +265,6 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
     ax2.set_title("End-of-month inventory")
     ax2.legend(fontsize=8)
     salva_figura(fig, "cap04_piano_scorte")
-
-    fig, ax = plt.subplots()
-    for gamma, stile_linea in zip([0.0, 0.5, 2.0], ["-o", "-s", "-^"]):
-        ax.plot(mesi, risultati_qp[gamma][1], stile_linea,
-                label=f"$\\gamma$ = {gamma} (cost {risultati_qp[gamma][0]:,.0f} €)")
-    ax.set_xlabel("month"); ax.set_ylabel("total production (units)")
-    ax.set_title("Effect of quadratic smoothing on the production profile")
-    ax.legend()
-    salva_figura(fig, "cap04_smoothing")
 
     # sensitivity: optimal cost as the uniform capacity varies
     intestazione("Sensitivity: optimal cost as capacity varies")

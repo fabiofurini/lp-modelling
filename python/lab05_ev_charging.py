@@ -1,4 +1,4 @@
-"""Chapter 10 — Smart charging of electric vehicles (LP / convex QP).
+"""Chapter 5 — Smart charging of electric vehicles (LP).
 
 Case study: a company depot with 6 electric vans to be charged overnight;
 hourly energy prices; base load of the building.
@@ -6,7 +6,7 @@ hourly energy prices; base load of the building.
 Contents:
   1. Minimum-cost LP: charging chases the cheap hours
   2. Peak shaving: minimise the peak withdrawal (minimax)
-  3. Smooth profile (QP) and multi-objective cost-peak comparison
+  3. Multi-objective cost-peak comparison
   4. Shadow prices: grid capacity and energy requirement
 """
 import gurobipy as gp
@@ -83,7 +83,7 @@ for v in veicoli:
     print(f"  {v}: {v_ene[v].Pi:.4f} €/kWh")
 
 # ----------------------------------------------------------------------
-# 3. PEAK SHAVING (minimax) and SMOOTH PROFILE (QP)
+# 3. PEAK SHAVING (minimax) and COST-PEAK TRADE-OFF
 # ----------------------------------------------------------------------
 intestazione("Peak shaving: minimise the peak withdrawal")
 mp, xp, _, _ = costruisci()
@@ -160,4 +160,4 @@ ax.set_ylabel("charging cost (€)")
 ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")
 salva_figura(fig, "cap05_frontiera")
 
-print("\nDone: chapter 10.")
+print("\nDone: chapter 5.")

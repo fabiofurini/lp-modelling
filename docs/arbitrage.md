@@ -105,7 +105,7 @@ The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ip
 ??? example "Show the full script — `lab09_arbitrage.py`"
 
     ```python
-    """Chapter 15 — Arbitrage and arbitrage-free pricing (LP).
+    """Chapter 9 — Arbitrage and arbitrage-free pricing (LP).
 
     Case study: a one-period market with 3 states of the world, one risk-free
     security (gross return R = 1.04) and 2 risky securities.
@@ -262,7 +262,7 @@ The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ip
     ax.set_title("Outside the consistent price interval an arbitrage appears")
     salva_figura(fig, "cap09_arbitraggio_curva")
 
-    print("\nDone: chapter 15 (arbitrage).")
+    print("\nDone: chapter 9 (arbitrage).")
     ```
 
 ## Exercises

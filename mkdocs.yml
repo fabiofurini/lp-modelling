@@ -1,7 +1,7 @@
 site_name: LP Modelling · Fabio Furini
 site_url: https://fabiofurini.github.io/lp-modelling/
 site_description: >-
-  Continuous optimization models:
+  Linear programming models:
   lecture notes, Python/Gurobi code, data and case studies.
 site_author: Fabio Furini
 repo_url: https://github.com/fabiofurini/lp-modelling
@@ -74,6 +74,9 @@ extra:
     - icon: material/code-braces
       link: https://fabiofurini.github.io/algorithms/
       name: Algorithms
+    - icon: material/chart-bell-curve-cumulative
+      link: https://fabiofurini.github.io/nlp-modelling/
+      name: NLP Modelling
   alternate:
     - name: English
       link: https://fabiofurini.github.io/lp-modelling/
@@ -111,20 +114,12 @@ nav:
   - Tools:
       - tools.md
       - Theory, linear programming: theory-lp.md
-      - Theory, nonlinear optimization: theory-nonlinear.md
       - Solver, linear models: solver-lp.md
-      - Solver, nonlinear models: solver-nonlinear.md
       - Notebooks in Colab: notebooks.md
   - Deterministic models:
       - deterministic-models.md
       - Production and inventory: production.md
-      - Supply chain and CO2: supplychain.md
-      - Markowitz portfolio: markowitz.md
-      - Pricing and revenue management: pricing.md
-      - Advertising budget: budget.md
-      - Continuous location: location.md
       - Electric vehicle charging: ev-charging.md
-      - Queues and service capacity: queues.md
       - Data Envelopment Analysis: dea.md
   - Decisions under uncertainty:
       - decisions-uncertainty.md
@@ -133,7 +128,6 @@ nav:
       - Arbitrage and pricing: arbitrage.md
   - Optimization and machine learning:
       - optimization-ml.md
-      - Support Vector Machine: svm.md
       - Robust and quantile regression: regression.md
   - Quiz: self-assessment.md
   - Downloads: downloads.md

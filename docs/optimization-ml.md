@@ -2,25 +2,16 @@
 
 The bridge between the two disciplines: a learning model is, in the end, an
 optimization problem to be solved with the same solver as the rest of the course.
-A QP that classifies and an LP that estimates.
+Here an LP that estimates the parameters of the models.
 
 <div class="grid cards" markdown>
-
--   :material-robot: **Support Vector Machine**
-
-    ---
-
-    The SVM as a convex QP: maximum margin, dual formulation, support vectors and
-    kernels — with no machine learning library.
-
-    [:octicons-arrow-right-24: QP](svm.md)
 
 -   :material-chart-scatter-plot: **Robust and quantile regression**
 
     ---
 
-    Estimating the parameters with an LP: absolute instead of squared
-    deviations, support points from the duals and the quantile the newsvendor
+    Estimating the parameters with an LP: absolute deviations, robust to
+    outliers, support points from the duals and the quantile the newsvendor
     needs.
 
     [:octicons-arrow-right-24: LP](regression.md)

@@ -2,12 +2,12 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-regression.pdf)
 
-**Class: LP** (compared with a QP) · Script: `python/lab10_regression.py`
+**Class: LP** · Script: `python/lab10_regression.py`
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb)
 
-Every model in the lab starts from known parameters: the demand curve of
-[pricing](pricing.md), the costs of [production](production.md), the scenarios of
+Every model in the course starts from known parameters: the costs of
+[production](production.md), the hourly prices of [charging](ev-charging.md), the scenarios of
 the [newsvendor](newsvendor.md). Somebody has to estimate those numbers, and the
 estimation is itself an optimization problem. Minimising **absolute** rather than
 squared deviations keeps the problem an LP, the estimate is not dragged around by
@@ -43,7 +43,7 @@ is the same positive-part trick as the [scenario newsvendor](newsvendor.md).
 
 !!! example "With no features: the empirical quantile comes back"
     With $p = 0$ only the intercept is left. Seven days of sales: 88, 96, 104,
-    112, 120, 132, 148 pieces; the bakery of chapter 13 has $c_u = 9$ and
+    112, 120, 132, 148 pieces; the bakery of chapter 7 has $c_u = 9$ and
     $c_o = 4$, hence $\tau = \alpha^* = 9/13 = 0.6923$.
 
     The optimum is $\tilde b = 120$, the fifth observation in increasing order
@@ -64,22 +64,25 @@ is the same positive-part trick as the [scenario newsvendor](newsvendor.md).
 
 Sixty days of sales (demand, temperature, price, weekend) in
 `data/panetteria_storico.csv`; five of them fall during two transport strikes,
-with sales collapsing to about twenty pieces. With temperature alone:
+with sales collapsing to about twenty pieces. With temperature alone, the LP
+($\tau = 1/2$) on the 60 days and on the 55 normal days only:
 
 ```text
-LP  (median)       : demand = 209.77 - 3.63 * temperature
-QP  (least squares): demand = 202.34 - 3.61 * temperature
-Mean absolute deviation over the 55 normal days: LP 13.08 pieces, QP 14.81 pieces
-QP without the 5 strike days: demand = 213.58 - 3.72 * temperature
-Distance from the "clean" intercept 213.58: LP 3.81 pieces, QP 11.24 pieces
+LP on the 60 days             : demand = 209.77 - 3.63 * temperature
+LP without the 5 strike days  : demand = 210.49 - 3.58 * temperature
+Mean absolute deviation over the 55 normal days: 13.08 pieces
+Distance between the two intercepts: 0.72 pieces
 ```
 
-![Absolute deviations against least squares](img/cap10_regressione_robusta.png)
+![The LP line does not move](img/cap10_regressione_robusta.png)
 
-Least squares pays the deviation **squared**: one deviation of 100 weighs as much
-as ten thousand deviations of one, and five days out of sixty are enough to move
-the intercept by 11 pieces. The LP pays the deviation once and reaches on its own
-the line the QP finds only after somebody has cleaned the history by hand.
+The LP pays every deviation once, in proportion to its size: the five strike days
+move the intercept by a mere 0.72 pieces, and the model reaches on its own the line
+one would get by cleaning the history by hand.
+
+Minimising instead the sum of the *squared* deviations leads to least-squares
+regression, a quadratic model: the comparison with the LP is in the module
+*NLP Modelling*, page [“Least squares”](https://fabiofurini.github.io/nlp-modelling/least-squares/).
 
 ## The dual reading: the support points
 
@@ -104,9 +107,7 @@ Complementary slackness says where each dual sits:
 | on the estimate (interpolated) | $\tilde u_i = \tilde v_i = 0$ | $-(1-\tau) < \tilde\pi_i < \tau$ |
 
 The interpolated observations are the **support points**: there are $p + 1$ of
-them, as many as the free variables, and they alone determine the estimate. They
-are for regression what the support vectors of the [SVM](svm.md) are for
-classification.
+them, as many as the free variables, and they alone determine the estimate.
 
 ```text
 Observations above the line: 29, below: 29, interpolated: 2  <- p + 1 = 2
@@ -147,7 +148,7 @@ safety stock                        5.8 pieces
 0.6923 quantile with no features  148.0 pieces
 ```
 
-The quantile rule is still the one of chapter 13, but the number it applies to
+The quantile rule is still the one of chapter 7, but the number it applies to
 changes: the quantile over the whole history says 148 pieces, the one
 *conditional* on the conditions of the day asks for 132. Sixteen unsold pieces a
 day fewer, without touching the costs. The gap between the median estimate and
@@ -204,15 +205,15 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
 
 ??? example "Show the complete script — `lab10_regression.py`"
     ```python
-    """Chapter 17 — Robust and quantile regression (LP).
+    """Chapter 10 — Robust and quantile regression (LP).
 
-    Case study: the bakery of chapter 13. Sixty days of history (demand,
+    Case study: the bakery of chapter 7. Sixty days of history (demand,
     temperature, price, weekend) plus five transport-strike days on which demand
     collapses.
 
     Contents:
       1. With no features the model returns the empirical quantile (worked example)
-      2. Absolute deviations (LP) against least squares (QP): robustness to outliers
+      2. Absolute deviations (LP): robustness to outliers
       3. Dual reading: pi_i, complementary slackness, support points
       4. Quantile regression: the newsvendor safety stock from the data
       5. Feature selection with a budget on the coefficients
@@ -225,7 +226,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     from stile import (ARANCIO, BLU, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt,
                        salva_dat, salva_dati, salva_figura)
 
-    TAU_NV = 9 / 13                                # critical fractile of chapter 13
+    TAU_NV = 9 / 13                                # critical fractile of chapter 7
 
 
     # ----------------------------------------------------------------------
@@ -262,22 +263,6 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
         return m, coef, b.X, duals, budget_constr
 
 
-    def least_squares(X, y):
-        """min sum_i r_i^2  with  X w + b + r = y  (convex QP, same solver)."""
-        n, p = X.shape
-        m = gp.Model("least_squares")
-        m.Params.OutputFlag = 0
-        w = m.addVars(p, lb=-GRB.INFINITY, name="w")
-        b = m.addVar(lb=-GRB.INFINITY, name="b")
-        r = m.addVars(n, lb=-GRB.INFINITY, name="r")
-        m.addConstrs((gp.quicksum(X[i, j] * w[j] for j in range(p)) + b + r[i] == y[i]
-                      for i in range(n)), name="residual")
-        m.setObjective(gp.quicksum(r[i] * r[i] for i in range(n)), GRB.MINIMIZE)
-        m.optimize()
-        assert m.Status == GRB.OPTIMAL
-        return np.array([w[j].X for j in range(p)]), b.X
-
-
     def mean_deviation(X, y, coef, b):
         return float(np.abs(y - (X @ coef + b)).mean())
 
@@ -290,7 +275,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     X0 = np.zeros((len(y7), 0))
     m0, _, b0, pi0, _ = quantile_regression(X0, y7, tau=TAU_NV)
     print(f"Seven days: {y7.astype(int)}")
-    print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 13: cu=9, co=4)")
+    print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 7: cu=9, co=4)")
     print(f"Optimal intercept b = {b0:.4f}  -> the 5th ordered value, the 69.23% quantile")
     print(f"Optimal value = {m0.ObjVal:.4f} = 680/13")
     print(f"Duals pi = {np.round(pi0, 4)}  (bounds: -(1-tau) = {-(1 - TAU_NV):.4f}, "
@@ -342,23 +327,19 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
           f"max {demand.max():.0f}   strike days: {strike_days}")
 
     # ----------------------------------------------------------------------
-    # 3. ABSOLUTE DEVIATIONS (LP) AGAINST LEAST SQUARES (QP)
+    # 3. ABSOLUTE DEVIATIONS (LP): ROBUSTNESS TO OUTLIERS
     # ----------------------------------------------------------------------
-    intestazione("Absolute deviations (LP) against least squares (QP)")
+    intestazione("Absolute deviations (LP): robustness to outliers")
     Xt = temperature.reshape(-1, 1)
     m_lad, w_lad, b_lad, pi_lad, _ = quantile_regression(Xt, demand, tau=0.5)
-    w_ols, b_ols = least_squares(Xt, demand)
     normal = outlier == 0
-    print(f"LP  (median)      : demand = {b_lad:.2f} {w_lad[0]:+.2f} * temperature")
-    print(f"QP  (least squares): demand = {b_ols:.2f} {w_ols[0]:+.2f} * temperature")
+    _, w_clean, b_clean, _, _ = quantile_regression(Xt[normal], demand[normal], tau=0.5)
+    print(f"LP on the 60 days             : demand = {b_lad:.2f} {w_lad[0]:+.2f} * temperature")
+    print(f"LP without the 5 strike days  : demand = {b_clean:.2f} {w_clean[0]:+.2f} * temperature")
     print(f"Mean absolute deviation over the 55 normal days: "
-          f"LP {mean_deviation(Xt[normal], demand[normal], w_lad, b_lad):.2f} pieces, "
-          f"QP {mean_deviation(Xt[normal], demand[normal], w_ols, b_ols):.2f} pieces")
-    w_clean, b_clean = least_squares(Xt[normal], demand[normal])
-    print(f"QP without the 5 strike days: demand = {b_clean:.2f} "
-          f"{w_clean[0]:+.2f} * temperature  (the LP gets there removing nothing)")
-    print(f"Distance from the 'clean' intercept {b_clean:.2f}: "
-          f"LP {abs(b_lad - b_clean):.2f} pieces, QP {abs(b_ols - b_clean):.2f} pieces")
+          f"{mean_deviation(Xt[normal], demand[normal], w_lad, b_lad):.2f} pieces")
+    print(f"Distance between the two intercepts: {abs(b_lad - b_clean):.2f} pieces "
+          f"(the strikes barely move the line)")
 
     # ----------------------------------------------------------------------
     # 4. DUAL READING: SUPPORT POINTS AND THE QUANTILE PROPERTY
@@ -423,7 +404,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     print(f"  predicted {TAU_NV:.4f} quantile     {pred_nv:6.1f} pieces  <- quantity to bake")
     print(f"  safety stock                   {pred_nv - pred_med:6.1f} pieces")
     print(f"  {TAU_NV:.4f} quantile with no features {q_uncond:6.1f} pieces  "
-          f"(chapter 13: same rule, no features)")
+          f"(chapter 7: same rule, no features)")
 
     # ----------------------------------------------------------------------
     # 6. FEATURE SELECTION WITH A BUDGET ON THE COEFFICIENTS
@@ -496,11 +477,9 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
                edgecolors=VERDE, linewidths=1.6, label="support points")
     gr = np.linspace(9, 35, 2)
     ax.plot(gr, b_lad + w_lad[0] * gr, color=BLU, lw=2, label="absolute deviations (LP)")
-    ax.plot(gr, b_ols + w_ols[0] * gr, color=ARANCIO, lw=2, ls="--",
-            label="least squares (QP)")
     ax.set_xlabel("maximum temperature (degrees)")
     ax.set_ylabel("demand (pieces)")
-    ax.set_title("Five strike days move least squares, not the LP")
+    ax.set_title("Five strike days do not move the LP line")
     ax.legend(loc="upper right", fontsize=8)
     salva_figura(fig, "cap10_regressione_robusta")
 
@@ -538,7 +517,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     ax.set_title("The price of complexity: error against budget")
     salva_figura(fig, "cap10_budget")
 
-    print("\nDone: chapter 17 (robust and quantile regression).")
+    print("\nDone: chapter 10 (robust and quantile regression).")
     ```
 
 ## Exercises

@@ -123,7 +123,7 @@ Description of the objective function and of the constraints:
 
 The **positive-part trick**: the objective pushes $o_s$ and $u_s$ down onto the
 values $\max\{q - d_s, 0\}$ and $\max\{d_s - q, 0\}$ without binary variables — the
-same mechanism returns in the CVaR and in the SVM.
+same mechanism returns in the CVaR and in quantile regression.
 
 ```text
 LP with k = 600 scenarios: q = 108.61
@@ -203,7 +203,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
 ??? example "Show the full script — `lab07_newsvendor.py`"
 
     ```python
-    """Chapter 13 — The Newsvendor and its variants (scenario-based stochastic LP).
+    """Chapter 7 — The Newsvendor and its variants (scenario-based stochastic LP).
 
     Case study: a bakery deciding how many artisan panettoni to produce.
     Price p = 15 €, cost c = 6 €, salvage v = 2 € -> Cu = 9, Co = 4.
@@ -417,7 +417,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
     ax.set_title("Mean cost - tail risk frontier")
     salva_figura(fig, "cap07_frontiera")
 
-    print("\nDone: chapter 13.")
+    print("\nDone: chapter 7.")
     ```
 
 ## Exercises

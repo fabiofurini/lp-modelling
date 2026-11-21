@@ -2,7 +2,7 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-ev-charging.pdf)
 
-**Class:** LP / convex QP · **Script:** `python/lab05_ev_charging.py`
+**Class:** LP · **Script:** `python/lab05_ev_charging.py`
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb)
 
@@ -70,8 +70,7 @@ Description of the objective function and of the constraints:
 - the non-negativity constraints on $x_{vt}$ define the variables of the model.
 
 Variants: peak shaving ($\min z$ with $\sum_{v=1}^{n} x_{vt} + b_t \le z$ for every
-$t \in \{1, 2, \dots, m\}$); smooth profile (QP with
-$\gamma \sum_{t=2}^{m} (z_t - z_{t-1})^2$); multi-objective cost $+\,\rho\,z$.
+$t \in \{1, 2, \dots, m\}$); multi-objective cost $+\,\rho\,z$.
 The energy constraint is written as $\ge$ because charging more than necessary is
 allowed but never worthwhile (the price is positive): at the optimum it holds with
 equality.
@@ -132,6 +131,11 @@ would spend 27.79 €: the trade-off with $\rho = 0{,}2$ achieves the *same* pea
     suspect your own code before suspecting the model.
 
 
+A *smooth* load profile, which penalizes the changes of the load from one hour to
+the next, requires a quadratic term in the objective and is no longer an LP: it is
+the quadratic variant of this model, in the module *NLP Modelling*, page
+[“Electric vehicle charging: the quadratic variant”](https://fabiofurini.github.io/nlp-modelling/ev-charging-quadratic/).
+
 ## Code
 
 The complete script of the chapter — data, model, solution, sensitivity and figures —
@@ -143,7 +147,7 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
 ??? example "Show the full script — `lab05_ev_charging.py`"
 
     ```python
-    """Chapter 10 — Smart charging of electric vehicles (LP / convex QP).
+    """Chapter 5 — Smart charging of electric vehicles (LP).
 
     Case study: a company depot with 6 electric vans to be charged overnight;
     hourly energy prices; base load of the building.
@@ -151,7 +155,7 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
     Contents:
       1. Minimum-cost LP: charging chases the cheap hours
       2. Peak shaving: minimise the peak withdrawal (minimax)
-      3. Smooth profile (QP) and multi-objective cost-peak comparison
+      3. Multi-objective cost-peak comparison
       4. Shadow prices: grid capacity and energy requirement
     """
     import gurobipy as gp
@@ -228,7 +232,7 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
         print(f"  {v}: {v_ene[v].Pi:.4f} €/kWh")
 
     # ----------------------------------------------------------------------
-    # 3. PEAK SHAVING (minimax) and SMOOTH PROFILE (QP)
+    # 3. PEAK SHAVING (minimax) and COST-PEAK TRADE-OFF
     # ----------------------------------------------------------------------
     intestazione("Peak shaving: minimise the peak withdrawal")
     mp, xp, _, _ = costruisci()
@@ -305,13 +309,12 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
     ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")
     salva_figura(fig, "cap05_frontiera")
 
-    print("\nDone: chapter 10.")
+    print("\nDone: chapter 5.")
     ```
 
 ## Exercises
 
 1. $e_1: 46 \to 47$ kWh: cost $+0{,}0947 = 0{,}09/0{,}95$ (verified).
 2. V3 arrives at 23: how do cost and peak change?
-3. Smooth profile QP with $\gamma \sum_t (z_t - z_{t-1})^2$.
-4. Cost-emissions frontier with an hourly carbon intensity $g_t$.
-5. Minimum feasible capacity by bisection: $\tilde k = 68$ kW.
+3. Cost-emissions frontier with an hourly carbon intensity $g_t$.
+4. Minimum feasible capacity by bisection: $\tilde k = 68$ kW.

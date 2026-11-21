@@ -3,7 +3,7 @@
 <!-- collana-dalla-home -->
 ## The lab at a glance
 
-**14 application chapters · 4 chapters of tools · LP, QP and NLP · one Colab
+**7 application chapters · 3 chapters of tools · LP models only · one Colab
 notebook per chapter · reproducible Python/Gurobi code.** The full list, chapter
 by chapter, is in the [syllabus](syllabus.md).
 
@@ -23,7 +23,7 @@ by chapter, is in the [syllabus](syllabus.md).
 
 ## Download as PDF
 
-- 📘 **[Full lecture notes](pdf/lp-modelling-notes.pdf)** — 127 pages: models, worked examples, case studies, sensitivity analysis
+- 📘 **[Full lecture notes](pdf/lp-modelling-notes.pdf)** — models, worked examples, case studies, sensitivity analysis
 - 📊 **[Lecture slides](downloads.md)** — one deck per chapter of the notes, on the [downloads](downloads.md) page
 
 ## Getting started
@@ -39,19 +39,19 @@ the same page.
 | | Content | Learning objectives |
 |---|---|---|
 | **Lab 1** | Production and inventory | formulate a multi-period LP; read duals, slacks and ranges; verify a shadow price by perturbation |
-| **Lab 2** | Markowitz | build a convex QP; plot a frontier; discuss the fragility of the estimates |
-| **Lab 3** | Pricing *or* budget | model nonlinear functions; study concavity; check the KKT conditions numerically |
-| **Lab 4** | Project of your choice | supply chain, EV charging, location, queues, DEA, Newsvendor, CVaR or SVM; managerial presentation |
+| **Lab 2** | Data Envelopment Analysis | build one LP per unit; read the envelopment form (peers and targets); tell weak from strong efficiency |
+| **Lab 3** | Newsvendor *or* CVaR | formulate a scenario LP; read the optimal quantile; measure the cost of protection |
+| **Lab 4** | Project of your choice | EV charging, arbitrage or robust and quantile regression; managerial presentation |
 
 ## The most common mistakes
 
 1. Reading `.X` or `.Pi` without checking `m.Status`.
-2. Forgetting `lb=-GRB.INFINITY` on the free variables ($b$ of the SVM, $\eta$ of the CVaR).
+2. Forgetting `lb=-GRB.INFINITY` on the free variables ($b$ of the regression, $\eta$ of the CVaR).
 3. Using a shadow price outside its validity range.
 4. Getting the sign of the duals wrong in minimization problems.
 5. Updating the RHS of a constraint that contains constants on the left-hand side.
 6. Optimizing a single objective when the problem has two (pure minimax).
-7. Choosing the hyperparameters by looking at the test set.
+7. Choosing the parameters ($\tau$, $\lambda$, the budget) by looking at the data used to decide.
 8. Reporting six decimal digits from estimates that wobble at the second.
 
 ## Reproducibility

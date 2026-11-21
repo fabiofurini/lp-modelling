@@ -13,18 +13,11 @@ from pathlib import Path
 
 SCRIPT = [
     "lab04_production.py",
-    "lab05_supplychain.py",
-    "lab06_markowitz.py",
-    "lab07_pricing.py",
-    "lab08_budget.py",
-    "lab09_location.py",
     "lab05_ev_charging.py",
-    "lab11_queues.py",
     "lab06_dea.py",
     "lab07_newsvendor.py",
     "lab08_var_cvar.py",
     "lab09_arbitrage.py",
-    "lab16_svm.py",
     "lab10_regression.py",
 ]
 

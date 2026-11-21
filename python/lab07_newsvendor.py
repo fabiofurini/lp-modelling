@@ -1,4 +1,4 @@
-"""Chapter 13 — The Newsvendor and its variants (scenario-based stochastic LP).
+"""Chapter 7 — The Newsvendor and its variants (scenario-based stochastic LP).
 
 Case study: a bakery deciding how many artisan panettoni to produce.
 Price p = 15 €, cost c = 6 €, salvage v = 2 € -> Cu = 9, Co = 4.
@@ -212,4 +212,4 @@ ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)
 ax.set_title("Mean cost - tail risk frontier")
 salva_figura(fig, "cap07_frontiera")
 
-print("\nDone: chapter 13.")
+print("\nDone: chapter 7.")

@@ -1,12 +1,12 @@
-"""Chapter 17 — Robust and quantile regression (LP).
+"""Chapter 10 — Robust and quantile regression (LP).
 
-Case study: the bakery of chapter 13. Sixty days of history (demand,
+Case study: the bakery of chapter 7. Sixty days of history (demand,
 temperature, price, weekend) plus five transport-strike days on which demand
 collapses.
 
 Contents:
   1. With no features the model returns the empirical quantile (worked example)
-  2. Absolute deviations (LP) against least squares (QP): robustness to outliers
+  2. Absolute deviations (LP): robustness to outliers
   3. Dual reading: pi_i, complementary slackness, support points
   4. Quantile regression: the newsvendor safety stock from the data
   5. Feature selection with a budget on the coefficients
@@ -19,7 +19,7 @@ from gurobipy import GRB
 from stile import (ARANCIO, BLU, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt,
                    salva_dat, salva_dati, salva_figura)
 
-TAU_NV = 9 / 13                                # critical fractile of chapter 13
+TAU_NV = 9 / 13                                # critical fractile of chapter 7
 
 
 # ----------------------------------------------------------------------
@@ -56,22 +56,6 @@ def quantile_regression(X, y, tau=0.5, budget=None):
     return m, coef, b.X, duals, budget_constr
 
 
-def least_squares(X, y):
-    """min sum_i r_i^2  with  X w + b + r = y  (convex QP, same solver)."""
-    n, p = X.shape
-    m = gp.Model("least_squares")
-    m.Params.OutputFlag = 0
-    w = m.addVars(p, lb=-GRB.INFINITY, name="w")
-    b = m.addVar(lb=-GRB.INFINITY, name="b")
-    r = m.addVars(n, lb=-GRB.INFINITY, name="r")
-    m.addConstrs((gp.quicksum(X[i, j] * w[j] for j in range(p)) + b + r[i] == y[i]
-                  for i in range(n)), name="residual")
-    m.setObjective(gp.quicksum(r[i] * r[i] for i in range(n)), GRB.MINIMIZE)
-    m.optimize()
-    assert m.Status == GRB.OPTIMAL
-    return np.array([w[j].X for j in range(p)]), b.X
-
-
 def mean_deviation(X, y, coef, b):
     return float(np.abs(y - (X @ coef + b)).mean())
 
@@ -84,7 +68,7 @@ y7 = np.array([88.0, 96.0, 104.0, 112.0, 120.0, 132.0, 148.0])
 X0 = np.zeros((len(y7), 0))
 m0, _, b0, pi0, _ = quantile_regression(X0, y7, tau=TAU_NV)
 print(f"Seven days: {y7.astype(int)}")
-print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 13: cu=9, co=4)")
+print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 7: cu=9, co=4)")
 print(f"Optimal intercept b = {b0:.4f}  -> the 5th ordered value, the 69.23% quantile")
 print(f"Optimal value = {m0.ObjVal:.4f} = 680/13")
 print(f"Duals pi = {np.round(pi0, 4)}  (bounds: -(1-tau) = {-(1 - TAU_NV):.4f}, "
@@ -136,23 +120,19 @@ print(f"Demand: min {demand.min():.0f}, mean {demand.mean():.1f}, "
       f"max {demand.max():.0f}   strike days: {strike_days}")
 
 # ----------------------------------------------------------------------
-# 3. ABSOLUTE DEVIATIONS (LP) AGAINST LEAST SQUARES (QP)
+# 3. ABSOLUTE DEVIATIONS (LP): ROBUSTNESS TO OUTLIERS
 # ----------------------------------------------------------------------
-intestazione("Absolute deviations (LP) against least squares (QP)")
+intestazione("Absolute deviations (LP): robustness to outliers")
 Xt = temperature.reshape(-1, 1)
 m_lad, w_lad, b_lad, pi_lad, _ = quantile_regression(Xt, demand, tau=0.5)
-w_ols, b_ols = least_squares(Xt, demand)
 normal = outlier == 0
-print(f"LP  (median)      : demand = {b_lad:.2f} {w_lad[0]:+.2f} * temperature")
-print(f"QP  (least squares): demand = {b_ols:.2f} {w_ols[0]:+.2f} * temperature")
+_, w_clean, b_clean, _, _ = quantile_regression(Xt[normal], demand[normal], tau=0.5)
+print(f"LP on the 60 days             : demand = {b_lad:.2f} {w_lad[0]:+.2f} * temperature")
+print(f"LP without the 5 strike days  : demand = {b_clean:.2f} {w_clean[0]:+.2f} * temperature")
 print(f"Mean absolute deviation over the 55 normal days: "
-      f"LP {mean_deviation(Xt[normal], demand[normal], w_lad, b_lad):.2f} pieces, "
-      f"QP {mean_deviation(Xt[normal], demand[normal], w_ols, b_ols):.2f} pieces")
-w_clean, b_clean = least_squares(Xt[normal], demand[normal])
-print(f"QP without the 5 strike days: demand = {b_clean:.2f} "
-      f"{w_clean[0]:+.2f} * temperature  (the LP gets there removing nothing)")
-print(f"Distance from the 'clean' intercept {b_clean:.2f}: "
-      f"LP {abs(b_lad - b_clean):.2f} pieces, QP {abs(b_ols - b_clean):.2f} pieces")
+      f"{mean_deviation(Xt[normal], demand[normal], w_lad, b_lad):.2f} pieces")
+print(f"Distance between the two intercepts: {abs(b_lad - b_clean):.2f} pieces "
+      f"(the strikes barely move the line)")
 
 # ----------------------------------------------------------------------
 # 4. DUAL READING: SUPPORT POINTS AND THE QUANTILE PROPERTY
@@ -217,7 +197,7 @@ print(f"  median predicted demand        {pred_med:6.1f} pieces")
 print(f"  predicted {TAU_NV:.4f} quantile     {pred_nv:6.1f} pieces  <- quantity to bake")
 print(f"  safety stock                   {pred_nv - pred_med:6.1f} pieces")
 print(f"  {TAU_NV:.4f} quantile with no features {q_uncond:6.1f} pieces  "
-      f"(chapter 13: same rule, no features)")
+      f"(chapter 7: same rule, no features)")
 
 # ----------------------------------------------------------------------
 # 6. FEATURE SELECTION WITH A BUDGET ON THE COEFFICIENTS
@@ -290,11 +270,9 @@ ax.scatter(temperature[support], demand[support], s=95, facecolors="none",
            edgecolors=VERDE, linewidths=1.6, label="support points")
 gr = np.linspace(9, 35, 2)
 ax.plot(gr, b_lad + w_lad[0] * gr, color=BLU, lw=2, label="absolute deviations (LP)")
-ax.plot(gr, b_ols + w_ols[0] * gr, color=ARANCIO, lw=2, ls="--",
-        label="least squares (QP)")
 ax.set_xlabel("maximum temperature (degrees)")
 ax.set_ylabel("demand (pieces)")
-ax.set_title("Five strike days move least squares, not the LP")
+ax.set_title("Five strike days do not move the LP line")
 ax.legend(loc="upper right", fontsize=8)
 salva_figura(fig, "cap10_regressione_robusta")
 
@@ -332,4 +310,4 @@ ax.set_ylabel("mean absolute deviation (pieces)")
 ax.set_title("The price of complexity: error against budget")
 salva_figura(fig, "cap10_budget")
 
-print("\nDone: chapter 17 (robust and quantile regression).")
+print("\nDone: chapter 10 (robust and quantile regression).")

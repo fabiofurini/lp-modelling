@@ -4,8 +4,7 @@
 
 How to build a linear model with `gurobipy`, how to run it, how to retrieve the
 solution and how to interpret the output. All the examples can be copied and
-pasted straight into a Python terminal. Nonlinear models are on the
-[companion page](solver-nonlinear.md).
+pasted straight into a Python terminal.
 
 ---
 
@@ -44,7 +43,7 @@ x2 = m.addVar(lb=0, name="x2")
 Key points:
 - the **default** is a continuous variable with `lb=0` and `ub=+inf`: for non-negative variables `m.addVar(name=...)` is enough;
 - `vtype=GRB.CONTINUOUS` is the default; in this lab we **never use** `GRB.BINARY`/`GRB.INTEGER`;
-- for a free variable (possibly negative, e.g. the SVM intercept `b` or the CVaR threshold `η`): `m.addVar(lb=-GRB.INFINITY)`.
+- for a free variable (possibly negative, e.g. the regression intercept `b` or the CVaR threshold `η`): `m.addVar(lb=-GRB.INFINITY)`.
 
 For **indexed families of variables** (the normal case in real models):
 
@@ -80,13 +79,7 @@ m.addConstrs((x.sum(i, "*") <= b[i] for i in I), name="cap")
 m.setObjective(30*x1 + 50*x2, GRB.MAXIMIZE)
 ```
 
-The second argument is `GRB.MAXIMIZE` or `GRB.MINIMIZE`. **Quadratic** objectives (Markowitz,
-SVM, smoothing) are written in the natural way:
-
-```python
-m.setObjective(x @ Q @ x, GRB.MINIMIZE)                  # matrix form (numpy)
-m.setObjective(gp.quicksum(q[i,j]*x[i]*x[j] for i in I for j in I), GRB.MINIMIZE)
-```
+The second argument is `GRB.MAXIMIZE` or `GRB.MINIMIZE`.
 
 ### Step 5 — (optional) check what we have written
 
@@ -137,8 +130,7 @@ Optimal value: 1900.0
 ```
 
 Section 4 explains how to read each of these numbers; the “all the cases”
-example (section 4.3 bis) also covers `=`/`≥` constraints and free or `≤ 0` variables;
-for nonlinear models there is the [companion page](solver-nonlinear.md).
+example (section 4.3 bis) also covers `=`/`≥` constraints and free or `≤ 0` variables.
 
 
 ---
@@ -154,7 +146,6 @@ That is all. Useful parameters to set **before** `optimize()`:
 ```python
 m.Params.OutputFlag = 0      # 1 = log on screen (default), 0 = silent
 m.Params.TimeLimit  = 60     # maximum number of seconds
-m.Params.NonConvex  = 2      # allows non-convex QPs (e.g. pricing p*q)
 ```
 
 ### The log explained
@@ -224,9 +215,7 @@ sol = pd.DataFrame([(i, t, x[i, t].X) for i in I for t in T],
 
 ### 4.1 The outcome
 
-- **OPTIMAL** — certified optimal solution. In the convex models of this lab
-  the optimum is **global**; even in a QP declared non-convex (`NonConvex=2`) and in
-  models with nonlinear constraints (`FuncNonlinear=1`) Gurobi certifies the global one.
+- **OPTIMAL** — certified optimal solution. An LP is convex: the optimum is **global**.
 - **INFEASIBLE** — the constraints contradict each other. Diagnosis:
   `m.computeIIS(); m.write("conflitto.ilp")` — the file lists a minimal subset of
   mutually conflicting constraints. Typical mistake: total demand > total capacity without
@@ -357,7 +346,7 @@ perturbation: `b_2 = 101 → 626` (+6), `b_3 = -19 → 619` (−1), `x3` forced 
 | optimum = 0, all variables at zero | objective not set or wrong direction | check `setObjective(..., GRB.MAXIMIZE)` |
 | unexpected `INFEASIBLE` | constraint written with the wrong direction, inconsistent data | `computeIIS()` + read the `.ilp` |
 | `UNBOUNDED` | a bound or a capacity constraint is missing | write the `.lp` and look for the free variable |
-| expected values but `Pi` not available | the model is a QP/MIP, LP duals do not exist | for QP use `m.Params.QCPDual = 1` or check by perturbation |
+| expected values but `Pi` not available | the model contains integer variables, LP duals do not exist | keep continuous variables only, or check by perturbation |
 | "almost zero" numbers such as `1e-13` | normal numerical tolerance | filter with `> 1e-6` when printing |
 | `Model too large for size-limited license` | the pip licence limits have been exceeded | activate the academic licence (sec. 1) |
 

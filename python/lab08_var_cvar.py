@@ -1,9 +1,9 @@
-"""Chapter 14 — VaR and CVaR: linear models and applications (scenario LP).
+"""Chapter 8 — VaR and CVaR: linear models and applications (scenario LP).
 
 Contents:
   1. Example with 6 scenarios: VaR = 12, CVaR = 18.67,
      checked with the linear formulation of Rockafellar-Uryasev
-  2. Mean-CVaR portfolio (LP) and comparison with Markowitz (QP)
+  2. Mean-CVaR portfolio (LP)
   3. Return-CVaR frontier
   4. Two-stage supply chain with adverse scenarios: the cost of resilience
 """
@@ -46,9 +46,9 @@ print(f"Expected value of the loss: {perdite.mean():.2f} "
       f"-> the CVaR tells the story of the tail, the mean does not.")
 
 # ----------------------------------------------------------------------
-# 2. MEAN-CVaR PORTFOLIO vs MARKOWITZ
+# 2. MEAN-CVaR PORTFOLIO
 # ----------------------------------------------------------------------
-intestazione("Mean-CVaR portfolio (LP) vs Markowitz (QP)")
+intestazione("Mean-CVaR portfolio (LP)")
 titoli = ["ENE", "FIN", "TEC", "IND", "SAN", "CON", "UTL", "MAT"]
 n = len(titoli)
 beta_f = np.array([1.1, 1.3, 1.5, 1.0, 0.6, 0.8, 0.4, 1.2])
@@ -61,7 +61,6 @@ R = alfa_ann[None, :] / 12 + np.outer(mercato, beta_f) + rng.normal(0, sigma_idi
 salva_dati(pd.DataFrame(R, columns=titoli), "cvar_scenari_rendimenti")
 
 mu = R.mean(axis=0) * 12
-Q = np.cov(R.T) * 12
 alpha_c = 0.90
 
 
@@ -85,23 +84,9 @@ def porta_cvar(r_min):
     return w, m.ObjVal
 
 
-def porta_markowitz(r_min):
-    m = gp.Model("mk")
-    m.Params.OutputFlag = 0
-    x = m.addVars(n, name="x")
-    m.addConstr(x.sum() == 1)
-    m.addConstr(gp.quicksum(mu[i] * x[i] for i in range(n)) >= r_min)
-    m.setObjective(gp.quicksum(Q[i, j] * x[i] * x[j] for i in range(n) for j in range(n)),
-                   GRB.MINIMIZE)
-    m.optimize()
-    return np.array([x[i].X for i in range(n)])
-
-
 r_obb = 0.08
 w_cv, cvar_ott = porta_cvar(r_obb)
-w_mk = porta_markowitz(r_obb)
 perd_cv = -R @ w_cv
-perd_mk = -R @ w_mk
 
 
 def stat_perdite(perd):
@@ -112,11 +97,11 @@ def stat_perdite(perd):
 
 print(f"Required minimum return: {r_obb:.0%} per year, alpha = {alpha_c}")
 print(f"{'':>12} | {'mean loss':>13} | {'VaR90':>8} | {'CVaR90':>8}  (monthly losses)")
-for nome, perd in [("mean-CVaR", perd_cv), ("Markowitz", perd_mk)]:
+for nome, perd in [("mean-CVaR", perd_cv)]:
     mm_, vv_, cc_ = stat_perdite(perd)
     print(f"{nome:>12} | {mm_:13.4f} | {vv_:8.4f} | {cc_:8.4f}")
 print("\nCompositions (weights > 1%):")
-for nome, w in [("mean-CVaR", w_cv), ("Markowitz", w_mk)]:
+for nome, w in [("mean-CVaR", w_cv)]:
     print(f"  {nome:>10}: " + ", ".join(f"{titoli[i]} {w[i]:.1%}"
                                         for i in range(n) if w[i] > 0.01))
 
@@ -222,4 +207,4 @@ ax2.set_ylabel("expected annual return (%)")
 ax2.set_title("Return-CVaR frontier")
 salva_figura(fig, "cap08_perdite_frontiera")
 
-print("\nDone: chapter 14.")
+print("\nDone: chapter 8.")
