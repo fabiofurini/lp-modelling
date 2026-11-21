@@ -30,12 +30,12 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-The DEA efficiency frontier: twelve bank branches, one LP per branch, and the dual tells each branch whom to learn from. Open the notebook in Colab, change the data and solve it again with Gurobi, with nothing to install.
+The optimal six-month production plan computed by a linear programming model: how much of each product to make and how much to keep in stock to follow demand at minimum cost. Open the notebook in Colab, change the data and solve it again with Gurobi, with nothing to install.
 
-[![](img/cap06_frontiera.png)](dea.md)
+[![](img/cap04_piano_scorte.png)](production.md)
 
-[:simple-googlecolab: Open the notebook in Colab](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb){ .md-button .md-button--primary }
-[:material-book-open-variant: The chapter](dea.md){ .md-button }
+[:simple-googlecolab: Open the notebook in Colab](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb){ .md-button .md-button--primary }
+[:material-book-open-variant: The chapter](production.md){ .md-button }
 [:material-language-python: All the notebooks](notebooks.md){ .md-button }
 <!-- /collana-app -->
 
