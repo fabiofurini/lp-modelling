@@ -66,7 +66,7 @@ x2 = m.addVar(lb=0, name="x2")
 Key points:
 - the **default** is a continuous variable with `lb=0` and `ub=+inf`: for non-negative variables `m.addVar(name=...)` is enough;
 - `vtype=GRB.CONTINUOUS` is the default; in this lab we **never use** `GRB.BINARY`/`GRB.INTEGER`;
-- for a free variable (possibly negative, e.g. the SVM intercept `b` or the CVaR threshold `η`): `m.addVar(lb=-GRB.INFINITY)`.
+- for a free variable (possibly negative, e.g. the regression intercept `b` or the CVaR threshold `η`): `m.addVar(lb=-GRB.INFINITY)`.
 
 For **indexed families of variables** (the normal case in real models):
 
@@ -102,13 +102,7 @@ m.addConstrs((x.sum(i, "*") <= b[i] for i in I), name="cap")
 m.setObjective(30*x1 + 50*x2, GRB.MAXIMIZE)
 ```
 
-The second argument is `GRB.MAXIMIZE` or `GRB.MINIMIZE`. **Quadratic** objectives (Markowitz,
-SVM, smoothing) are written in the natural way:
-
-```python
-m.setObjective(x @ Q @ x, GRB.MINIMIZE)                  # matrix form (numpy)
-m.setObjective(gp.quicksum(q[i,j]*x[i]*x[j] for i in I for j in I), GRB.MINIMIZE)
-```
+The second argument is `GRB.MAXIMIZE` or `GRB.MINIMIZE`.
 
 ### Step 5 — (optional) check what we have written
 
@@ -175,7 +169,6 @@ That is all. Useful parameters to set **before** `optimize()`:
 ```python
 m.Params.OutputFlag = 0      # 1 = log on screen (default), 0 = silent
 m.Params.TimeLimit  = 60     # maximum number of seconds
-m.Params.NonConvex  = 2      # allows non-convex QPs (e.g. pricing p*q)
 ```
 
 ### The log explained
@@ -245,9 +238,7 @@ sol = pd.DataFrame([(i, t, x[i, t].X) for i in I for t in T],
 
 ### 5.1 The outcome
 
-- **OPTIMAL** — certified optimal solution. In the convex models of this lab
-  the optimum is **global**; even in a QP declared non-convex (`NonConvex=2`) and in
-  models with nonlinear constraints (`FuncNonlinear=1`) Gurobi certifies the global one.
+- **OPTIMAL** — certified optimal solution. An LP is convex: the optimum is **global**.
 - **INFEASIBLE** — the constraints contradict each other. Diagnosis:
   `m.computeIIS(); m.write("conflict.ilp")` — the file lists a minimal subset of
   mutually conflicting constraints. Typical mistake: total demand > total capacity without a
@@ -357,14 +348,7 @@ complementarity); equality → free dual, here `+6`; `≤` in a minimum → dual
 perturbation: `b_2 = 101 → 626` (+6), `b_3 = -19 → 619` (−1), `x3` forced to
 −1 → `623` (+3).
 
-### 5.4 In nonlinear models
-
-For convex QP/NLP the multipliers (`Pi` on the linear constraints, KKT conditions in general)
-have the same marginal reading as shadow prices. Numerical check recommended in the
-lab: perturb the right-hand side by ε and check again that
-`new_optimum ≈ old_optimum + Pi·ε`.
-
-### 5.5 Interpretation checklist (to be used in every lab session)
+### 5.4 Interpretation checklist (to be used in every lab session)
 
 1. Is the status `OPTIMAL`? If not, stop and diagnose.
 2. Does the optimal value have the expected order of magnitude?
@@ -385,7 +369,7 @@ lab: perturb the right-hand side by ε and check again that
 | optimum = 0, all variables at zero | objective not set or wrong direction | check `setObjective(..., GRB.MAXIMIZE)` |
 | unexpected `INFEASIBLE` | constraint written with the wrong direction, inconsistent data | `computeIIS()` + read the `.ilp` |
 | `UNBOUNDED` | a bound or a capacity constraint is missing | write the `.lp` and look for the free variable |
-| expected values but `Pi` not available | the model is a QP/MIP, LP duals do not exist | for QP use `m.Params.QCPDual = 1` or check by perturbation |
+| expected values but `Pi` not available | the model contains integer variables, LP duals do not exist | keep continuous variables only, or check by perturbation |
 | "almost zero" numbers such as `1e-13` | normal numerical tolerance | filter with `> 1e-6` when printing |
 | `Model too large for size-limited license` | the pip licence limits have been exceeded | activate the academic licence (sec. 1) |
 
@@ -419,12 +403,4 @@ assert m.Status == GRB.OPTIMAL, f"unexpected status: {m.Status}"
 # loop over a key parameter, re-optimize, save figures
 ```
 
-**A single solver: general NLPs are solved with Gurobi too** (from version 12 on).
-Nonlinear functions as functional constraints on auxiliary variables — `addGenConstrLog`,
-`addGenConstrExp`, `addGenConstrPow` with `m.Params.FuncNonlinear = 1` — and bilinear terms
-with `m.Params.NonConvex = 2`: the optimum remains **globally certified**. Examples in the lab:
-advertising budget (`log`), constant-elasticity pricing (`Pow` + bilinear), M/M/1 queues
-(bilinear constraint `w·(mu - lam) = 1`), Weber (conic constraints `dx² + dy² ≤ d²`, a convex
-QCP). For marginal analyses tighten `MIPGap`, `FeasibilityTol` and `OptimalityTol`
-to `1e-9`; reformulate to avoid tiny quantities (e.g. `q·p^eps ≤ A` instead of
-`q ≤ A·p^(-eps)`).
+The commands for quadratic and nonlinear models (quadratic objectives, functional and bilinear constraints, tolerances) are in the module *NLP Modelling*, page [“Implementation: nonlinear models”](https://fabiofurini.github.io/nlp-modelling/solver-nonlinear/).

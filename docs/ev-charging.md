@@ -134,7 +134,7 @@ would spend 27.79 €: the trade-off with $\rho = 0{,}2$ achieves the *same* pea
 A *smooth* load profile, which penalizes the changes of the load from one hour to
 the next, requires a quadratic term in the objective and is no longer an LP: it is
 the quadratic variant of this model, in the module *NLP Modelling*, page
-[“Electric vehicle charging: the quadratic variant”](https://fabiofurini.github.io/nlp-modelling/ev-charging-quadratic/).
+[“Electric vehicle charging with a smooth profile”](https://fabiofurini.github.io/nlp-modelling/ev-charging-quadratic/).
 
 ## Code
 

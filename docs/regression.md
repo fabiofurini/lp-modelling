@@ -82,7 +82,7 @@ one would get by cleaning the history by hand.
 
 Minimising instead the sum of the *squared* deviations leads to least-squares
 regression, a quadratic model: the comparison with the LP is in the module
-*NLP Modelling*, page [“Least squares”](https://fabiofurini.github.io/nlp-modelling/least-squares/).
+*NLP Modelling*, page [“Least-squares regression”](https://fabiofurini.github.io/nlp-modelling/least-squares/).
 
 ## The dual reading: the support points
 

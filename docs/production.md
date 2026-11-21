@@ -119,7 +119,7 @@ of the current capacity the problem becomes **infeasible**.
 A *smooth* plan, which penalizes the changes of production from one month to the
 next, requires a quadratic term in the objective and is no longer an LP: it is the
 quadratic variant of this model, in the module *NLP Modelling*, page
-[“Production and inventory: the quadratic variant”](https://fabiofurini.github.io/nlp-modelling/production-quadratic/).
+[“Production with quadratic smoothing”](https://fabiofurini.github.io/nlp-modelling/production-quadratic/).
 
 
 ## Code
