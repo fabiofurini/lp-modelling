@@ -1,0 +1,35 @@
+# Only what students need goes to GitHub (REGOLE_MODULI_TEMATICI §0.5, §1):
+# docs/ (PDFs in docs/pdf/), mkdocs.yml, README.md, licences, CITATION.cff, .github/,
+# GUROBI_GUIDE.md, python/ (student scripts), data/, notebooks/.
+
+# internal material, not published (local git repositories in volumes/ and slides/)
+note/
+volumes/
+slides/
+*.tex
+materiale_sorgente/
+STYLE_AND_FORMAT.md
+# recomputes the instructors' solutions: private
+python/solutions_numbers.py
+# intermediate products and built site
+build/
+site/
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+# Python
+__pycache__/
+*.pyc
+# misc
+.DS_Store
+*conflicted copy*
+# the PDFs published on the site are versioned
+!docs/pdf/*.pdf
