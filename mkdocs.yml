@@ -145,6 +145,7 @@ nav:
   - Optimization and machine learning:
       - optimization-ml.md
       - Robust and quantile regression: regression.md
+  - Exercises: exercises/index.md
   - Quiz: self-assessment.md
   - Lab: lab/index.md
   - Downloads: downloads.md

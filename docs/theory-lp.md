@@ -2,6 +2,26 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-02-background.pdf)
 
+!!! nota "Prerequisites"
+
+    - From the module *Linear Programming*, [Chapter 9 «Duality theory»](https://fabiofurini.github.io/linear-programming/duality/09-duality/): the dual of a Linear Programming problem, weak and strong duality, complementary slackness.
+
+    - From the module *Linear Programming*, [Chapter 14 «Sensitivity analysis»](https://fabiofurini.github.io/linear-programming/advanced-methods/14-sensitivity/): shadow prices, reduced costs and their validity ranges.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write the dual of an LP in general form with the conversion rules;
+
+    - check optimality with complementary slackness;
+
+    - deduce the sign of a shadow price from the direction of the constraint and the sense of the objective;
+
+    - read a shadow price and a reduced cost together with their validity ranges;
+
+    - apply the six steps of the sensitivity protocol.
+
 The linear programming background used throughout the course: duality, optimality
 conditions, sensitivity analysis and the sensitivity protocol of every chapter. The
 complete theory, with proofs, is in the module *Linear Programming*:
@@ -286,3 +306,17 @@ Together with the solution, four numbers for each constraint and variable come f
 4. **Scenarios**: pessimistic, central, optimistic.
 5. **Trade-off**: trace a frontier (cost-service, risk-return…).
 6. **Stability**: data ±5% → does the recommendation hold?
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Every constraint generates a dual variable and every variable a dual constraint; weak duality gives a bound, strong duality equal values at the optimum.
+
+    - Complementary slackness: a slack constraint has a null dual, a non-null variable has a null reduced cost.
+
+    - The shadow price $\tilde\pi_i = \partial \tilde z / \partial b_i$ holds only inside its range; a number is always quoted with its range.
+
+    - The reduced cost says by how much $c_j$ must improve for a variable at zero to be worth using.
+
+    - The protocol: base case, one-at-a-time, shadow prices checked by perturbation, scenarios, trade-off, stability.

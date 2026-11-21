@@ -22,6 +22,7 @@ studies.
 Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 
 [Start :material-arrow-right:](tools.md){ .md-button .md-button--primary }
+[:material-pencil: Exercises](exercises/index.md){ .md-button }
 [:material-gesture-tap: Lab](lab/index.md){ .md-button }
 [:material-clipboard-check-outline: Quiz](self-assessment.md){ .md-button }
 [:material-download: Downloads](downloads.md){ .md-button }
@@ -84,6 +85,14 @@ Three LP models of the course solved to optimality in the browser: production an
 ## Don't miss
 
 <div class="grid cards" markdown>
+
+-   :material-pencil-box-multiple: **Exercises with solutions**
+
+    ---
+
+    Exercises for every chapter, each with its worked solution that opens with a click.
+
+    [:octicons-arrow-right-24: The exercises](exercises/index.md)
 
 -   :material-clipboard-check-outline: **Self-assessment quiz**
 

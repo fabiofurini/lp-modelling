@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_var_cvar.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 7 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the scenario-based LP, the positive-part trick and the mean-CVaR objective.
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices and the sensitivity protocol.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - define and compute VaR and CVaR on a discrete distribution;
+
+    - use the Rockafellar–Uryasev linear formulation;
+
+    - build portfolios and logistics plans protected against the worst scenarios;
+
+    - recognize the statistical limits of tail estimates.
+
 Optimizing an average value can hide rare and very large losses. The **VaR**
 (*Value-at-Risk*) answers "what is a high loss threshold?"; the **CVaR**
 (*Conditional Value-at-Risk*) also answers "how much do we lose *on average* when
@@ -190,6 +208,18 @@ grows, capacity migrates towards the reliable supplier: **+79 € of average cos
     distributions the VaR may not be unique ($\tilde\eta$ is *a* VaR): always compare
     $\tilde\eta$ with the empirical quantile.
 
+
+## In summary
+
+!!! chiave "In summary"
+
+    - VaR is a high loss threshold, the $\alpha$ quantile; CVaR is the average loss in the tail beyond it.
+
+    - CVaR is convex, subadditive and sensitive to the severity of the tail; VaR is not.
+
+    - The Rockafellar–Uryasev LP uses a free threshold $\eta$ and excesses $\xi_s \ge 0$: at the optimum $\eta^*$ is a VaR and the value is the CVaR.
+
+    - Extreme tails estimated from few scenarios are noisy: dozens of scenarios beyond the quantile are needed.
 
 ## Code
 

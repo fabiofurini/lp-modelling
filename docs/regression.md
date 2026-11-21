@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 7 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the quantile rule and the critical fractile.
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): the dual of an LP and shadow prices.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - formulate regression with absolute deviations as an LP;
+
+    - read its dual, recognising the points that support the estimate and the quantile property;
+
+    - estimate the quantity to produce conditional on the conditions of the day;
+
+    - select the relevant features with a budget on the coefficients, reading its shadow price.
+
 Every model in the course starts from known parameters: the costs of
 [production](production.md), the hourly prices of [charging](ev-charging.md), the scenarios of
 the [newsvendor](newsvendor.md). Somebody has to estimate those numbers, and the
@@ -519,6 +537,18 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
 
     print("\nDone: chapter 10 (robust and quantile regression).")
     ```
+
+## In summary
+
+!!! chiave "In summary"
+
+    - With absolute deviations regression is an LP: deviation $= u_i - v_i$ with $u_i, v_i \ge 0$, and the line stays where the normal data are.
+
+    - Paying $\tau$ above and $1-\tau$ below gives the quantile of level $\tau$; with $\tau$ equal to the critical fractile it gives the quantity to produce.
+
+    - Every dual lies in $[-(1-\tau),\, \tau]$; the interpolated observations are the support points that determine the estimate.
+
+    - A budget on $\sum_j |w_j|$ selects the features and keeps an LP; its shadow price is the price of complexity.
 
 ## Exercises
 

@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices, their validity ranges and the sensitivity protocol.
+
+    - From this module, [Chapter 3 «The solver: building, solving, interpreting»](https://fabiofurini.github.io/lp-modelling/solver-lp/): building an LP in `gurobipy` and reading `Pi` and `SARHS`.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - formulate a multi-period LP with inventory balance constraints;
+
+    - read and check the shadow prices of capacity and their validity ranges;
+
+    - build the capacity value curve;
+
+    - explain how inventory moves capacity from the light months to the peak months.
+
 A firm decides how much to produce today and how much to keep in inventory for future
 demand. Producing in advance costs holding; producing at the last moment risks
 crashing into the capacity limit precisely in the peak months.
@@ -121,6 +139,18 @@ next, requires a quadratic term in the objective and is no longer an LP: it is t
 quadratic variant of this model, in the module *NLP Modelling*, page
 [“Production with quadratic smoothing”](https://fabiofurini.github.io/nlp-modelling/production-quadratic/).
 
+
+## In summary
+
+!!! chiave "In summary"
+
+    - The inventory balance links the months: the problem cannot be solved one month at a time.
+
+    - Inventory moves capacity from the light months to the peak months; emptying the warehouse at the end is always optimal.
+
+    - The shadow price of a capacity is checked by adding one hour and re-optimizing; a non-binding capacity has a null shadow price.
+
+    - One more hour of capacity is worth the holding cost it saves; the capacity value curve is convex and decreasing.
 
 ## Code
 

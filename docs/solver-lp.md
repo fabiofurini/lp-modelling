@@ -2,6 +2,24 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-03-python-gurobi.pdf)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): duals, reduced costs, slacks and validity ranges, which the solver returns as attributes.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - build an LP in `gurobipy` in five steps;
+
+    - declare free variables, remembering the default lower bound $0$;
+
+    - check `Status` before reading `ObjVal`, `X` and `Slack`;
+
+    - read `Pi`, `RC`, `SARHS` and `SAObj` as the quantities of the background chapter;
+
+    - recognise the typical errors, from an infeasible model to a right-hand side that contains constants.
+
 How to build a linear model with `gurobipy`, how to run it, how to retrieve the
 solution and how to interpret the output. All the examples can be copied and
 pasted straight into a Python terminal.
@@ -380,3 +398,16 @@ assert m.Status == GRB.OPTIMAL, f"unexpected status: {m.Status}"
 # loop over a key parameter, re-optimize, save figures
 ```
 
+## In summary
+
+!!! chiave "In summary"
+
+    - Five steps: `Model`, `addVar(s)`, `addConstr(s)`, `setObjective`, `write`.
+
+    - Variables are $\ge 0$ by default: a free variable needs `lb=-GRB.INFINITY`.
+
+    - `Status` always comes first; only then `ObjVal`, `X` and `Slack`.
+
+    - `Pi`, `RC`, `Slack`, `SARHS` and `SAObj` are the theoretical quantities of the background chapter; the stored RHS includes the constants moved from the left-hand side.
+
+    - $`RC` = 0$ is not enough to say that a variable is used: degeneracy is always possible.

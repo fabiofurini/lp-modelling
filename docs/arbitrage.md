@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_arbitrage.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): duality, complementary slackness and strong duality.
+
+    - From this module, [Chapter 3 «The solver: building, solving, interpreting»](https://fabiofurini.github.io/lp-modelling/solver-lp/): free variables in `gurobipy` and the reading of `Pi`.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - formulate the search for an arbitrage as an LP;
+
+    - read the risk-neutral probabilities in the duals of the constraints;
+
+    - compute the interval of consistent prices of a security;
+
+    - price a new security (an option) in a complete or incomplete market.
+
 An **arbitrage** is a strategy that creates money out of nothing: it collects cash
 today with no risk of a loss tomorrow (type A), or it costs nothing today and can
 only make money (type B). Detecting one is an LP; duality — shadow prices,
@@ -264,6 +282,18 @@ The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ip
 
     print("\nDone: chapter 9 (arbitrage).")
     ```
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Detecting an arbitrage is an LP with free positions and one constraint per state: payoff $\ge 0$.
+
+    - Optimum $<0$ is a type A arbitrage, the normalization (cost $\ge -1$) avoids unboundedness; optimum $0$ with a slack state constraint is type B.
+
+    - The duals, multiplied by $R$, are risk-neutral probabilities: no arbitrage if and only if there is $q$ with $q_j > 0$ for every state.
+
+    - Two LPs give the interval of consistent prices: a unique price in a complete market, an interval in an incomplete one.
 
 ## Exercises
 

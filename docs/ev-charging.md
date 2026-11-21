@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices and the sensitivity protocol.
+
+    - From this module, [Chapter 3 «The solver: building, solving, interpreting»](https://fabiofurini.github.io/lp-modelling/solver-lp/): variable bounds in `gurobipy` and the right-hand side stored by the solver.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - model decisions over an hourly horizon with availability windows;
+
+    - read the duals as prices of the marginal hours;
+
+    - handle the cost-peak trade-off with a weighted objective;
+
+    - diagnose a real pitfall of sensitivity analysis: the right-hand side with constants.
+
 A fleet must be fully charged by the morning by exploiting the cheap hours — but if
 all the vehicles charge together, the peak draw explodes. A problem that *seems* to
 require on/off variables and instead is a pure LP: the real decision — how much
@@ -135,6 +153,18 @@ A *smooth* load profile, which penalizes the changes of the load from one hour t
 the next, requires a quadratic term in the objective and is no longer an LP: it is
 the quadratic variant of this model, in the module *NLP Modelling*, page
 [“Electric vehicle charging with a smooth profile”](https://fabiofurini.github.io/nlp-modelling/ev-charging-quadratic/).
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Smart charging is a pure LP: the decision is how much power, and availability is a datum, not a binary variable.
+
+    - The cheap hours are filled first; the shadow price of the energy requirement is the price of the marginal hour, divided by $\eta$.
+
+    - Cost $+\,\rho\,$peak traces the cost-peak frontier: the peak drops a lot for a small increase in cost.
+
+    - The constants of the constraints end up in the right-hand side: if a sensitivity analysis changes nothing, check the code first.
 
 ## Code
 

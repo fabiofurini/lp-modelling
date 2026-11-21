@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_newsvendor.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices and their validity ranges.
+
+    - From this module, [Chapter 3 «The solver: building, solving, interpreting»](https://fabiofurini.github.io/lp-modelling/solver-lp/): building and solving an LP in `gurobipy`.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - derive and apply the quantile rule;
+
+    - turn a stochastic problem into a scenario-based LP with the positive-part trick;
+
+    - quantify the value of modelling uncertainty (VSS);
+
+    - incorporate service levels and risk aversion.
+
 Choosing a quantity **before** observing demand: fashion and seasonal goods, fresh
 products, drugs, hotel capacity. It is the gateway to stochastic optimization, with
 a clear-cut result: **the optimal quantity is not the average demand**.
@@ -191,6 +209,18 @@ the expected cost by 0.55 €: a 55% return that would justify almost any financ
 Moreover, the high correlation removes the diversification benefit: the three
 products fail together.
 
+
+## In summary
+
+!!! chiave "In summary"
+
+    - The quantity is chosen before observing demand, and the optimum is the quantile $q^* = F^{-1}\bigl(c_u/(c_u+c_o)\bigr)$, not the mean.
+
+    - With $k$ scenarios the newsvendor becomes an LP with $2k+1$ variables: the positive parts are linearized without binary variables.
+
+    - The VSS measures the gain from modelling uncertainty; decisions estimated from few scenarios are unstable.
+
+    - Cycle service level and fill rate are different measures; with mean-CVaR a little risk aversion gives a lot of protection.
 
 ## Code
 

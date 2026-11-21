@@ -6,6 +6,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From the module *Linear Programming*, [Chapter 9 «Duality theory»](https://fabiofurini.github.io/linear-programming/duality/09-duality/): the dual of an LP and strong duality, which give the envelopment form.
+
+    - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices and their checking by perturbation.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - define relative efficiency as a weighted ratio of outputs to inputs;
+
+    - turn the fractional model into an LP and write its dual;
+
+    - read in the dual the reference units and the improvement targets;
+
+    - separate technical inefficiency from scale inefficiency.
+
 A bank has twelve branches: they use staff and operating costs and produce loans and
 deposits. Which ones perform well, and by how much should the others reduce their
 resources? The outputs have no common price, and a large branch is not inefficient just
@@ -302,6 +320,18 @@ Without branch 7: 5 branches change efficiency; newly efficient: [3, 8]
     A single DMU on the frontier can change the verdict on many others. Before acting on
     the targets it is worth checking the data of the most cited peers and repeating the
     analysis without them.
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Efficiency is the weighted output/input ratio with the most favourable weights; fixing the weighted input to $1$ gives an LP.
+
+    - The dual, the envelopment form, looks for a virtual unit that does at least as much with less: $\tilde\theta = \tilde h_o$, and the $\tilde\lambda_j > 0$ are the peers.
+
+    - BCC adds $\sum_{j=1}^{n} \lambda_j = 1$; scale efficiency is $\tilde\theta^{\rm CCR}/\tilde\theta^{\rm BCC}$.
+
+    - Efficiency is relative to the observed units: the frontier and the most cited peers must be checked.
 
 ## Code
 
