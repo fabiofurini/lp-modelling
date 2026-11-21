@@ -1,6 +1,6 @@
 # Data Envelopment Analysis
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-06-dea.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-06-dea.pdf) · [:material-gesture-tap: App: DEA: efficiency and peers of a branch](lab/dea-efficiency.md)
 
 **Class:** LP · **Script:** `python/lab06_dea.py`
 

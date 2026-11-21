@@ -1,6 +1,6 @@
 # Robust and quantile regression
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-regression.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-regression.pdf) · [:material-gesture-tap: App: Least absolute deviations and quantile regression](lab/quantile-regression.md)
 
 **Class: LP** · Script: `python/lab10_regression.py`
 

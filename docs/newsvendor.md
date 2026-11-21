@@ -1,6 +1,6 @@
 # The Newsvendor and its variants
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-07-newsvendor.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-07-newsvendor.pdf) · [:material-gesture-tap: App: Newsvendor: optimal order over 600 scenarios](lab/newsvendor-scenarios.md)
 
 **Class:** 1D convex / scenario-based stochastic LP · **Script:** `python/lab07_newsvendor.py`
 

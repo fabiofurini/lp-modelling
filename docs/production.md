@@ -1,6 +1,6 @@
 # Multi-period production and inventory
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-production.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-production.pdf) · [:material-gesture-tap: App: Production plan and shadow prices](lab/production-plan.md)
 
 **Class:** LP · **Script:** `python/lab04_production.py`
 

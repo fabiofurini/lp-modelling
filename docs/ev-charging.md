@@ -1,6 +1,6 @@
 # Smart charging of electric vehicles
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-ev-charging.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-ev-charging.pdf) · [:material-gesture-tap: App: Minimum-cost overnight charging](lab/ev-charging.md)
 
 **Class:** LP · **Script:** `python/lab05_ev_charging.py`
 

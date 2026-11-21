@@ -22,6 +22,7 @@ studies.
 Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 
 [Start :material-arrow-right:](tools.md){ .md-button .md-button--primary }
+[:material-gesture-tap: Lab](lab/index.md){ .md-button }
 [:material-clipboard-check-outline: Quiz](self-assessment.md){ .md-button }
 [:material-download: Downloads](downloads.md){ .md-button }
 
@@ -30,13 +31,11 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-The optimal six-month production plan computed by a linear programming model: how much of each product to make and how much to keep in stock to follow demand at minimum cost. Open the notebook in Colab, change the data and solve it again with Gurobi, with nothing to install.
+Three LP models of the course solved to optimality in the browser: production and inventory, electric vehicle charging and the scenario newsvendor. Choose the model at the top right, change demand, capacity, costs or prices with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices.
 
-[![](img/cap04_piano_scorte.png)](production.md)
+<div class="gi" data-grafico="pl-modelli"></div>
 
-[:simple-googlecolab: Open the notebook in Colab](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb){ .md-button .md-button--primary }
-[:material-book-open-variant: The chapter](production.md){ .md-button }
-[:material-language-python: All the notebooks](notebooks.md){ .md-button }
+[:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
 
 ## The parts of the course
@@ -93,6 +92,14 @@ The optimal six-month production plan computed by a linear programming model: ho
     A new mock exam at every start: 13 questions, 33 points, with the solution and the link to the notes. Downloads also has the full question bank.
 
     [:octicons-arrow-right-24: Test yourself](self-assessment.md)
+
+-   :material-gesture-tap: **Interactive lab**
+
+    ---
+
+    Apps running in the browser: move the parameters and watch the ideas of the course at work, one step at a time.
+
+    [:octicons-arrow-right-24: The lab](lab/index.md)
 
 -   :material-download: **Lecture notes in PDF**
 
