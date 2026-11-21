@@ -42,8 +42,8 @@ The lecture slides, one deck per chapter of the notes (PDF).
 
     ---
 
-    - [Introduction to the laboratory](pdf/slides-01-introduction.pdf)
-    - [Theory background](pdf/slides-02-background.pdf)
+    - [Introduction to LP modelling](pdf/slides-01-introduction.pdf)
+    - [Linear programming background](pdf/slides-02-background.pdf)
     - [The solver: building, solving, interpreting](pdf/slides-03-python-gurobi.pdf)
 
 -   :material-presentation: **Deterministic models**
@@ -51,13 +51,7 @@ The lecture slides, one deck per chapter of the notes (PDF).
     ---
 
     - [Multi-period production and inventory](pdf/slides-04-production.pdf)
-    - [Supply chain with congestion and sustainability](pdf/slides-05-supply-chain.pdf)
-    - [The Markowitz portfolio](pdf/slides-06-markowitz.pdf)
-    - [Pricing and revenue management](pdf/slides-07-pricing.pdf)
-    - [Advertising budget allocation](pdf/slides-08-budget.pdf)
-    - [Continuous location of a service](pdf/slides-09-location.pdf)
     - [Smart charging of electric vehicles](pdf/slides-05-ev-charging.pdf)
-    - [Service capacity and waiting times](pdf/slides-11-queues.pdf)
     - [Data Envelopment Analysis](pdf/slides-06-dea.pdf)
 
 -   :material-presentation: **Decisions under uncertainty**
@@ -72,7 +66,6 @@ The lecture slides, one deck per chapter of the notes (PDF).
 
     ---
 
-    - [Support Vector Machine](pdf/slides-16-svm.pdf)
     - [Robust and quantile regression](pdf/slides-10-regression.pdf)
 
 </div>

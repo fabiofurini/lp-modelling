@@ -27,6 +27,18 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 
 </div>
 
+<!-- collana-app -->
+## Try it now
+
+The DEA efficiency frontier: twelve bank branches, one LP per branch, and the dual tells each branch whom to learn from. Open the notebook in Colab, change the data and solve it again with Gurobi, with nothing to install.
+
+[![](img/cap06_frontiera.png)](dea.md)
+
+[:simple-googlecolab: Open the notebook in Colab](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb){ .md-button .md-button--primary }
+[:material-book-open-variant: The chapter](dea.md){ .md-button }
+[:material-language-python: All the notebooks](notebooks.md){ .md-button }
+<!-- /collana-app -->
+
 ## The parts of the course
 
 <div class="grid cards" markdown>
@@ -114,7 +126,7 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana -->
 ## The series
 
-Ten courses built the same way: lecture notes online and in PDF, exercises with solutions, an interactive lab and self-assessment quizzes.
+All the courses of the series are built the same way: lecture notes online and in PDF, exercises with solutions, an interactive lab and self-assessment quizzes.
 
 <div class="grid cards" markdown>
 
@@ -146,15 +158,31 @@ Ten courses built the same way: lecture notes online and in PDF, exercises with 
 
     graphs, spanning trees, shortest paths, network flows, the network simplex and project management
 
--   :material-hexagon-multiple-outline: **[Combinatorial Optimization](https://fabiofurini.github.io/combinatorial-optimization/)**
+-   :material-hexagon-multiple-outline: **[Combinatorial Optimization Problems](https://fabiofurini.github.io/combinatorial-optimization/)**
 
-    knapsack, bin packing, coloring, TSP, scheduling and lot sizing, solved in every way
+    knapsack, bin packing, coloring, TSP, scheduling and lot sizing: the problems, their formulations and ad hoc algorithms
+
+-   :material-table-large: **[Dynamic Programming](https://fabiofurini.github.io/dynamic-programming/)**
+
+    principles and DP algorithms for knapsack, lot sizing, coin change and rod cutting
+
+-   :material-map-marker-path: **[Heuristic Algorithms](https://fabiofurini.github.io/heuristic-algorithms/)**
+
+    constructive heuristics, local search, metaheuristics and MIP heuristics for combinatorial optimization problems
+
+-   :material-approximately-equal: **[Approximation Algorithms](https://fabiofurini.github.io/approximation-algorithms/)**
+
+    performance guarantees, approximation schemes and limits of approximation for combinatorial problems
 
 -   :material-vector-polygon: **[MIP Modelling](https://fabiofurini.github.io/mip-modelling/)**
 
     integer linear programming models, from the formulation to the solution with solvers
 
--   :material-chart-timeline-variant: **Operations Research Lab** · *this course*
+-   :material-chart-line: **LP Modelling** · *this course*
+
+    linear programming models of managerial problems, solved with Python and Gurobi
+
+-   :material-chart-timeline-variant: **[Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/)**
 
     modelling and solving optimization problems with Python and solvers
 

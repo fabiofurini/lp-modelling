@@ -61,4 +61,4 @@ python3 -m pip install gurobipy matplotlib pandas scipy   # scipy: statistical f
 python3 python/run_all.py            # regenerates data, results and figures
 ```
 
-The course slides and the solutions to the exercises are distributed in class.
+The slides are on the [downloads](downloads.md) page; the solutions to the exercises are distributed in class.

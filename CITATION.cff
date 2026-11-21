@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this material, please cite it as below."
-title: "Operations Research Lab: continuous optimization models for Management Engineering"
+title: "LP Modelling: linear programming models for Management Engineering"
 abstract: >-
-  Complete teaching material for the Operations Research Lab: online lecture
-  notes, Python/Gurobi code, data and case studies. Eighteen chapters covering
-  linear and nonlinear programming theory, solver usage, nine deterministic
-  models, decisions under uncertainty, and optimization for machine learning.
-  Every model uses continuous variables only and a single solver.
+  Teaching material of the course LP Modelling: online lecture notes,
+  Python/Gurobi code, data and case studies. Eleven chapters: linear
+  programming background, solver usage, deterministic models, decisions under
+  uncertainty, and robust and quantile regression. Every model is linear, with
+  continuous variables only and a single solver.
 authors:
   - family-names: Furini
     given-names: Fabio
@@ -17,12 +17,11 @@ repository-code: "https://github.com/fabiofurini/lp-modelling"
 license:
   - CC-BY-4.0
   - MIT
-date-released: 2026-09-04
+date-released: 2026-11-21
 keywords:
   - operations research
   - optimization
   - linear programming
-  - nonlinear optimization
   - Gurobi
   - Python
   - teaching material

@@ -6,7 +6,7 @@
   <a href="https://fabiofurini.github.io/">personal website</a>
 </p>
 
-# Operations Research Lab
+# LP Modelling
 
 > **The author.** Since September 2021 Fabio Furini has been an associate
 > professor at DIAG, Sapienza University of Rome. Ph.D. in Control Engineering
@@ -18,7 +18,7 @@
 > researcher at IASI-CNR in Rome.
 > Personal website: <https://fabiofurini.github.io/>
 
-Continuous optimization models — the course lecture
+Linear programming models — the course lecture
 notes in online form, with Python/Gurobi code, data and case studies.
 
 **📖 Online lecture notes: [fabiofurini.github.io/lp-modelling](https://fabiofurini.github.io/lp-modelling/)**
@@ -27,48 +27,42 @@ notes in online form, with Python/Gurobi code, data and case studies.
 
 ## Download as PDF
 
-- [Full lecture notes](https://fabiofurini.github.io/lp-modelling/pdf/lp-modelling-notes.pdf) (127 pages)
+- [Full lecture notes](https://fabiofurini.github.io/lp-modelling/pdf/lp-modelling-notes.pdf)
 - [Lecture slides](https://fabiofurini.github.io/lp-modelling/downloads/), one deck per chapter, on the downloads page
 
 ## Contents
 
+Prerequisite: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
+Quadratic and nonlinear models are in [NLP Modelling](https://fabiofurini.github.io/nlp-modelling/).
+
 **Tools**
 
-- [Theory: linear programming](https://fabiofurini.github.io/lp-modelling/theory-lp/) — duality, complementary slackness, shadow prices and sensitivity
-- [Theory: nonlinear optimization](https://fabiofurini.github.io/lp-modelling/theory-nonlinear/) — convexity, QP, KKT conditions
+- [Theory: linear programming](https://fabiofurini.github.io/lp-modelling/theory-lp/) — duality, complementary slackness, shadow prices, sensitivity protocol
 - [Solver: linear models](https://fabiofurini.github.io/lp-modelling/solver-lp/) — building the model, running it, reading and interpreting the solution
-- [Solver: nonlinear models](https://fabiofurini.github.io/lp-modelling/solver-nonlinear/) — function constraints, bilinear terms, tolerances
 
 **Deterministic models**
 
-- [Multi-period production and inventory](https://fabiofurini.github.io/lp-modelling/production/) — LP/QP
-- [Supply chain with congestion and CO₂](https://fabiofurini.github.io/lp-modelling/supplychain/) — LP/NLP
-- [Markowitz portfolio](https://fabiofurini.github.io/lp-modelling/markowitz/) — QP
-- [Pricing and revenue management](https://fabiofurini.github.io/lp-modelling/pricing/) — NLP
-- [Advertising budget](https://fabiofurini.github.io/lp-modelling/budget/) — convex NLP
-- [Continuous location](https://fabiofurini.github.io/lp-modelling/location/) — convex NLP
-- [Electric vehicle charging](https://fabiofurini.github.io/lp-modelling/ev-charging/) — LP/QP
-- [Queues and service capacity](https://fabiofurini.github.io/lp-modelling/queues/) — convex NLP
+- [Multi-period production and inventory](https://fabiofurini.github.io/lp-modelling/production/) — LP
+- [Electric vehicle charging](https://fabiofurini.github.io/lp-modelling/ev-charging/) — LP
 - [Data Envelopment Analysis](https://fabiofurini.github.io/lp-modelling/dea/) — LP, relative efficiency and the dual
 
 **Decisions under uncertainty**
 
-- [The newsvendor and its variants](https://fabiofurini.github.io/lp-modelling/newsvendor/) — stochastic LP
-- [VaR and CVaR](https://fabiofurini.github.io/lp-modelling/var-cvar/) — scenario LP
+- [The Newsvendor and its variants](https://fabiofurini.github.io/lp-modelling/newsvendor/) — stochastic LP
+- [VaR and CVaR](https://fabiofurini.github.io/lp-modelling/var-cvar/) — scenario-based LP
 - [Arbitrage and pricing](https://fabiofurini.github.io/lp-modelling/arbitrage/) — LP, the duality that prices
 
 **Optimization and machine learning**
 
-- [Support Vector Machine](https://fabiofurini.github.io/lp-modelling/svm/) — QP
 - [Robust and quantile regression](https://fabiofurini.github.io/lp-modelling/regression/) — LP, estimating the parameters
 
 **The course**
 
-- [Lab organization](https://fabiofurini.github.io/lp-modelling/organization/) — lab sessions, deliverables, assessment
+- [Organization of the lab](https://fabiofurini.github.io/lp-modelling/organization/) — lab sessions and mistakes to avoid
 
 ## Running the models
 
-Every chapter has its own script in [`python/`](python/) (`lab04`–`lab17`), with the
+Every chapter has its own script in [`python/`](python/) (`lab04`–`lab10`), with the
 data in [`data/`](data/):
 
 ```bash
@@ -99,7 +93,7 @@ published: they are distributed in class.
 
 ## Versione italiana
 
-The whole lab is also available in Italian:
+The whole course is also available in Italian:
 **[fabiofurini.github.io/modellazione-pl](https://fabiofurini.github.io/modellazione-pl/)**
 ([repository](https://github.com/fabiofurini/modellazione-pl)).
 
