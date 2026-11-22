@@ -54,3 +54,7 @@ $$
 The chapter [5. Multi-period production and inventory](production.md) uses this pattern with
 several products and shared machine-hour capacities. There you find the data, the code, the
 shadow prices of the capacity and the sensitivity analysis.
+
+<!-- modelli:inizio -->
+**Worked models that use this technique:** [Example 4.8 — Multi-period production with purchases and storage](techniques-models-05.md) · [Example 4.10 — Production and storage of fruit cakes](techniques-models-07.md)
+<!-- modelli:fine -->

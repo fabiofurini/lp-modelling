@@ -62,3 +62,7 @@ $$
     $$
     z(\mathit{LP}) = 4 \cdot 30 + 6 \cdot 20 + 5 \cdot 0 + 3 \cdot 60 = 420 .
     $$
+
+<!-- modelli:inizio -->
+**Worked models that use this technique:** [Example 4.5 — Transportation from warehouses to clients](techniques-models-02.md)
+<!-- modelli:fine -->

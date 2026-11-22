@@ -166,6 +166,16 @@ nav:
           - 4.7 Absolute values: techniques-07.md
           - 4.8 Ratios and percentages: techniques-08.md
           - 4.9 What cannot be modelled: techniques-09.md
+          - Worked models:
+              - "Example 4.4 — Production with regular time and overtime": techniques-models-01.md
+              - "Example 4.5 — Transportation from warehouses to clients": techniques-models-02.md
+              - "Example 4.6 — Diet planning": techniques-models-03.md
+              - "Example 4.7 — Diet planning for several classes": techniques-models-04.md
+              - "Example 4.8 — Multi-period production with purchases and storage": techniques-models-05.md
+              - "Example 4.9 — Choice of desserts": techniques-models-06.md
+              - "Example 4.10 — Production and storage of fruit cakes": techniques-models-07.md
+              - "Example 4.11 — Blending of crude oil in a refinery": techniques-models-08.md
+              - "Example 4.12 — Production of three drugs": techniques-models-09.md
   - Deterministic models:
       - deterministic-models.md
       - Production and inventory: production.md

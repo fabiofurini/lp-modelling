@@ -80,3 +80,7 @@ The general rule is in the technique [4.8 Ratios and percentages](techniques-08.
     $$
     z(\mathit{LP}) = 0.80 \cdot 20 + 0.50 \cdot 64 + 0.30 \cdot 16 = 52.80 \text{ euros} .
     $$
+
+<!-- modelli:inizio -->
+**Worked models that use this technique:** [Example 4.6 — Diet planning](techniques-models-03.md) · [Example 4.7 — Diet planning for several classes](techniques-models-04.md) · [Example 4.11 — Blending of crude oil in a refinery](techniques-models-08.md)
+<!-- modelli:fine -->

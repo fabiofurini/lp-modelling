@@ -31,3 +31,7 @@ is not linear.
 - The same technique applies to the percentage requirements of the [blending](techniques-03.md) models.
 - It is correct only when the denominator is *known to be positive* for every feasible solution.
 - Otherwise multiplying by it would change the direction of the inequality.
+
+<!-- modelli:inizio -->
+**Worked models that use this technique:** [Example 4.11 — Blending of crude oil in a refinery](techniques-models-08.md)
+<!-- modelli:fine -->

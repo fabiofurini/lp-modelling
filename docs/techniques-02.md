@@ -66,3 +66,7 @@ $$
     $$
 
     An optimal solution is $\tilde x_1 = 2$ and $\tilde x_2 = 6$, with optimal value $z(\mathit{LP}) = 36$.
+
+<!-- modelli:inizio -->
+**Worked models that use this technique:** [Example 4.4 — Production with regular time and overtime](techniques-models-01.md) · [Example 4.9 — Choice of desserts](techniques-models-06.md) · [Example 4.12 — Production of three drugs](techniques-models-09.md)
+<!-- modelli:fine -->

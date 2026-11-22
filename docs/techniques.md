@@ -2,7 +2,7 @@
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
 
-**Class:** LP · modelling techniques · **Examples:** three solved instances and nine worked models in the notes
+**Class:** LP · modelling techniques · **Examples:** three solved instances and [nine worked models](#worked-models)
 
 !!! nota "Prerequisites"
 
@@ -130,16 +130,27 @@ that say it»).
 | [4.7 absolute value](techniques-07.md) | $w_i \ge \pm \sum_j a_{ij} x_j$, or $w_i^{+} - w_i^{-}$ |
 | [4.8 ratio](techniques-08.md) | $\sum_j (a_j - \gamma\, e_j)\, x_j \le 0$ |
 
-## Worked models in the notes
+<!-- modelli-svolti:inizio -->
+## Worked models
 
-The [lecture notes](pdf/lp-modelling-notes.pdf) close the chapter with nine worked models,
-each one with its statement and its complete solution:
+Nine worked models, as in the lecture notes: the statement, the questions and the complete solution.
 
-- **symbolic models**: production with regular time and overtime; transportation from
-  warehouses to clients; diet planning, also for several classes; multi-period production
-  with purchases and storage;
-- **numerical models**: choice of desserts; production and storage of fruit cakes; blending
-  of crude oil in a refinery; production of three drugs.
+**Symbolic models**
+
+- [Example 4.4 — Production with regular time and overtime](techniques-models-01.md)
+- [Example 4.5 — Transportation from warehouses to clients](techniques-models-02.md)
+- [Example 4.6 — Diet planning](techniques-models-03.md)
+- [Example 4.7 — Diet planning for several classes](techniques-models-04.md)
+- [Example 4.8 — Multi-period production with purchases and storage](techniques-models-05.md)
+
+**Numerical models**
+
+- [Example 4.9 — Choice of desserts](techniques-models-06.md)
+- [Example 4.10 — Production and storage of fruit cakes](techniques-models-07.md)
+- [Example 4.11 — Blending of crude oil in a refinery](techniques-models-08.md)
+- [Example 4.12 — Production of three drugs](techniques-models-09.md)
+
+<!-- modelli-svolti:fine -->
 
 ## In summary
 
