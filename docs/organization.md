@@ -58,7 +58,7 @@ the same page.
 
 ```bash
 python3 -m pip install gurobipy matplotlib pandas scipy   # scipy: statistical functions only
-python3 python/run_all.py            # regenerates data, results and figures
+python3 python/lab05_production.py   # every script runs on its own
 ```
 
-The slides are on the [downloads](downloads.md) page; the solutions to the exercises are distributed in class.
+The slides are on the [downloads](downloads.md) page; the solutions to the exercises of the cases are distributed in class, those of the [modelling techniques](techniques.md#exercises) open below each exercise.

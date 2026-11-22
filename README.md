@@ -69,14 +69,13 @@ data in [`data/`](data/):
 
 ```bash
 python3 -m pip install gurobipy matplotlib pandas scipy
-python3 python/run_all.py     # all models: data, results and figures
+python3 python/lab05_production.py   # every script runs on its own
 ```
 
 With nothing to install, every chapter has its own notebook in
 [`notebooks/`](notebooks/): it opens in Colab from the badge at the top of the
 chapter page (the full list is [on the website](https://fabiofurini.github.io/lp-modelling/notebooks/))
-and runs in the browser. The notebooks are generated from the scripts —
-`python3 python/make_notebooks.py` — so the course code stays in one place.
+and runs in the browser. Notebook and chapter script contain the same code.
 
 The `gurobipy` licence bundled with the pip package is enough for every model in
 the course; the free academic licence can be activated at
