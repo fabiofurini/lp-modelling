@@ -1,10 +1,10 @@
 # Data Envelopment Analysis
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-06-dea.pdf) · [:material-gesture-tap: App: DEA: efficiency and peers of a branch](lab/dea-efficiency.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-07-dea.pdf) · [:material-gesture-tap: App: DEA: efficiency and peers of a branch](lab/dea-efficiency.md)
 
-**Class:** LP · **Script:** `python/lab06_dea.py`
+**Class:** LP · **Script:** `python/lab07_dea.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_dea.ipynb)
 
 !!! nota "Prerequisites"
 
@@ -261,7 +261,7 @@ BCC-efficient branches: [2, 3, 6, 7, 8, 9, 10, 12]
 For every branch the optimal value of the envelopment form coincides with that of the
 multiplier form: strong duality checked numerically.
 
-![CCR and BCC efficiencies](img/cap06_efficienze.png)
+![CCR and BCC efficiencies](img/cap07_efficienze.png)
 
 **Peers and input targets** (CCR, after the second phase; `data/dea_target.csv`):
 
@@ -283,7 +283,7 @@ multiplier form: strong duality checked numerically.
     model ($0.90$), and has a slack of $116.8$ k€ on costs: target $463.2$ k€ against
     $720$.
 
-![Efficient frontiers: staff and loans](img/cap06_frontiera.png)
+![Efficient frontiers: staff and loans](img/cap07_frontiera.png)
 
 In the one-input, one-output view (staff and loans) the CCR frontier is the ray with the
 best slope, $2.4333$ M€ per FTE of branch 9; the BCC frontier goes through branches 7,
@@ -336,15 +336,15 @@ Without branch 7: 5 branches change efficiency; newly efficient: [3, 8]
 ## Code
 
 The complete script of the chapter — data, models, duality, sensitivity and figures —
-is [`python/lab06_dea.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab06_dea.py)
-(reproducible with `python3 python/lab06_dea.py` from the `python/` folder).
+is [`python/lab07_dea.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab07_dea.py)
+(reproducible with `python3 python/lab07_dea.py` from the `python/` folder).
 
-The same code is also available as a notebook — [`notebooks/lab06_dea.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab07_dea.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab07_dea.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab06_dea.py`"
+??? example "Show the full script — `lab07_dea.py`"
 
     ```python
-    """Chapter 6 — Data Envelopment Analysis (LP).
+    """Chapter 7 — Data Envelopment Analysis (LP).
 
     Case study: 12 branches of a bank (branches 1, 2, ..., 12) compared on
     2 inputs (staff in FTE, operating costs in thousands of €) and 2 outputs
@@ -622,7 +622,7 @@ The same code is also available as a notebook — [`notebooks/lab06_dea.ipynb`](
     # ----------------------------------------------------------------------
     # 8. FIGURES (data for pgfplots + matplotlib preview)
     # ----------------------------------------------------------------------
-    salva_dat(eff[["branch", "ccr", "bcc"]], "cap06_efficienze")
+    salva_dat(eff[["branch", "ccr", "bcc"]], "cap07_efficienze")
 
     # one-input, one-output view: staff -> loans
     Xp, Yp = X[[0], :], Y[[0], :]
@@ -642,10 +642,10 @@ The same code is also available as a notebook — [`notebooks/lab06_dea.ipynb`](
     vrs = [(frontiera[0][0], 0.0)] + frontiera + [(x_max, frontiera[-1][1])]
     salva_dat(pd.DataFrame({"branch": filiali, "staff": Xp[0], "loans": Yp[0],
                             "ccr": np.round(ccr_p, 6), "bcc": np.round([b[0] for b in bcc_p], 6)}),
-              "cap06_frontiera_punti")
-    salva_dat(pd.DataFrame(vrs, columns=["staff", "loans"]), "cap06_frontiera_vrs")
+              "cap07_frontiera_punti")
+    salva_dat(pd.DataFrame(vrs, columns=["staff", "loans"]), "cap07_frontiera_vrs")
     salva_dat(pd.DataFrame({"staff": [0.0, x_max], "loans": [0.0, pend * x_max]}),
-              "cap06_frontiera_crs")
+              "cap07_frontiera_crs")
     intestazione("One-input, one-output view: staff -> loans")
     print(f"Slope of the CCR frontier (loans per FTE): {pend:.4f}")
     print("Efficiencies in the view (CCR/BCC): "
@@ -664,7 +664,7 @@ The same code is also available as a notebook — [`notebooks/lab06_dea.ipynb`](
     ax.set_xlabel("staff (FTE)"); ax.set_ylabel("loans (M€)")
     ax.set_title("CCR and BCC efficient frontiers: staff and loans")
     ax.legend(fontsize=8)
-    salva_figura(fig, "cap06_frontiera")
+    salva_figura(fig, "cap07_frontiera")
 
     fig, ax = plt.subplots()
     larg = 0.38
@@ -676,9 +676,9 @@ The same code is also available as a notebook — [`notebooks/lab06_dea.ipynb`](
     ax.set_xlabel("branch"); ax.set_ylabel("efficiency")
     ax.set_title("CCR and BCC efficiencies of the 12 branches")
     ax.legend(fontsize=8, loc="upper center", ncol=2)
-    salva_figura(fig, "cap06_efficienze")
+    salva_figura(fig, "cap07_efficienze")
 
-    print("\nDone: chapter 6.")
+    print("\nDone: chapter 7.")
     ```
 
 ## Exercises

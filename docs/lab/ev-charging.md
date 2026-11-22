@@ -5,7 +5,7 @@ hide:
 title: "Minimum-cost overnight charging"
 ---
 
-[← Lab](index.md) · Chapter: [5. Electric vehicle charging](../ev-charging.md)
+[← Lab](index.md) · Chapter: [6. Electric vehicle charging](../ev-charging.md)
 
 # Minimum-cost overnight charging
 

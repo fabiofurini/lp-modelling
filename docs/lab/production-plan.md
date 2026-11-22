@@ -5,7 +5,7 @@ hide:
 title: "Production plan and shadow prices"
 ---
 
-[← Lab](index.md) · Chapter: [4. Production and inventory](../production.md)
+[← Lab](index.md) · Chapter: [5. Production and inventory](../production.md)
 
 # Production plan and shadow prices
 

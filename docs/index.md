@@ -21,7 +21,7 @@ studies.
 
 Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 
-[Start :material-arrow-right:](tools.md){ .md-button .md-button--primary }
+[Start :material-arrow-right:](modelling.md){ .md-button .md-button--primary }
 [:material-pencil: Exercises](exercises/index.md){ .md-button }
 [:material-gesture-tap: Lab](lab/index.md){ .md-button }
 [:material-clipboard-check-outline: Quiz](self-assessment.md){ .md-button }
@@ -43,14 +43,14 @@ Three LP models of the course solved to optimality in the browser: production an
 
 <div class="grid cards" markdown>
 
--   :material-hammer-wrench: **Tools**
+-   :material-vector-polygon: **Modelling**
 
     ---
 
-    How a model is built, how it is run, how to read the solution, the shadow
-    prices and the reduced costs: the theory and the solver.
+    From the description to the model: the techniques (production, blending,
+    transportation, multi-period, linearizations), duality to interrogate the solution, the solver.
 
-    [:octicons-arrow-right-24: The three chapters](tools.md)
+    [:octicons-arrow-right-24: The four chapters](modelling.md)
 
 -   :material-factory: **Deterministic models**
 

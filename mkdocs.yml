@@ -45,6 +45,10 @@ theme:
 
 plugins:
   - search
+  # 22/11/2026: the Tools part is now the Modelling part
+  - redirects:
+      redirect_maps:
+        tools.md: modelling.md
 extra:
   social:
     - icon: material/web
@@ -146,11 +150,22 @@ not_in_nav: |
 
 nav:
   - Home: index.md
-  - Tools:
-      - tools.md
-      - Theory, linear programming: theory-lp.md
-      - Solver, linear models: solver-lp.md
-      - Notebooks in Colab: notebooks.md
+  - Modelling:
+      - modelling.md
+      - 1. Introduction to LP modelling: introduction.md
+      - "2. Background: LP and sensitivity analysis": theory-lp.md
+      - "3. The solver: building, solving, interpreting": solver-lp.md
+      - 4. Modelling techniques:
+          - Overview: techniques.md
+          - 4.1 From the description to the model: techniques-01.md
+          - 4.2 Production planning: techniques-02.md
+          - 4.3 Blending: techniques-03.md
+          - 4.4 Transportation: techniques-04.md
+          - 4.5 Multi-period planning: techniques-05.md
+          - 4.6 Min-max and max-min: techniques-06.md
+          - 4.7 Absolute values: techniques-07.md
+          - 4.8 Ratios and percentages: techniques-08.md
+          - 4.9 What cannot be modelled: techniques-09.md
   - Deterministic models:
       - deterministic-models.md
       - Production and inventory: production.md
@@ -171,3 +186,4 @@ nav:
   - Index:
       - Syllabus: syllabus.md
       - How to work with the course: organization.md
+      - Notebooks in Colab: notebooks.md

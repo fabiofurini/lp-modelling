@@ -1,14 +1,14 @@
 # VaR and CVaR: measuring and optimizing risk
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-08-var-cvar.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-09-var-cvar.pdf)
 
-**Class:** scenario-based LP · **Script:** `python/lab08_var_cvar.py`
+**Class:** scenario-based LP · **Script:** `python/lab09_var_cvar.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_var_cvar.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_var_cvar.ipynb)
 
 !!! nota "Prerequisites"
 
-    - From this module, [Chapter 7 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the scenario-based LP, the positive-part trick and the mean-CVaR objective.
+    - From this module, [Chapter 8 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the scenario-based LP, the positive-part trick and the mean-CVaR objective.
 
     - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices and the sensitivity protocol.
 
@@ -119,7 +119,7 @@ $\mathrm{CVaR}_{0.90}$ with expected return $\ge 8\%$ per year.
 Composition: ENE 9.9 FIN 1.9 TEC 10.5 SAN 8.6 UTL 46.5 MAT 22.5
 ```
 
-![Loss distribution and frontier](img/cap08_perdite_frontiera.png)
+![Loss distribution and frontier](img/cap09_perdite_frontiera.png)
 
 With an expected return of 8% per year the portfolio gains 0.67% per month on
 average, but in the worst 10% of the months it loses 4.89% on average: this is the
@@ -224,15 +224,15 @@ grows, capacity migrates towards the reliable supplier: **+79 € of average cos
 ## Code
 
 The complete script of the chapter — data, model, solution, sensitivity and figures —
-is [`python/lab08_var_cvar.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab08_var_cvar.py)
-(reproducible with `python3 python/lab08_var_cvar.py` from the `python/` folder).
+is [`python/lab09_var_cvar.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab09_var_cvar.py)
+(reproducible with `python3 python/lab09_var_cvar.py` from the `python/` folder).
 
-The same code is also available as a notebook — [`notebooks/lab08_var_cvar.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab08_var_cvar.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab09_var_cvar.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab08_var_cvar.py`"
+??? example "Show the full script — `lab09_var_cvar.py`"
 
     ```python
-    """Chapter 8 — VaR and CVaR: linear models and applications (scenario LP).
+    """Chapter 9 — VaR and CVaR: linear models and applications (scenario LP).
 
     Contents:
       1. Example with 6 scenarios: VaR = 12, CVaR = 18.67,
@@ -342,10 +342,10 @@ The same code is also available as a notebook — [`notebooks/lab08_var_cvar.ipy
     # histogram of the losses of the mean-CVaR portfolio
     conteggi, bordi = np.histogram(perd_cv * 100, bins=30)
     salva_dat(pd.DataFrame({"center": (bordi[:-1] + bordi[1:]) / 2, "freq": conteggi}),
-              "cap08_istogramma")
+              "cap09_istogramma")
     mm_, var_cv, cvar_cv = stat_perdite(perd_cv)
     salva_dat(pd.DataFrame({"stat": ["mean", "VaR", "CVaR"],
-                            "value": [mm_ * 100, var_cv * 100, cvar_cv * 100]}), "cap08_soglie")
+                            "value": [mm_ * 100, var_cv * 100, cvar_cv * 100]}), "cap09_soglie")
 
     # ----------------------------------------------------------------------
     # 3. RETURN-CVaR FRONTIER
@@ -358,7 +358,7 @@ The same code is also available as a notebook — [`notebooks/lab08_var_cvar.ipy
         if w is not None:
             punti.append((cv * 100, r * 100))
     front = pd.DataFrame(punti, columns=["cvar", "ret"])
-    salva_dat(front, "cap08_frontiera")
+    salva_dat(front, "cap09_frontiera")
     print(f"{len(front)} points computed; minimum CVaR {front['cvar'].min():.2f}% "
           f"at return {front.loc[front['cvar'].idxmin(), 'ret']:.1f}%")
 
@@ -419,7 +419,7 @@ The same code is also available as a notebook — [`notebooks/lab08_var_cvar.ipy
         print(f"  lambda = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
               f"mean cost {tot.mean():8.2f}, CVaR90 {cvar_t:8.2f} | mean service {serv.mean():.1%}")
     res2 = pd.DataFrame(righe, columns=["lam", "F1", "F2", "mean_cost", "cvar", "service"])
-    salva_dat(res2, "cap08_duestadi")
+    salva_dat(res2, "cap09_duestadi")
     print("The risk-averse decision maker reserves more capacity from the reliable supplier:")
     print("it pays more on average, but it cuts the tail of the scenarios with shortage.")
 
@@ -439,9 +439,9 @@ The same code is also available as a notebook — [`notebooks/lab08_var_cvar.ipy
     ax2.set_xlabel("CVaR$_{0.90}$ of the monthly loss (%)")
     ax2.set_ylabel("expected annual return (%)")
     ax2.set_title("Return-CVaR frontier")
-    salva_figura(fig, "cap08_perdite_frontiera")
+    salva_figura(fig, "cap09_perdite_frontiera")
 
-    print("\nDone: chapter 8.")
+    print("\nDone: chapter 9.")
     ```
 
 ## Exercises

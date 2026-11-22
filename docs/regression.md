@@ -1,14 +1,14 @@
 # Robust and quantile regression
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-regression.pdf) · [:material-gesture-tap: App: Least absolute deviations and quantile regression](lab/quantile-regression.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-11-regression.pdf) · [:material-gesture-tap: App: Least absolute deviations and quantile regression](lab/quantile-regression.md)
 
-**Class: LP** · Script: `python/lab10_regression.py`
+**Class: LP** · Script: `python/lab11_regression.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab11_regression.ipynb)
 
 !!! nota "Prerequisites"
 
-    - From this module, [Chapter 7 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the quantile rule and the critical fractile.
+    - From this module, [Chapter 8 «The Newsvendor and its variants»](https://fabiofurini.github.io/lp-modelling/newsvendor/): the quantile rule and the critical fractile.
 
     - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): the dual of an LP and shadow prices.
 
@@ -61,7 +61,7 @@ is the same positive-part trick as the [scenario newsvendor](newsvendor.md).
 
 !!! example "With no features: the empirical quantile comes back"
     With $p = 0$ only the intercept is left. Seven days of sales: 88, 96, 104,
-    112, 120, 132, 148 pieces; the bakery of chapter 7 has $c_u = 9$ and
+    112, 120, 132, 148 pieces; the bakery of chapter 8 has $c_u = 9$ and
     $c_o = 4$, hence $\tau = \alpha^* = 9/13 = 0.6923$.
 
     The optimum is $\tilde b = 120$, the fifth observation in increasing order
@@ -92,7 +92,7 @@ Mean absolute deviation over the 55 normal days: 13.08 pieces
 Distance between the two intercepts: 0.72 pieces
 ```
 
-![The LP line does not move](img/cap10_regressione_robusta.png)
+![The LP line does not move](img/cap11_regressione_robusta.png)
 
 The LP pays every deviation once, in proportion to its size: the five strike days
 move the intercept by a mere 0.72 pieces, and the model reaches on its own the line
@@ -155,7 +155,7 @@ last column checks the quantile property.
 | 9/13 = 0.6923 | 281.19 | −3.96 | −23.21 | +31.47 | 0.673 |
 | 0.90 | 287.49 | −3.57 | −25.69 | +27.98 | 0.873 |
 
-![The fan of quantiles](img/cap10_quantili.png)
+![The fan of quantiles](img/cap11_quantili.png)
 
 For a hot weekend day at full price (28 degrees, price 3.00):
 
@@ -166,7 +166,7 @@ safety stock                        5.8 pieces
 0.6923 quantile with no features  148.0 pieces
 ```
 
-The quantile rule is still the one of chapter 7, but the number it applies to
+The quantile rule is still the one of chapter 8, but the number it applies to
 changes: the quantile over the whole history says 148 pieces, the one
 *conditional* on the conditions of the day asks for 132. Sixteen unsold pieces a
 day fewer, without touching the costs. The gap between the median estimate and
@@ -208,7 +208,7 @@ budget 30: mean deviation 10.63 pieces, shadow price  -7.271 pieces per unit
 budget 45: mean deviation  7.19 pieces, shadow price  -4.197 pieces per unit
 ```
 
-![Error against the budget on the coefficients](img/cap10_budget.png)
+![Error against the budget on the coefficients](img/cap11_budget.png)
 
 The shadow price of the budget constraint is the **price of complexity**: how
 many pieces of error are saved for every extra unit of budget. It is −19.95 when
@@ -219,13 +219,13 @@ deviation until the budget becomes plainly excessive. The budget to choose is no
 the one minimising the historical error, but the one beyond which the shadow
 price becomes negligible.
 
-The same code is also available as a notebook — [`notebooks/lab10_regression.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab11_regression.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab11_regression.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the complete script — `lab10_regression.py`"
+??? example "Show the complete script — `lab11_regression.py`"
     ```python
-    """Chapter 10 — Robust and quantile regression (LP).
+    """Chapter 11 — Robust and quantile regression (LP).
 
-    Case study: the bakery of chapter 7. Sixty days of history (demand,
+    Case study: the bakery of chapter 8. Sixty days of history (demand,
     temperature, price, weekend) plus five transport-strike days on which demand
     collapses.
 
@@ -244,7 +244,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     from stile import (ARANCIO, BLU, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt,
                        salva_dat, salva_dati, salva_figura)
 
-    TAU_NV = 9 / 13                                # critical fractile of chapter 7
+    TAU_NV = 9 / 13                                # critical fractile of chapter 8
 
 
     # ----------------------------------------------------------------------
@@ -293,7 +293,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     X0 = np.zeros((len(y7), 0))
     m0, _, b0, pi0, _ = quantile_regression(X0, y7, tau=TAU_NV)
     print(f"Seven days: {y7.astype(int)}")
-    print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 7: cu=9, co=4)")
+    print(f"tau = alpha* = 9/13 = {TAU_NV:.4f}  (bakery of chapter 8: cu=9, co=4)")
     print(f"Optimal intercept b = {b0:.4f}  -> the 5th ordered value, the 69.23% quantile")
     print(f"Optimal value = {m0.ObjVal:.4f} = 680/13")
     print(f"Duals pi = {np.round(pi0, 4)}  (bounds: -(1-tau) = {-(1 - TAU_NV):.4f}, "
@@ -422,7 +422,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     print(f"  predicted {TAU_NV:.4f} quantile     {pred_nv:6.1f} pieces  <- quantity to bake")
     print(f"  safety stock                   {pred_nv - pred_med:6.1f} pieces")
     print(f"  {TAU_NV:.4f} quantile with no features {q_uncond:6.1f} pieces  "
-          f"(chapter 7: same rule, no features)")
+          f"(chapter 8: same rule, no features)")
 
     # ----------------------------------------------------------------------
     # 6. FEATURE SELECTION WITH A BUDGET ON THE COEFFICIENTS
@@ -458,7 +458,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
                 entries[name] = t
     curve = pd.DataFrame(curve)
     salva_dati(curve, "regressione_budget")
-    salva_dat(curve[["budget", "scarto_medio", "prezzo_ombra"]], "cap10_budget")
+    salva_dat(curve[["budget", "scarto_medio", "prezzo_ombra"]], "cap11_budget")
 
     print(f"\nOrder of entry (coefficient above {THRESHOLD:.0f} pieces per standard "
           f"deviation):")
@@ -484,7 +484,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     points = pd.DataFrame({"temperatura": temperature, "domanda": demand,
                            "sciopero": outlier.astype(int),
                            "appoggio": support.astype(int)})
-    salva_dat(points, "cap10_panetteria")
+    salva_dat(points, "cap11_panetteria")
 
     fig, ax = plt.subplots()
     ax.scatter(temperature[normal], demand[normal], s=18, color=TEAL,
@@ -499,14 +499,14 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     ax.set_ylabel("demand (pieces)")
     ax.set_title("Five strike days do not move the LP line")
     ax.legend(loc="upper right", fontsize=8)
-    salva_figura(fig, "cap10_regressione_robusta")
+    salva_figura(fig, "cap11_regressione_robusta")
 
     lines = []
     for tau in (0.10, 0.50, TAU_NV):
         _, w_t, b_t, _, _ = quantile_regression(Xt[clean], demand[clean], tau=tau)
         lines.append({"tau": tau, "intercetta": b_t, "pendenza": w_t[0]})
     lines = pd.DataFrame(lines)
-    salva_dat(lines, "cap10_rette_quantili")
+    salva_dat(lines, "cap11_rette_quantili")
 
     fig, ax = plt.subplots()
     ax.scatter(temperature[clean], demand[clean], s=16, color=GRIGIO, alpha=0.7,
@@ -521,7 +521,7 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     ax.set_ylabel("demand (pieces)")
     ax.set_title("One line per quantile: the fan of demand")
     ax.legend(loc="upper right", fontsize=8)
-    salva_figura(fig, "cap10_quantili")
+    salva_figura(fig, "cap11_quantili")
 
     fig, ax = plt.subplots()
     ax.plot(curve["budget"], curve["scarto_medio"], color=TEAL, lw=2)
@@ -533,9 +533,9 @@ The same code is also available as a notebook — [`notebooks/lab10_regression.i
     ax.set_xlabel("budget on the coefficients")
     ax.set_ylabel("mean absolute deviation (pieces)")
     ax.set_title("The price of complexity: error against budget")
-    salva_figura(fig, "cap10_budget")
+    salva_figura(fig, "cap11_budget")
 
-    print("\nDone: chapter 10 (robust and quantile regression).")
+    print("\nDone: chapter 11 (robust and quantile regression).")
     ```
 
 ## In summary

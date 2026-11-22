@@ -14,7 +14,7 @@ scripts under the
 
     ---
 
-    Models, worked examples, case studies and sensitivity analysis: the tools,
+    Models, worked examples, case studies and sensitivity analysis: modelling,
     deterministic models, decisions under uncertainty, optimization and
     machine learning.
 
@@ -38,35 +38,36 @@ The lecture slides, one deck per chapter of the notes (PDF).
 
 <div class="grid cards" markdown>
 
--   :material-presentation: **Tools**
+-   :material-presentation: **Modelling**
 
     ---
 
     - [Introduction to LP modelling](pdf/slides-01-introduction.pdf)
     - [Linear programming background](pdf/slides-02-background.pdf)
     - [The solver: building, solving, interpreting](pdf/slides-03-python-gurobi.pdf)
+    - [Modelling techniques](pdf/slides-04-techniques.pdf)
 
 -   :material-presentation: **Deterministic models**
 
     ---
 
-    - [Multi-period production and inventory](pdf/slides-04-production.pdf)
-    - [Smart charging of electric vehicles](pdf/slides-05-ev-charging.pdf)
-    - [Data Envelopment Analysis](pdf/slides-06-dea.pdf)
+    - [Multi-period production and inventory](pdf/slides-05-production.pdf)
+    - [Smart charging of electric vehicles](pdf/slides-06-ev-charging.pdf)
+    - [Data Envelopment Analysis](pdf/slides-07-dea.pdf)
 
 -   :material-presentation: **Decisions under uncertainty**
 
     ---
 
-    - [The Newsvendor and its variants](pdf/slides-07-newsvendor.pdf)
-    - [VaR and CVaR](pdf/slides-08-var-cvar.pdf)
-    - [Arbitrage and pricing](pdf/slides-09-arbitrage.pdf)
+    - [The Newsvendor and its variants](pdf/slides-08-newsvendor.pdf)
+    - [VaR and CVaR](pdf/slides-09-var-cvar.pdf)
+    - [Arbitrage and pricing](pdf/slides-10-arbitrage.pdf)
 
 -   :material-presentation: **Optimization and machine learning**
 
     ---
 
-    - [Robust and quantile regression](pdf/slides-10-regression.pdf)
+    - [Robust and quantile regression](pdf/slides-11-regression.pdf)
 
 </div>
 

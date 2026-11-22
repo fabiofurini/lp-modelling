@@ -5,7 +5,7 @@ hide:
 title: "DEA: efficiency and peers of a branch"
 ---
 
-[← Lab](index.md) · Chapter: [6. Data Envelopment Analysis](../dea.md)
+[← Lab](index.md) · Chapter: [7. Data Envelopment Analysis](../dea.md)
 
 # DEA: efficiency and peers of a branch
 

@@ -15,13 +15,13 @@ being written to a file.
 
 | Chapter | Class | Notebook |
 |---|---|---|
-| [Multi-period production and inventory](production.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb) |
-| [Smart charging of electric vehicles](ev-charging.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb) |
-| [Data Envelopment Analysis](dea.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_dea.ipynb) |
-| [The Newsvendor and its variants](newsvendor.md) | 1D convex / scenario-based stochastic LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_newsvendor.ipynb) |
-| [VaR and CVaR: measuring and optimizing risk](var-cvar.md) | scenario-based LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_var_cvar.ipynb) |
-| [Arbitrage and arbitrage-free pricing](arbitrage.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_arbitrage.ipynb) |
-| [Robust and quantile regression](regression.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_regression.ipynb) |
+| [Multi-period production and inventory](production.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_production.ipynb) |
+| [Smart charging of electric vehicles](ev-charging.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_ev_charging.ipynb) |
+| [Data Envelopment Analysis](dea.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_dea.ipynb) |
+| [The Newsvendor and its variants](newsvendor.md) | 1D convex / scenario-based stochastic LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_newsvendor.ipynb) |
+| [VaR and CVaR: measuring and optimizing risk](var-cvar.md) | scenario-based LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_var_cvar.ipynb) |
+| [Arbitrage and arbitrage-free pricing](arbitrage.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_arbitrage.ipynb) |
+| [Robust and quantile regression](regression.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab11_regression.ipynb) |
 
 ## How they are made
 
@@ -36,7 +36,7 @@ docstring, sections and comments from it — and whoever prefers the command lin
 keeps running, from the `python/` folder:
 
 ```bash
-python3 lab06_markowitz.py
+python3 lab05_production.py
 ```
 
 ## Installation and licence

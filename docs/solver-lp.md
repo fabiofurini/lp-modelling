@@ -1,4 +1,4 @@
-# Implementation: linear models
+# 3. The solver: building, solving, interpreting
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-03-python-gurobi.pdf)
 

@@ -1,14 +1,16 @@
 # Multi-period production and inventory
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-production.pdf) · [:material-gesture-tap: App: Production plan and shadow prices](lab/production-plan.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-production.pdf) · [:material-gesture-tap: App: Production plan and shadow prices](lab/production-plan.md)
 
-**Class:** LP · **Script:** `python/lab04_production.py`
+**Class:** LP · **Script:** `python/lab05_production.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_production.ipynb)
 
 !!! nota "Prerequisites"
 
     - From this module, [Chapter 2 «Background: linear programming and sensitivity analysis»](https://fabiofurini.github.io/lp-modelling/theory-lp/): shadow prices, their validity ranges and the sensitivity protocol.
+
+    - From this module, [Chapter 4 «Modelling techniques»](https://fabiofurini.github.io/lp-modelling/techniques/): the inventory balance of multi-period planning.
 
     - From this module, [Chapter 3 «The solver: building, solving, interpreting»](https://fabiofurini.github.io/lp-modelling/solver-lp/): building an LP in `gurobipy` and reading `Pi` and `SARHS`.
 
@@ -75,10 +77,9 @@ Description of the objective function and of the constraints:
 - the linear objective function minimizes the total cost of the plan, the sum of the
   production costs $c_{it}\, x_{it}$ and of the holding costs $h_{it}\, s_{it}$ over
   all products and months;
-- the linear **balance** constraints impose that, for every product and every month,
-  what comes in (previous inventory plus production) is equal to what goes out
-  (demand served plus subsequent inventory); for $t = 1$ the initial inventory
-  $s_{i0}$ is used ($n\,m$ linear constraints);
+- the linear **balance** constraints are those of the technique
+  [4.5 Multi-period planning](techniques-05.md), one per product and month; for
+  $t = 1$ the initial inventory $s_{i0}$ is used ($n\,m$ linear constraints);
 - the linear **capacity** constraints ensure that, in every month, the machine hours
   used by all the products do not exceed those available ($m$ linear constraints);
 - the non-negativity constraints on $x_{it}$ and $s_{it}$ define the variables of the
@@ -106,7 +107,7 @@ prod.2  50.0   80.0  110.0  140.0  150.0  100.0
 prod.3  89.5   91.0   81.4   44.3   29.0   64.8     (inventory up to 107 units)
 ```
 
-![Production plan and inventory](img/cap04_piano_scorte.png)
+![Production plan and inventory](img/cap05_piano_scorte.png)
 
 The solver discovers the **pre-build** all by itself: product 3 (2.1 hours/unit) is
 produced in advance and stockpiled in order to free up capacity in the peak months; the
@@ -155,15 +156,15 @@ quadratic variant of this model, in the module *NLP Modelling*, page
 ## Code
 
 The complete script of the chapter — data, model, solution, sensitivity and figures —
-is [`python/lab04_production.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab04_production.py)
-(reproducible with `python3 python/lab04_production.py` from the `python/` folder).
+is [`python/lab05_production.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab05_production.py)
+(reproducible with `python3 python/lab05_production.py` from the `python/` folder).
 
-The same code is also available as a notebook — [`notebooks/lab04_production.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab04_production.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab05_production.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab05_production.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab04_production.py`"
+??? example "Show the full script — `lab05_production.py`"
 
     ```python
-    """Chapter 4 — Multi-period production and inventory planning (LP).
+    """Chapter 5 — Multi-period production and inventory planning (LP).
 
     Case study: a company producing 3 components (products 1, 2, 3) over a 6-month
     horizon with one shared resource (machine hours).
@@ -277,7 +278,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
         **{f"x{i}": [x[i, t].X for t in mesi] for i in prodotti},
         **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
         "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
-    }), "cap04_piano")
+    }), "cap05_piano")
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.5, 4.0))
     larg = 0.26
@@ -294,7 +295,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
     ax2.set_xlabel("month"); ax2.set_ylabel("units in stock")
     ax2.set_title("End-of-month inventory")
     ax2.legend(fontsize=8)
-    salva_figura(fig, "cap04_piano_scorte")
+    salva_figura(fig, "cap05_piano_scorte")
 
     # sensitivity: optimal cost as the uniform capacity varies
     intestazione("Sensitivity: optimal cost as capacity varies")
@@ -309,7 +310,7 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
         print(f"  capacity x{f:4.2f}: cost {costi[-1]:10.2f} €")
 
     tab_cap = pd.DataFrame({"percent": fattori * 100, "cost": costi}).dropna()
-    salva_dat(tab_cap, "cap04_capacita")
+    salva_dat(tab_cap, "cap05_capacita")
 
     fig, ax = plt.subplots()
     ax.plot(fattori * 100, costi, "-o", color=TEAL)
@@ -318,9 +319,9 @@ The same code is also available as a notebook — [`notebooks/lab04_production.i
     ax.set_ylabel("optimal total cost (€)")
     ax.set_title("Value curve of capacity: convex and decreasing")
     ax.legend()
-    salva_figura(fig, "cap04_valore_capacita")
+    salva_figura(fig, "cap05_valore_capacita")
 
-    print("\nDone: chapter 4.")
+    print("\nDone: chapter 5.")
     ```
 
 ## Exercises

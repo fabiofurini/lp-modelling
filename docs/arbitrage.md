@@ -1,10 +1,10 @@
 # Arbitrage and arbitrage-free pricing
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-09-arbitrage.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-arbitrage.pdf)
 
-**Class: LP** · Script: `python/lab09_arbitrage.py`
+**Class: LP** · Script: `python/lab10_arbitrage.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab09_arbitrage.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab10_arbitrage.ipynb)
 
 !!! nota "Prerequisites"
 
@@ -105,7 +105,7 @@ $$
 s^0_2 \in [18{,}69,\; 21{,}54] .
 $$
 
-![Arbitrage gain as the price of security 2 varies](img/cap09_arbitraggio_curva.png)
+![Arbitrage gain as the price of security 2 varies](img/cap10_arbitraggio_curva.png)
 
 Inside the interval the value of the normalized LP is 0 (consistent prices);
 outside it drops to −1: an arbitrage exists, in one direction or the other.
@@ -118,12 +118,12 @@ outside it drops to −1: an arbitrage exists, in one direction or the other.
   in $[1{,}4615,\; 2{,}0308]$ — outside that interval anyone could build an
   arbitrage by combining the call and the quoted securities.
 
-The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab09_arbitrage.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab10_arbitrage.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab10_arbitrage.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab09_arbitrage.py`"
+??? example "Show the full script — `lab10_arbitrage.py`"
 
     ```python
-    """Chapter 9 — Arbitrage and arbitrage-free pricing (LP).
+    """Chapter 10 — Arbitrage and arbitrage-free pricing (LP).
 
     Case study: a one-period market with 3 states of the world, one risk-free
     security (gross return R = 1.04) and 2 risky securities.
@@ -243,7 +243,7 @@ The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ip
         valori.append(mg.ObjVal)
     curva = pd.DataFrame({"price_security2": griglia, "lp_value": valori})
     salva_dati(curva, "arbitraggio_curva_prezzo")
-    salva_dat(curva, "cap09_arbitraggio_curva")
+    salva_dat(curva, "cap10_arbitraggio_curva")
     print(f"Grid {griglia[0]:.0f}..{griglia[-1]:.0f}: LP value = 0 only inside "
           f"the interval, negative outside (arbitrage)")
 
@@ -278,9 +278,9 @@ The same code is also available as a notebook — [`notebooks/lab09_arbitrage.ip
     ax.set_xlabel("price of security 2")
     ax.set_ylabel("optimal value of the normalised LP")
     ax.set_title("Outside the consistent price interval an arbitrage appears")
-    salva_figura(fig, "cap09_arbitraggio_curva")
+    salva_figura(fig, "cap10_arbitraggio_curva")
 
-    print("\nDone: chapter 9 (arbitrage).")
+    print("\nDone: chapter 10 (arbitrage).")
     ```
 
 ## In summary

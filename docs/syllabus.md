@@ -21,33 +21,36 @@ The complete list of the chapters, in the order in which they are covered. Every
 chapter has its own page, its own Python script and its own
 [notebook that opens in Colab](notebooks.md).
 
-**[Tools](tools.md)**
+**[Modelling](modelling.md)**
 
-1. Introduction to LP modelling — this page and the [home page](index.md)
-2. [Theory: linear programming](theory-lp.md) — duality, shadow prices,
-   sensitivity protocol
-3. [Solver, linear models](solver-lp.md) — building the model, running it,
-   retrieving the solution, interpreting the output
+1. [Introduction to LP modelling](introduction.md) — what we shall do, notation,
+   structure of the chapters
+2. [Background: linear programming and sensitivity analysis](theory-lp.md) — duality,
+   shadow prices, sensitivity protocol
+3. [The solver: building, solving, interpreting](solver-lp.md) — building the model,
+   running it, retrieving the solution, interpreting the output
+4. [Modelling techniques](techniques.md) — from the description to the model,
+   production, blending, transportation, multi-period, linearizations
 
 **[Deterministic models](deterministic-models.md)**
 
-4. [Multi-period production and inventory](production.md) — LP
-5. [Electric vehicle charging](ev-charging.md) — LP
-6. [Data Envelopment Analysis](dea.md) — LP and duality
+5. [Multi-period production and inventory](production.md) — LP
+6. [Electric vehicle charging](ev-charging.md) — LP
+7. [Data Envelopment Analysis](dea.md) — LP and duality
 
 **[Decisions under uncertainty](decisions-uncertainty.md)**
 
-7. [The Newsvendor and its variants](newsvendor.md) — stochastic LP
-8. [VaR and CVaR](var-cvar.md) — scenario-based LP
-9. [Arbitrage and pricing](arbitrage.md) — LP and duality that prices
+8. [The Newsvendor and its variants](newsvendor.md) — stochastic LP
+9. [VaR and CVaR](var-cvar.md) — scenario-based LP
+10. [Arbitrage and pricing](arbitrage.md) — LP and duality that prices
 
 **[Optimization and machine learning](optimization-ml.md)**
 
-10. [Robust and quantile regression](regression.md) — LP
+11. [Robust and quantile regression](regression.md) — LP
 
 **The course**
 
-11. [Organization of the lab](organization.md) — lab sessions and mistakes
+12. [Organization of the lab](organization.md) — lab sessions and mistakes
     to avoid
 
 Prerequisite: the module [Linear Programming](https://fabiofurini.github.io/linear-programming/), in particular

@@ -103,7 +103,7 @@ docstring, sections and comments from it — and whoever prefers the command lin
 keeps running, from the `python/` folder:
 
 ```bash
-python3 lab06_markowitz.py
+python3 lab05_production.py
 ```
 
 ## Installation and licence

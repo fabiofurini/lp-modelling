@@ -5,7 +5,7 @@ hide:
 title: "Least absolute deviations and quantile regression"
 ---
 
-[← Lab](index.md) · Chapter: [10. Robust and quantile regression](../regression.md)
+[← Lab](index.md) · Chapter: [11. Robust and quantile regression](../regression.md)
 
 # Least absolute deviations and quantile regression
 

@@ -1,4 +1,4 @@
-"""Chapter 5 — Smart charging of electric vehicles (LP).
+"""Chapter 6 — Smart charging of electric vehicles (LP).
 
 Case study: a company depot with 6 electric vans to be charged overnight;
 hourly energy prices; base load of the building.
@@ -132,8 +132,8 @@ for CC in [60, 65, 70, 80, 90, 120]:
 # ----------------------------------------------------------------------
 salva_dat(pd.DataFrame({"hour": ore, "price_cent": prezzo * 100, "base": base,
                         "totcost": base + prof_costo, "totpeak": base + prof_picco}),
-          "cap05_profili")
-salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap05_frontiera")
+          "cap06_profili")
+salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap06_frontiera")
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.2, 6.4), sharex=True)
 ax1.bar(ore, prezzo * 100, color=GRIGIO, alpha=0.6)
@@ -148,7 +148,7 @@ ax2.axhline(C_rete, color=ROSSO, ls=":", label=f"grid limit {C_rete:.0f} kW")
 ax2.set_xlabel("hour of the day"); ax2.set_ylabel("total withdrawal (kW)")
 ax2.set_title("Withdrawal profile: chasing prices creates a night-time peak")
 ax2.legend(fontsize=8, ncol=2)
-salva_figura(fig, "cap05_profili")
+salva_figura(fig, "cap06_profili")
 
 comp = pd.DataFrame(compromessi, columns=["rho", "cost", "peak"])
 fig, ax = plt.subplots()
@@ -158,6 +158,6 @@ for _, r in comp.iterrows():
 ax.set_xlabel("peak withdrawal (kW)")
 ax.set_ylabel("charging cost (€)")
 ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")
-salva_figura(fig, "cap05_frontiera")
+salva_figura(fig, "cap06_frontiera")
 
-print("\nDone: chapter 5.")
+print("\nDone: chapter 6.")

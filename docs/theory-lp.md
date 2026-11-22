@@ -1,4 +1,4 @@
-# Theory: linear programming
+# 2. Background: linear programming and sensitivity analysis
 
 [:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-02-background.pdf)
 
@@ -34,27 +34,12 @@ The *data* are the costs $c_j$, the coefficients $a_{ij}$ and the right-hand sid
 with $i \in M = \{1, 2, \dots, m\}$ and $j \in N = \{1, 2, \dots, n\}$. The sets
 $M_{\le}, M_{=}, M_{\ge}$ partition $M$ according to the direction of the constraint;
 the sets $N_{\ge 0}, N_{\gtreqless 0}, N_{\le 0}$ partition $N$ according to the
-sign of the variable (non-negative, free, non-positive). The *variables* are the
-$x_j$ of the primal and, in the dual, one $\pi_i$ per constraint of the primal.
+sign of the variable (non-negative, free, non-positive).
 
-$$
-\begin{aligned}
-\text{(P)} \qquad \max ~ \sum_{j \in N} c_j x_j & & \\
-\text{subject to} \quad \sum_{j \in N} a_{ij} x_j &\le b_i, & \forall i \in M_{\le}, \\
-\sum_{j \in N} a_{ij} x_j &= b_i, & \forall i \in M_{=}, \\
-\sum_{j \in N} a_{ij} x_j &\ge b_i, & \forall i \in M_{\ge}, \\
-x_j &\ge 0, & \forall j \in N_{\ge 0}, \\
-x_j &\gtreqless 0, & \forall j \in N_{\gtreqless 0}, \\
-x_j &\le 0, & \forall j \in N_{\le 0}; \\[1ex]
-\text{(D)} \qquad \min ~ \sum_{i \in M} b_i \pi_i & & \\
-\text{subject to} \quad \sum_{i \in M} a_{ij} \pi_i &\ge c_j, & \forall j \in N_{\ge 0}, \\
-\sum_{i \in M} a_{ij} \pi_i &= c_j, & \forall j \in N_{\gtreqless 0}, \\
-\sum_{i \in M} a_{ij} \pi_i &\le c_j, & \forall j \in N_{\le 0}, \\
-\pi_i &\ge 0, & \forall i \in M_{\le}, \\
-\pi_i &\gtreqless 0, & \forall i \in M_{=}, \\
-\pi_i &\le 0, & \forall i \in M_{\ge}.
-\end{aligned}
-$$
+The *variables* are the $x_j$ of the primal (P), a maximization problem in general form, and,
+in the minimization dual (D), one $\pi_i$ per constraint of the primal. The two complete models
+are in the chapter [“Duality theory”](https://fabiofurini.github.io/linear-programming/duality/09-duality/)
+of *Linear Programming*.
 
 **The rules of duality** — every constraint of the primal generates a dual
 variable, every variable a dual constraint:
@@ -86,72 +71,10 @@ $$
 \sum_{j \in N} c_j \tilde x_j \;=\; \sum_{i \in M} b_i \tilde\pi_i .
 $$
 
-Weak duality says that every feasible solution of the dual is an *upper bound*
-for the maximization primal: if two feasible solutions have the same value, they
-are both optimal. Strong duality guarantees that at the optimum the gap always
-closes (there may be more than one optimal solution, but the optimal values
-coincide).
-
-!!! example "Building the dual with the rules: the 2×2 LP"
-    The 2×2 LP is exactly in the canonical maximization form (constraints ≤,
-    non-negative variables):
-
-    $$
-    \begin{array}{r r@{\;}c@{\;}r c r l}
-    \max & 30\,x_1 & + & 50\,x_2 & & & \\
-    \text{subject to} & x_1 & + & 3\,x_2 & \le & 90 & \\
-     & 2\,x_1 & + & x_2 & \le & 80 & \\
-     & x_1, & & x_2 & \ge & 0 &
-    \end{array}
-    $$
-
-    Every constraint generates a dual variable ($\le$ in a maximization ⇒
-    $\pi_1, \pi_2 \ge 0$); every variable generates a dual constraint, with the
-    coefficients taken by **column** and the costs as right-hand sides; the
-    objective swaps the roles:
-
-    $$
-    \begin{array}{r r@{\;}c@{\;}r c r l}
-    \min & 90\,\pi_1 & + & 80\,\pi_2 & & & \\
-    \text{subject to} & \pi_1 & + & 2\,\pi_2 & \ge & 30 & \\
-     & 3\,\pi_1 & + & \pi_2 & \ge & 50 & \\
-     & \pi_1, & & \pi_2 & \ge & 0 &
-    \end{array}
-    $$
-
-!!! example "Building the dual with the rules: all the cases in a single LP"
-    A **minimization** LP with all the cases of the table (three directions,
-    three signs; the table is read from right to left):
-
-    $$
-    \begin{array}{r r@{\;}c@{\;}r@{\;}c@{\;}r c r}
-    \min & 5\,x_1 & + & 8\,x_2 & - & 9\,x_3 & & \\
-    \text{subject to} & x_1 & + & x_2 & & & \ge & 30 \\
-     & x_1 & + & x_2 & - & x_3 & = & 100 \\
-     & x_1 & - & 2\,x_2 & & & \le & -20 \\
-     & x_1 & & & & & \ge & 0 \\
-     & & & x_2 & & & \gtreqless & 0, \\
-     & & & & & x_3 & \le & 0 
-    \end{array}
-    $$
-
-    Dual variables: $\pi_1 \ge 0$ (constraint $\ge$ in a minimization),
-    $\pi_2 \gtreqless 0$ (equality), $\pi_3 \le 0$ (constraint $\le$).
-    Dual constraints by column: from $x_1 \ge 0$ we get
-    $\pi_1 + \pi_2 + \pi_3 \le 5$; from $x_2 \gtreqless 0$ we get
-    $\pi_1 + \pi_2 - 2\pi_3 = 8$; from $x_3 \le 0$ we get $-\pi_2 \ge -9$:
-
-    $$
-    \begin{array}{r r@{\;}c@{\;}r@{\;}c@{\;}r c r}
-    \max & 30\,\pi_1 & + & 100\,\pi_2 & - & 20\,\pi_3 & & \\
-    \text{subject to} & \pi_1 & + & \pi_2 & + & \pi_3 & \le & 5 \\
-     & \pi_1 & + & \pi_2 & - & 2\,\pi_3 & = & 8 \\
-     & & - & \pi_2 & & & \ge & -9 \\
-     & \pi_1 & & & & & \ge & 0 \\
-     & & & \pi_2 & & & \gtreqless & 0, \\
-     & & & & & \pi_3 & \le & 0 
-    \end{array}
-    $$
+If two feasible solutions, of the primal and of the dual, have the same value, they are both
+optimal. The proofs and the examples of construction of the dual are in the chapter
+[“Duality theory”](https://fabiofurini.github.io/linear-programming/duality/09-duality/)
+of *Linear Programming*.
 
 ## The optimality conditions of LP: complementary slackness
 
@@ -211,6 +134,10 @@ the optimum?* (it can never worsen it).
 An **inactive** constraint always has $\tilde\pi_i = 0$ (complementarity).
 
 !!! example "Duality on the 2×2 LP, worked out in full"
+    The 2×2 LP used throughout the course is $\max 30x_1 + 50x_2$ with $x_1 + 3x_2 \le 90$,
+    $2x_1 + x_2 \le 80$ and $x_1, x_2 \ge 0$; its dual is $\min 90\pi_1 + 80\pi_2$ with
+    $\pi_1 + 2\pi_2 \ge 30$, $3\pi_1 + \pi_2 \ge 50$ and $\pi_1, \pi_2 \ge 0$.
+
     **Solving we obtain**: $(\tilde x_1, \tilde x_2) = (30, 20)$,
     $\tilde z = 1900$, $(\tilde\pi_1, \tilde\pi_2) = (14, 8)$,
     $(\bar c_1, \bar c_2) = (0, 0)$, with validity ranges
@@ -225,34 +152,6 @@ An **inactive** constraint always has $\tilde\pi_i = 0$ (complementarity).
     14 + 16 = 30 = c_1, \qquad 42 + 8 = 50 = c_2,
     \qquad 90 \cdot 14 + 80 \cdot 8 = 1900 = \tilde z . \quad ✓
     $$
-
-!!! example "All the cases in a single LP: verification of the conditions"
-    **Solving we obtain**: $(\tilde x_1, \tilde x_2, \tilde x_3) = (60, 40, 0)$,
-    $\tilde z = 620$, $(\tilde\pi_1, \tilde\pi_2, \tilde\pi_3) = (0, 6, -1)$,
-    $(\bar c_1, \bar c_2, \bar c_3) = (0, 0, -3)$, with validity ranges of the
-    right-hand sides $(-\infty, 100]$, $[30, +\infty)$, $[-200, +\infty)$ and of the
-    coefficients $(-\infty, 8]$, $[5, 17]$, $(-\infty, -6]$.
-
-    **Checks with the rules**: $\tilde\pi_1 = 0$ by complementarity (slack
-    constraint: $60 + 40 = 100 > 30$); $\tilde\pi_2 = 6$ (equality → free dual
-    variable); $\tilde\pi_3 = -1 \le 0$ ($\le$ in a minimization). Dual constraints
-    of $x_1, x_2$ active and strong duality:
-
-    $$
-    0 + 6 - 1 = 5 = c_1, \qquad 0 + 6 - 2 \cdot (-1) = 8 = c_2,
-    \qquad 30 \cdot 0 + 100 \cdot 6 + (-20)(-1) = 620 = \tilde z . \quad ✓
-    $$
-
-    **Reduced costs, one per sign**: $\bar c_1 = 5 - 5 = 0$,
-    $\bar c_2 = 8 - 8 = 0$; $x_3$ sits at its **upper bound** (zero):
-
-    $$
-    \bar c_3 = -9 - (-1) \cdot 6 = -3 ,
-    $$
-
-    and it would become active only with a coefficient $\ge -6$ ($= c_3^{\max}$).
-    By perturbation: $b_2 = 101 → 626$ ($+6$), $b_3 = -19 → 619$ ($-1$),
-    $x_3$ forced to $-1 → 623$ ($+3$) ✓.
 
 ## Sensitivity analysis in LPs
 

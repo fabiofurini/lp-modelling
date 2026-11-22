@@ -3,7 +3,7 @@
 <!-- collana-dalla-home -->
 ## The lab at a glance
 
-**7 application chapters · 3 chapters of tools · LP models only · one Colab
+**4 modelling chapters · 7 application chapters · LP models only · one Colab
 notebook per chapter · reproducible Python/Gurobi code.** The full list, chapter
 by chapter, is in the [syllabus](syllabus.md).
 

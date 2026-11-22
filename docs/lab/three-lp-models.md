@@ -5,7 +5,7 @@ hide:
 title: "Three LP models solved to optimality"
 ---
 
-[← Lab](index.md) · Chapters: [4. Production and inventory](../production.md) · [5. Electric vehicle charging](../ev-charging.md) · [7. The Newsvendor](../newsvendor.md)
+[← Lab](index.md) · Chapters: [5. Production and inventory](../production.md) · [6. Electric vehicle charging](../ev-charging.md) · [8. The Newsvendor](../newsvendor.md)
 
 # Three LP models solved to optimality
 

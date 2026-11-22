@@ -35,10 +35,12 @@ notes in online form, with Python/Gurobi code, data and case studies.
 Prerequisite: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 Quadratic and nonlinear models are in [NLP Modelling](https://fabiofurini.github.io/nlp-modelling/).
 
-**Tools**
+**Modelling**
 
-- [Theory: linear programming](https://fabiofurini.github.io/lp-modelling/theory-lp/) — duality, complementary slackness, shadow prices, sensitivity protocol
-- [Solver: linear models](https://fabiofurini.github.io/lp-modelling/solver-lp/) — building the model, running it, reading and interpreting the solution
+- [Introduction to LP modelling](https://fabiofurini.github.io/lp-modelling/introduction/) — what we shall do, notation, structure of the chapters
+- [Background: linear programming](https://fabiofurini.github.io/lp-modelling/theory-lp/) — duality, shadow prices, sensitivity protocol
+- [The solver: linear models](https://fabiofurini.github.io/lp-modelling/solver-lp/) — building the model, running it, reading and interpreting the solution
+- [Modelling techniques](https://fabiofurini.github.io/lp-modelling/techniques/) — production, blending, transportation, multi-period planning, linearizations
 
 **Deterministic models**
 
@@ -62,7 +64,7 @@ Quadratic and nonlinear models are in [NLP Modelling](https://fabiofurini.github
 
 ## Running the models
 
-Every chapter has its own script in [`python/`](python/) (`lab04`–`lab10`), with the
+Every chapter has its own script in [`python/`](python/) (`lab05`–`lab11`), with the
 data in [`data/`](data/):
 
 ```bash

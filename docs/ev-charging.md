@@ -1,10 +1,10 @@
 # Smart charging of electric vehicles
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-ev-charging.pdf) · [:material-gesture-tap: App: Minimum-cost overnight charging](lab/ev-charging.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-06-ev-charging.pdf) · [:material-gesture-tap: App: Minimum-cost overnight charging](lab/ev-charging.md)
 
-**Class:** LP · **Script:** `python/lab05_ev_charging.py`
+**Class:** LP · **Script:** `python/lab06_ev_charging.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab06_ev_charging.ipynb)
 
 !!! nota "Prerequisites"
 
@@ -113,7 +113,7 @@ Shadow prices of the energy requirement (EUR/kWh):
   V1 0.0947   V2 0.0842   V3 0.0842   V4 0.0947   V5 0.0947   V6 0.0842
 ```
 
-![Draw profiles](img/cap05_profili.png)
+![Draw profiles](img/cap06_profili.png)
 
 The shadow prices of the energy requirement are equal to $0{,}0842 = 0{,}08/\eta$ or
 $0{,}0947 = 0{,}09/\eta$: they are the prices of the **marginal hours** of each
@@ -125,7 +125,7 @@ vehicle.
 
 ## Sensitivity
 
-![Cost-peak frontier](img/cap05_frontiera.png)
+![Cost-peak frontier](img/cap06_frontiera.png)
 
 ```text
 Trade-off cost + rho*peak:
@@ -169,15 +169,15 @@ the quadratic variant of this model, in the module *NLP Modelling*, page
 ## Code
 
 The complete script of the chapter — data, model, solution, sensitivity and figures —
-is [`python/lab05_ev_charging.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab05_ev_charging.py)
-(reproducible with `python3 python/lab05_ev_charging.py` from the `python/` folder).
+is [`python/lab06_ev_charging.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab06_ev_charging.py)
+(reproducible with `python3 python/lab06_ev_charging.py` from the `python/` folder).
 
-The same code is also available as a notebook — [`notebooks/lab05_ev_charging.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab05_ev_charging.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab06_ev_charging.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab06_ev_charging.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab05_ev_charging.py`"
+??? example "Show the full script — `lab06_ev_charging.py`"
 
     ```python
-    """Chapter 5 — Smart charging of electric vehicles (LP).
+    """Chapter 6 — Smart charging of electric vehicles (LP).
 
     Case study: a company depot with 6 electric vans to be charged overnight;
     hourly energy prices; base load of the building.
@@ -311,8 +311,8 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
     # ----------------------------------------------------------------------
     salva_dat(pd.DataFrame({"hour": ore, "price_cent": prezzo * 100, "base": base,
                             "totcost": base + prof_costo, "totpeak": base + prof_picco}),
-              "cap05_profili")
-    salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap05_frontiera")
+              "cap06_profili")
+    salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap06_frontiera")
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.2, 6.4), sharex=True)
     ax1.bar(ore, prezzo * 100, color=GRIGIO, alpha=0.6)
@@ -327,7 +327,7 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
     ax2.set_xlabel("hour of the day"); ax2.set_ylabel("total withdrawal (kW)")
     ax2.set_title("Withdrawal profile: chasing prices creates a night-time peak")
     ax2.legend(fontsize=8, ncol=2)
-    salva_figura(fig, "cap05_profili")
+    salva_figura(fig, "cap06_profili")
 
     comp = pd.DataFrame(compromessi, columns=["rho", "cost", "peak"])
     fig, ax = plt.subplots()
@@ -337,9 +337,9 @@ The same code is also available as a notebook — [`notebooks/lab05_ev_charging.
     ax.set_xlabel("peak withdrawal (kW)")
     ax.set_ylabel("charging cost (€)")
     ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")
-    salva_figura(fig, "cap05_frontiera")
+    salva_figura(fig, "cap06_frontiera")
 
-    print("\nDone: chapter 5.")
+    print("\nDone: chapter 6.")
     ```
 
 ## Exercises

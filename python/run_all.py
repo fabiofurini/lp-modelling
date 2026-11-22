@@ -12,13 +12,13 @@ import time
 from pathlib import Path
 
 SCRIPT = [
-    "lab04_production.py",
-    "lab05_ev_charging.py",
-    "lab06_dea.py",
-    "lab07_newsvendor.py",
-    "lab08_var_cvar.py",
-    "lab09_arbitrage.py",
-    "lab10_regression.py",
+    "lab05_production.py",
+    "lab06_ev_charging.py",
+    "lab07_dea.py",
+    "lab08_newsvendor.py",
+    "lab09_var_cvar.py",
+    "lab10_arbitrage.py",
+    "lab11_regression.py",
 ]
 
 base = Path(__file__).resolve().parent

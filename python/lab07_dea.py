@@ -1,4 +1,4 @@
-"""Chapter 6 — Data Envelopment Analysis (LP).
+"""Chapter 7 — Data Envelopment Analysis (LP).
 
 Case study: 12 branches of a bank (branches 1, 2, ..., 12) compared on
 2 inputs (staff in FTE, operating costs in thousands of €) and 2 outputs
@@ -276,7 +276,7 @@ print(f"Without branch {j_peer + 1}: {sum(1 for c in cambi if c[2] - c[1] > 1e-6
 # ----------------------------------------------------------------------
 # 8. FIGURES (data for pgfplots + matplotlib preview)
 # ----------------------------------------------------------------------
-salva_dat(eff[["branch", "ccr", "bcc"]], "cap06_efficienze")
+salva_dat(eff[["branch", "ccr", "bcc"]], "cap07_efficienze")
 
 # one-input, one-output view: staff -> loans
 Xp, Yp = X[[0], :], Y[[0], :]
@@ -296,10 +296,10 @@ x_max = 32.0
 vrs = [(frontiera[0][0], 0.0)] + frontiera + [(x_max, frontiera[-1][1])]
 salva_dat(pd.DataFrame({"branch": filiali, "staff": Xp[0], "loans": Yp[0],
                         "ccr": np.round(ccr_p, 6), "bcc": np.round([b[0] for b in bcc_p], 6)}),
-          "cap06_frontiera_punti")
-salva_dat(pd.DataFrame(vrs, columns=["staff", "loans"]), "cap06_frontiera_vrs")
+          "cap07_frontiera_punti")
+salva_dat(pd.DataFrame(vrs, columns=["staff", "loans"]), "cap07_frontiera_vrs")
 salva_dat(pd.DataFrame({"staff": [0.0, x_max], "loans": [0.0, pend * x_max]}),
-          "cap06_frontiera_crs")
+          "cap07_frontiera_crs")
 intestazione("One-input, one-output view: staff -> loans")
 print(f"Slope of the CCR frontier (loans per FTE): {pend:.4f}")
 print("Efficiencies in the view (CCR/BCC): "
@@ -318,7 +318,7 @@ ax.set_xlim(0, x_max); ax.set_ylim(0, 75)
 ax.set_xlabel("staff (FTE)"); ax.set_ylabel("loans (M€)")
 ax.set_title("CCR and BCC efficient frontiers: staff and loans")
 ax.legend(fontsize=8)
-salva_figura(fig, "cap06_frontiera")
+salva_figura(fig, "cap07_frontiera")
 
 fig, ax = plt.subplots()
 larg = 0.38
@@ -330,6 +330,6 @@ ax.set_ylim(0.6, 1.12)
 ax.set_xlabel("branch"); ax.set_ylabel("efficiency")
 ax.set_title("CCR and BCC efficiencies of the 12 branches")
 ax.legend(fontsize=8, loc="upper center", ncol=2)
-salva_figura(fig, "cap06_efficienze")
+salva_figura(fig, "cap07_efficienze")
 
-print("\nDone: chapter 6.")
+print("\nDone: chapter 7.")

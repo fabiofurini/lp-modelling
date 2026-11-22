@@ -5,7 +5,7 @@ hide:
 title: "Newsvendor: optimal order over 600 scenarios"
 ---
 
-[← Lab](index.md) · Chapter: [7. The Newsvendor](../newsvendor.md)
+[← Lab](index.md) · Chapter: [8. The Newsvendor](../newsvendor.md)
 
 # Newsvendor: optimal order over 600 scenarios
 

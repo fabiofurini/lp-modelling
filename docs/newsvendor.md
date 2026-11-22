@@ -1,10 +1,10 @@
 # The Newsvendor and its variants
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-07-newsvendor.pdf) · [:material-gesture-tap: App: Newsvendor: optimal order over 600 scenarios](lab/newsvendor-scenarios.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-08-newsvendor.pdf) · [:material-gesture-tap: App: Newsvendor: optimal order over 600 scenarios](lab/newsvendor-scenarios.md)
 
-**Class:** 1D convex / scenario-based stochastic LP · **Script:** `python/lab07_newsvendor.py`
+**Class:** 1D convex / scenario-based stochastic LP · **Script:** `python/lab08_newsvendor.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab07_newsvendor.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/lp-modelling/blob/main/notebooks/lab08_newsvendor.ipynb)
 
 !!! nota "Prerequisites"
 
@@ -98,7 +98,7 @@ q* = F^-1(0.6923) = 110.05 units   (mean = 100)
 expected cost at q*: 91.43 EUR    at q = mean: 103.72 EUR
 ```
 
-![Expected cost and stability](img/cap07_quantile_stabilita.png)
+![Expected cost and stability](img/cap08_quantile_stabilita.png)
 
 ## The scenario-based linear formulation
 
@@ -182,7 +182,7 @@ lambda = 0.50: q = 114.48  mean cost 92.52  CVaR90 225.49
 lambda = 1.00: q = 116.17  mean cost 94.87  CVaR90 224.56
 ```
 
-![Cost-CVaR frontier](img/cap07_frontiera.png)
+![Cost-CVaR frontier](img/cap08_frontiera.png)
 
 The risk-averse decision maker orders more (from 108.6 to 116.2 units): pays 6.5 €
 more on average in order to cut by 21.4 € the mean cost of the worst 10% of the
@@ -225,15 +225,15 @@ products fail together.
 ## Code
 
 The complete script of the chapter — data, model, solution, sensitivity and figures —
-is [`python/lab07_newsvendor.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab07_newsvendor.py)
-(reproducible with `python3 python/lab07_newsvendor.py` from the `python/` folder).
+is [`python/lab08_newsvendor.py`](https://github.com/fabiofurini/lp-modelling/blob/main/python/lab08_newsvendor.py)
+(reproducible with `python3 python/lab08_newsvendor.py` from the `python/` folder).
 
-The same code is also available as a notebook — [`notebooks/lab07_newsvendor.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab07_newsvendor.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
+The same code is also available as a notebook — [`notebooks/lab08_newsvendor.ipynb`](https://github.com/fabiofurini/lp-modelling/blob/main/notebooks/lab08_newsvendor.ipynb) — which opens in Colab from the badge at the top of the page and runs in the browser, with nothing to install.
 
-??? example "Show the full script — `lab07_newsvendor.py`"
+??? example "Show the full script — `lab08_newsvendor.py`"
 
     ```python
-    """Chapter 7 — The Newsvendor and its variants (scenario-based stochastic LP).
+    """Chapter 8 — The Newsvendor and its variants (scenario-based stochastic LP).
 
     Case study: a bakery deciding how many artisan panettoni to produce.
     Price p = 15 €, cost c = 6 €, salvage v = 2 € -> Cu = 9, Co = 4.
@@ -285,7 +285,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
           f"{costo_atteso(mu_d):.2f} €")
 
     qq = np.linspace(50, 160, 400)
-    salva_dat(pd.DataFrame({"q": qq, "cost": [costo_atteso(q) for q in qq]}), "cap07_costo")
+    salva_dat(pd.DataFrame({"q": qq, "cost": [costo_atteso(q) for q in qq]}), "cap08_costo")
 
     # ----------------------------------------------------------------------
     # 2. SCENARIO LP
@@ -347,7 +347,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
         righe.append((Sn, np.mean(stime), np.std(stime)))
         print(f"  S = {Sn:5d}: mean q {np.mean(stime):7.2f}, std dev across replications {np.std(stime):5.2f}")
     stab = pd.DataFrame(righe, columns=["S", "q_mean", "q_std"])
-    salva_dat(stab, "cap07_stabilita")
+    salva_dat(stab, "cap08_stabilita")
 
     # ----------------------------------------------------------------------
     # 4. SERVICE CONSTRAINTS
@@ -380,7 +380,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
         print(f"  lambda = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
               f"CVaR90 = {cvar_l:6.2f}")
     front = pd.DataFrame(front, columns=["lam", "q", "mean_cost", "cvar"])
-    salva_dat(front, "cap07_frontiera_cvar")
+    salva_dat(front, "cap08_frontiera_cvar")
     print("Increasing lambda means ordering more: it costs on average, it protects in the worst scenarios.")
 
     # ----------------------------------------------------------------------
@@ -436,7 +436,7 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
     ax2.set_xlabel("number of scenarios S"); ax2.set_ylabel("optimal q")
     ax2.set_title("Stability of the scenario solution")
     ax2.legend(fontsize=8)
-    salva_figura(fig, "cap07_quantile_stabilita")
+    salva_figura(fig, "cap08_quantile_stabilita")
 
     fig, ax = plt.subplots()
     ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL)
@@ -445,9 +445,9 @@ The same code is also available as a notebook — [`notebooks/lab07_newsvendor.i
                     fontsize=8)
     ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)")
     ax.set_title("Mean cost - tail risk frontier")
-    salva_figura(fig, "cap07_frontiera")
+    salva_figura(fig, "cap08_frontiera")
 
-    print("\nDone: chapter 7.")
+    print("\nDone: chapter 8.")
     ```
 
 ## Exercises

@@ -1,4 +1,4 @@
-"""Chapter 4 — Multi-period production and inventory planning (LP).
+"""Chapter 5 — Multi-period production and inventory planning (LP).
 
 Case study: a company producing 3 components (products 1, 2, 3) over a 6-month
 horizon with one shared resource (machine hours).
@@ -112,7 +112,7 @@ salva_dat(pd.DataFrame({
     **{f"x{i}": [x[i, t].X for t in mesi] for i in prodotti},
     **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
     "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
-}), "cap04_piano")
+}), "cap05_piano")
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.5, 4.0))
 larg = 0.26
@@ -129,7 +129,7 @@ for i in prodotti:
 ax2.set_xlabel("month"); ax2.set_ylabel("units in stock")
 ax2.set_title("End-of-month inventory")
 ax2.legend(fontsize=8)
-salva_figura(fig, "cap04_piano_scorte")
+salva_figura(fig, "cap05_piano_scorte")
 
 # sensitivity: optimal cost as the uniform capacity varies
 intestazione("Sensitivity: optimal cost as capacity varies")
@@ -144,7 +144,7 @@ for f in fattori:
     print(f"  capacity x{f:4.2f}: cost {costi[-1]:10.2f} €")
 
 tab_cap = pd.DataFrame({"percent": fattori * 100, "cost": costi}).dropna()
-salva_dat(tab_cap, "cap04_capacita")
+salva_dat(tab_cap, "cap05_capacita")
 
 fig, ax = plt.subplots()
 ax.plot(fattori * 100, costi, "-o", color=TEAL)
@@ -153,6 +153,6 @@ ax.set_xlabel("available capacity (% of the current one)")
 ax.set_ylabel("optimal total cost (€)")
 ax.set_title("Value curve of capacity: convex and decreasing")
 ax.legend()
-salva_figura(fig, "cap04_valore_capacita")
+salva_figura(fig, "cap05_valore_capacita")
 
-print("\nDone: chapter 4.")
+print("\nDone: chapter 5.")

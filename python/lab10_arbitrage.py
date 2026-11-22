@@ -1,4 +1,4 @@
-"""Chapter 9 — Arbitrage and arbitrage-free pricing (LP).
+"""Chapter 10 — Arbitrage and arbitrage-free pricing (LP).
 
 Case study: a one-period market with 3 states of the world, one risk-free
 security (gross return R = 1.04) and 2 risky securities.
@@ -118,7 +118,7 @@ for prezzo2 in griglia:
     valori.append(mg.ObjVal)
 curva = pd.DataFrame({"price_security2": griglia, "lp_value": valori})
 salva_dati(curva, "arbitraggio_curva_prezzo")
-salva_dat(curva, "cap09_arbitraggio_curva")
+salva_dat(curva, "cap10_arbitraggio_curva")
 print(f"Grid {griglia[0]:.0f}..{griglia[-1]:.0f}: LP value = 0 only inside "
       f"the interval, negative outside (arbitrage)")
 
@@ -153,6 +153,6 @@ ax.plot([6], [0], alpha=0)  # noop
 ax.set_xlabel("price of security 2")
 ax.set_ylabel("optimal value of the normalised LP")
 ax.set_title("Outside the consistent price interval an arbitrage appears")
-salva_figura(fig, "cap09_arbitraggio_curva")
+salva_figura(fig, "cap10_arbitraggio_curva")
 
-print("\nDone: chapter 9 (arbitrage).")
+print("\nDone: chapter 10 (arbitrage).")
