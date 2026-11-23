@@ -15,9 +15,10 @@ hide:
 Teaching material designed and developed by **[Fabio Furini](https://fabiofurini.github.io/)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
-**Linear programming models** — the course lecture
-notes in online form, with Python/Gurobi code, data and reproducible case
-studies.
+The course presents modelling with linear programming: how to build a model, the solver and the
+interpretation of the solution, modelling techniques, and models of production and inventory,
+electric vehicle charging, Data Envelopment Analysis, the newsvendor, VaR and CVaR, arbitrage and
+robust regression, with Python/Gurobi code.
 
 Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-programming/) (duality and sensitivity analysis).
 
