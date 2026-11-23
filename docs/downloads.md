@@ -6,7 +6,7 @@ Text, figures and data are released under
 scripts under the
 [MIT](https://github.com/fabiofurini/lp-modelling/blob/main/LICENSE-CODE) license.
 
-## The lecture notes
+## Lecture notes
 
 <div class="grid cards" markdown>
 
@@ -20,6 +20,42 @@ scripts under the
 
     [:octicons-download-24: lp-modelling-notes.pdf](pdf/lp-modelling-notes.pdf)
 
+</div>
+
+<!-- slide:inizio -->
+## Slides
+
+The lecture slides, one deck per chapter of the notes (PDF).
+
+### Modelling
+
+- :material-presentation: [Introduction to LP modelling](pdf/slides-01-introduction.pdf)
+- :material-presentation: [Linear programming background](pdf/slides-02-background.pdf)
+- :material-presentation: [The solver: building, solving, interpreting](pdf/slides-03-python-gurobi.pdf)
+- :material-presentation: [Modelling techniques](pdf/slides-04-techniques.pdf)
+
+### Deterministic models
+
+- :material-presentation: [Multi-period production and inventory](pdf/slides-05-production.pdf)
+- :material-presentation: [Smart charging of electric vehicles](pdf/slides-06-ev-charging.pdf)
+- :material-presentation: [Data Envelopment Analysis](pdf/slides-07-dea.pdf)
+
+### Decisions under uncertainty
+
+- :material-presentation: [The Newsvendor and its variants](pdf/slides-08-newsvendor.pdf)
+- :material-presentation: [VaR and CVaR](pdf/slides-09-var-cvar.pdf)
+- :material-presentation: [Arbitrage and pricing](pdf/slides-10-arbitrage.pdf)
+
+### Optimization and machine learning
+
+- :material-presentation: [Robust and quantile regression](pdf/slides-11-regression.pdf)
+
+<!-- slide:fine -->
+
+## Other documents
+
+<div class="grid cards" markdown>
+
 -   :material-language-python: **The code**
 
     ---
@@ -30,48 +66,6 @@ scripts under the
     [:octicons-mark-github-16: lp-modelling](https://github.com/fabiofurini/lp-modelling)
 
 </div>
-
-<!-- slide:inizio -->
-## Slides
-
-The lecture slides, one deck per chapter of the notes (PDF).
-
-<div class="grid cards" markdown>
-
--   :material-presentation: **Modelling**
-
-    ---
-
-    - [Introduction to LP modelling](pdf/slides-01-introduction.pdf)
-    - [Linear programming background](pdf/slides-02-background.pdf)
-    - [The solver: building, solving, interpreting](pdf/slides-03-python-gurobi.pdf)
-    - [Modelling techniques](pdf/slides-04-techniques.pdf)
-
--   :material-presentation: **Deterministic models**
-
-    ---
-
-    - [Multi-period production and inventory](pdf/slides-05-production.pdf)
-    - [Smart charging of electric vehicles](pdf/slides-06-ev-charging.pdf)
-    - [Data Envelopment Analysis](pdf/slides-07-dea.pdf)
-
--   :material-presentation: **Decisions under uncertainty**
-
-    ---
-
-    - [The Newsvendor and its variants](pdf/slides-08-newsvendor.pdf)
-    - [VaR and CVaR](pdf/slides-09-var-cvar.pdf)
-    - [Arbitrage and pricing](pdf/slides-10-arbitrage.pdf)
-
--   :material-presentation: **Optimization and machine learning**
-
-    ---
-
-    - [Robust and quantile regression](pdf/slides-11-regression.pdf)
-
-</div>
-
-<!-- slide:fine -->
 
 <!-- banca-domande -->
 ## Quiz question bank
