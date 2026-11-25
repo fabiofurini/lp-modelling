@@ -33,7 +33,7 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-The six-month production and inventory plan, solved to optimality in the browser: change demand, capacity and holding cost with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices of the machine hours.
+The three-month production and inventory plan, solved to optimality in the browser: change demand, capacity and holding cost with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices of the machine hours.
 
 <div class="gi" data-grafico="pl-produzione"></div>
 

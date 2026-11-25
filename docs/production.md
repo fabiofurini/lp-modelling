@@ -100,48 +100,68 @@ is the scarce shared resource, and its shadow price will tell how much an extra 
 
 ## Case study
 
-Three products × six months, demand peaking in months 4–5, capacity 420–460 hours/month
-(data in `data/produzione_domanda.csv`).
+Three products × three months ($n = m = 3$: 18 variables, 9 balances and 3 capacity
+constraints), demand increasing towards a peak in month 3, 400 machine hours per month,
+zero initial inventory (data in `data/produzione_domanda.csv` and
+`data/produzione_capacita.csv`).
+
+| Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $s_{i0}$ (units) |
+|---|---|---|---|---|
+| 1 | 10 | 1 | 1 | 0 |
+| 2 | 15 | 1.2 | 1.5 | 0 |
+| 3 | 20 | 1.2 | 2 | 0 |
+
+| month $t$ | 1 | 2 | 3 |
+|---|---|---|---|
+| $b_t$ (hours) | 400 | 400 | 400 |
+| $d_{1t}$ | 110 | 140 | 200 |
+| $d_{2t}$ | 60 | 80 | 120 |
+| $d_{3t}$ | 40 | 40 | 70 |
+
+Serving each month with its own production alone would need 280, 340 and 520 hours:
+month 3 is 120 hours short, while months 1 and 2 leave 120 and 60 hours free.
 
 ```text
-Optimal total cost: 32.889.33 EUR
-month      1      2      3      4      5      6
-prod.1  80.0  130.0  150.0  190.0  210.0  160.0
-prod.2  50.0   80.0  110.0  140.0  150.0  100.0
-prod.3  89.5   91.0   81.4   44.3   29.0   64.8     (inventory up to 107 units)
+Optimal total cost: 11,508.00 EUR
+month       1      2      3
+prod.1  110.0  140.0  200.0
+prod.2   60.0   80.0  120.0
+prod.3   70.0   70.0   10.0     (inventory of product 3: 30 and 60 units at the end of months 1 and 2)
 ```
 
 ![Machine hours, production and demand, inventory](img/cap05_piano_scorte.png)
 
 At the top, the machine hours $a_i\, x_{it}$ used by each product, stacked, with the capacity $b_t$
-dashed: from month 2 to month 6 the capacity is binding. At the bottom left, the production
-$x_{it}$ (bars) and the demand $d_{it}$ (dashed) of each product; on the right, the inventory $s_{it}$.
+dashed: months 2 and 3 are binding, month 1 uses 340 of its 400 hours. At the bottom left, the
+production $x_{it}$ (bars) and the demand $d_{it}$ (dashed) of each product; on the right, the inventory $s_{it}$.
 
-The solver discovers the **pre-build** all by itself: product 3 (2.1 hours/unit) is
-produced in advance and stockpiled in order to free up capacity in the peak months; the
-inventory goes back to zero in the final month.
+The solver discovers the **pre-build** all by itself: product 3 (2 hours/unit) is
+produced in advance, 30 units in month 1 and 30 in month 2, to free 120 hours in the
+peak month; the inventory goes back to zero in the final month. Product 3 is the one
+to stock because bringing one machine hour forward costs $h_i/a_i$ per month: $1$,
+$0.8$ and $0.6$ € for products 1, 2 and 3.
 
 ## Sensitivity
 
 ```text
-month 1: use 330.0/420  | Pi =  0.000 EUR/hour | valid for b_t in [330.0, +inf]
-month 2: use 420.0/420  | Pi = -0.762 EUR/hour | valid for b_t in [330.0, 524.0]
-month 3: use 460.0/460  | Pi = -1.524 EUR/hour | valid for b_t in [370.0, 564.0]
-month 4: use 460.0/460  | Pi = -2.286 EUR/hour | valid for b_t in [370.0, 564.0]
-month 5: use 460.0/460  | Pi = -3.048 EUR/hour | valid for b_t in [399.0, 564.0]
-month 6: use 420.0/420  | Pi = -3.810 EUR/hour | valid for b_t in [330.0, 431.0]
+month 1: use 340.0/400  | Pi =  0.000 EUR/hour | valid for b_t in [340.0, +inf]
+month 2: use 400.0/400  | Pi = -0.600 EUR/hour | valid for b_t in [340.0, 460.0]
+month 3: use 400.0/400  | Pi = -1.200 EUR/hour | valid for b_t in [380.0, 460.0]
 
-Check: +1 hour in month 6 -> cost from 32889.33 to 32885.52 (delta -3.810)
+Check: +1 hour in month 3 -> cost from 11508.00 to 11506.80 (delta -1.200)
 ```
 
-The duals grow by $0.762 = h_3/a_3$ per month: one more hour in month $t$ allows us
+The duals grow by $0.6 = h_3/a_3$ per month: one more hour in month $t$ allows us
 to produce $1/a_3$ units of product 3 *one month later*, saving one month of
-holding. The capacity value curve is convex and decreasing; below 97%
-of the current capacity the problem becomes **infeasible**.
+holding. The dual of month 3 is $2 \times 0.6 = 1.2$: one hour there avoids two
+months of holding for half a unit produced in month 1. The capacity value curve is
+convex and decreasing; below 95% of the current capacity (1140 hours needed out of
+1200) the problem becomes **infeasible**.
 
 !!! tip "Managerial take-away"
-    It is worth buying overtime hours in months 5–6 up to 3–3.8 €/hour below the
-    internal price; below 97% of the capacity full service cannot be guaranteed.
+    It is worth buying overtime hours in month 3 up to 1.2 €/hour below the internal
+    price, and in month 2 up to 0.6 €/hour; below 95% of the capacity full service
+    cannot be guaranteed.
 
 A *smooth* plan, which penalizes the changes of production from one month to the
 next, requires a quadratic term in the objective and is no longer an LP: it is the
@@ -174,7 +194,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     ```python
     """Chapter 5 — Multi-period production and inventory planning (LP).
 
-    Case study: a company producing 3 components (products 1, 2, 3) over a 6-month
+    Case study: a company producing 3 components (products 1, 2, 3) over a 3-month
     horizon with one shared resource (machine hours).
 
     Contents:
@@ -194,19 +214,19 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     # 1. DATA
     # ----------------------------------------------------------------------
     prodotti = ["1", "2", "3"]
-    mesi = list(range(1, 7))
+    mesi = list(range(1, 4))
 
-    # demand (units/month): increasing seasonality peaking in months 4-5
+    # demand (units/month): increasing, peaking in month 3
     domanda = {
-        ("1", 1): 110, ("1", 2): 130, ("1", 3): 150, ("1", 4): 190, ("1", 5): 210, ("1", 6): 160,
-        ("2", 1): 70,  ("2", 2): 80,  ("2", 3): 110, ("2", 4): 140, ("2", 5): 150, ("2", 6): 100,
-        ("3", 1): 50,  ("3", 2): 55,  ("3", 3): 60,  ("3", 4): 80,  ("3", 5): 95,  ("3", 6): 70,
+        ("1", 1): 110, ("1", 2): 140, ("1", 3): 200,
+        ("2", 1): 60,  ("2", 2): 80,  ("2", 3): 120,
+        ("3", 1): 40,  ("3", 2): 40,  ("3", 3): 70,
     }
-    costo_prod = {"1": 12.0, "2": 18.0, "3": 25.0}   # €/unit
-    costo_giac = {"1": 0.8, "2": 1.2, "3": 1.6}      # €/unit/month
-    ore_unit = {"1": 0.9, "2": 1.4, "3": 2.1}        # machine hours per unit
-    capacita = {1: 420, 2: 420, 3: 460, 4: 460, 5: 460, 6: 420}  # hours/month
-    scorta_iniziale = {"1": 30, "2": 20, "3": 10}
+    costo_prod = {"1": 10.0, "2": 15.0, "3": 20.0}   # €/unit
+    costo_giac = {"1": 1.0, "2": 1.2, "3": 1.2}      # €/unit/month
+    ore_unit = {"1": 1.0, "2": 1.5, "3": 2.0}        # machine hours per unit
+    capacita = {1: 400, 2: 400, 3: 400}  # hours/month
+    scorta_iniziale = {"1": 0, "2": 0, "3": 0}
 
     df = pd.DataFrame(
         [(i, t, domanda[i, t], costo_prod[i], costo_giac[i], ore_unit[i], scorta_iniziale[i])
@@ -285,7 +305,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         "month": mesi,
         **{f"x{i}": [x[i, t].X for t in mesi] for i in prodotti},
         **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
-    **{f"d{i}": [domanda[i, t] for t in mesi] for i in prodotti},
+        **{f"d{i}": [domanda[i, t] for t in mesi] for i in prodotti},
         "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
     }), "cap05_piano")
 
@@ -307,7 +327,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
             ax1.text(t, capacita[t] + 8, "binding", ha="center", fontsize=8, color=ROSSO)
     ax1.plot([], [], " ", label="binding: capacity constraint active (all hours used)")      # voce di sola legenda
     ax1.set_ylim(0, max(capacita.values()) * 1.12)
-    ax1.set_xlabel("month"); ax1.set_ylabel("hours")
+    ax1.set_xticks(mesi); ax1.set_xlabel("month"); ax1.set_ylabel("hours")
     ax1.set_title("Machine hours used by product and capacity (the bar height is the month's total)")
     ax1.legend(fontsize=8, loc="upper left", bbox_to_anchor=(1.01, 1.0))   # fuori a destra: non copre le barre
     larg = 0.26
@@ -318,19 +338,19 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         ax2.plot([t + (k - 1) * larg for t in mesi], [domanda[i, t] for t in mesi], "--", marker="D", ms=4,
                  color=colori[i], mfc="white", lw=1.2, label=f"product {i}: demand $d_{{{i}t}}$")
     ax2.set_ylim(0, max(domanda.values()) * 1.6)
-    ax2.set_xlabel("month"); ax2.set_ylabel("units")
+    ax2.set_xticks(mesi); ax2.set_xlabel("month"); ax2.set_ylabel("units")
     ax2.set_title("Production and demand by product")
     ax2.legend(fontsize=7, ncol=2, loc="upper left")
     for i in prodotti:
         ax3.plot(mesi, [s[i, t].X for t in mesi], marker="o", color=colori[i], label=f"product {i}")
-    ax3.set_xlabel("month"); ax3.set_ylabel("units in stock")
+    ax3.set_xticks(mesi); ax3.set_xlabel("month"); ax3.set_ylabel("units in stock")
     ax3.set_title("End-of-month inventory")
     ax3.legend(fontsize=8)
     salva_figura(fig, "cap05_piano_scorte")
 
     # sensitivity: optimal cost as the uniform capacity varies
     intestazione("Sensitivity: optimal cost as capacity varies")
-    fattori = np.linspace(0.85, 1.25, 17)
+    fattori = np.linspace(0.90, 1.35, 19)
     costi = []
     for f in fattori:
         ms, xs_, ss_, vs = costruisci_lp()
@@ -357,7 +377,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
 
 ## Exercises
 
-1. **Check** — verify by perturbation the duals of months 3 and 4; why is the
+1. **Check** — verify by perturbation the duals of months 2 and 3; why is the
    dual of month 1 zero?
 2. **Lost demand** — add $u_{it}$ with penalty 40 €/unit and capacity at 90%:
    how much demand is lost, of which product, in which months?

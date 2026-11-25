@@ -39,7 +39,7 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     ---
 
-    The optimal six-month plan with the inventory: change demand, capacity and holding cost and see which months saturate the machine hours and what one more hour is worth.
+    The optimal three-month plan with the inventory: change demand, capacity and holding cost and see which months saturate the machine hours and what one more hour is worth.
 
     [Open the app →](production-plan.md)
 
