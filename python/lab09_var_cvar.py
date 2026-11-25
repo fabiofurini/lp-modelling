@@ -3,9 +3,11 @@
 Contents:
   1. Example with 6 scenarios: VaR = 12, CVaR = 18.67,
      checked with the linear formulation of Rockafellar-Uryasev
-  2. Mean-CVaR portfolio (LP)
-  3. Return-CVaR frontier
-  4. Two-stage supply chain with adverse scenarios: the cost of resilience
+  2. Minimum-CVaR portfolio: 3 assets (TEC, UTL, GLD), 10 equally likely annual scenarios,
+     alpha = 0.8 (the tail is the 2 worst scenarios), expected return at least b = 3%
+  3. Return-CVaR frontier as b varies, shadow price of the return constraint
+     and effect of the level alpha
+  4. Two-stage supplier choice (2 suppliers, 10 scenarios): the cost of resilience
 """
 import gurobipy as gp
 import numpy as np
@@ -14,8 +16,6 @@ from gurobipy import GRB
 
 from stile import (ARANCIO, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dat,
                    salva_dati, salva_figura)
-
-rng = np.random.default_rng(42)
 
 # ----------------------------------------------------------------------
 # 1. EXAMPLE WITH 6 SCENARIOS
@@ -45,49 +45,6 @@ print(f"By hand: 12 + (1/0.20)·(1/6)·(20-12) = 12 + 6.67 = 18.67  OK")
 print(f"Expected value of the loss: {perdite.mean():.2f} "
       f"-> the CVaR tells the story of the tail, the mean does not.")
 
-# ----------------------------------------------------------------------
-# 2. MEAN-CVaR PORTFOLIO
-# ----------------------------------------------------------------------
-intestazione("Mean-CVaR portfolio (LP)")
-titoli = ["ENE", "FIN", "TEC", "IND", "SAN", "CON", "UTL", "MAT"]
-n = len(titoli)
-beta_f = np.array([1.1, 1.3, 1.5, 1.0, 0.6, 0.8, 0.4, 1.2])
-alfa_ann = np.array([0.05, 0.06, 0.11, 0.05, 0.045, 0.05, 0.035, 0.06])
-sigma_idio = np.array([0.05, 0.055, 0.07, 0.04, 0.03, 0.035, 0.02, 0.06])
-S = 220                                   # monthly scenarios (pip licence: n+2+S constraints)
-# market factor with FAT TAILS (Student t): realistic extreme scenarios
-mercato = 0.004 + 0.035 * rng.standard_t(4, S) / np.sqrt(2)
-R = alfa_ann[None, :] / 12 + np.outer(mercato, beta_f) + rng.normal(0, sigma_idio, (S, n))
-salva_dati(pd.DataFrame(R, columns=titoli), "cvar_scenari_rendimenti")
-
-mu = R.mean(axis=0) * 12
-alpha_c = 0.90
-
-
-def porta_cvar(r_min):
-    """min CVaR_alpha of the monthly loss -R x  subject to  expected return >= r_min."""
-    m = gp.Model("mean_cvar")
-    m.Params.OutputFlag = 0
-    x = m.addVars(n, name="x")
-    eta = m.addVar(lb=-GRB.INFINITY, name="eta")
-    xi = m.addVars(S, name="xi")
-    m.addConstr(x.sum() == 1)
-    m.addConstr(gp.quicksum(mu[i] * x[i] for i in range(n)) >= r_min)
-    m.addConstrs((xi[s] >= -gp.quicksum(R[s, i] * x[i] for i in range(n)) - eta
-                  for s in range(S)), name="tail")
-    m.setObjective(eta + gp.quicksum(xi[s] for s in range(S)) / (S * (1 - alpha_c)),
-                   GRB.MINIMIZE)
-    m.optimize()
-    if m.Status != GRB.OPTIMAL:
-        return None, None
-    w = np.array([x[i].X for i in range(n)])
-    return w, m.ObjVal
-
-
-r_obb = 0.08
-w_cv, cvar_ott = porta_cvar(r_obb)
-perd_cv = -R @ w_cv
-
 
 def var_cvar(perd, alpha):
     """VaR_alpha and exact CVaR_alpha of k equiprobable scenarios.
@@ -103,65 +60,128 @@ def var_cvar(perd, alpha):
     return var_, cvar_
 
 
-def stat_perdite(perd):
-    var_, cvar_ = var_cvar(perd, alpha_c)
-    return perd.mean(), var_, cvar_
+# ----------------------------------------------------------------------
+# 2. MINIMUM-CVaR PORTFOLIO
+# ----------------------------------------------------------------------
+intestazione("Minimum-CVaR portfolio (LP): 3 assets, 10 scenarios")
+titoli = ["TEC", "UTL", "GLD"]
+# annual return r_is (%) of asset i in scenario s, 10 equally likely scenarios:
+# in scenario 1 the markets crash and gold rises; in scenarios 2 and 9 gold falls
+R = np.array([[-25, -8, 15],
+              [5, 2, -10],
+              [30, 6, -5],
+              [5, 4, 4],
+              [0, 5, -3],
+              [-5, -6, 8],
+              [20, 8, 0],
+              [10, 3, 2],
+              [25, 7, -6],
+              [5, 9, 5]], dtype=float)
+k, n = R.shape
+dati = pd.DataFrame(R, columns=titoli)
+dati.insert(0, "scenario", range(1, k + 1))
+salva_dati(dati, "cvar_scenari_rendimenti")
+mu = R.mean(axis=0)                       # expected return m_i (%): 7, 3, 1
+alpha_c = 0.80                            # the tail: (1 - 0.8) * 10 = 2 scenarios
+b_obb = 3.0                               # minimum required expected return (%)
+
+print(" s  " + "".join(f"{t:>6}" for t in titoli))
+for s in range(k):
+    print(f"{s + 1:2d}  " + "".join(f"{R[s, i]:6.0f}" for i in range(n)))
+print("m_i " + "".join(f"{mu[i]:6.0f}" for i in range(n)) + "   (expected return, %)")
 
 
-print(f"Required minimum return: {r_obb:.0%} per year, alpha = {alpha_c}")
-print(f"{'':>12} | {'mean loss':>13} | {'VaR90':>8} | {'CVaR90':>8}  (monthly losses)")
-for nome, perd in [("mean-CVaR", perd_cv)]:
-    mm_, vv_, cc_ = stat_perdite(perd)
-    print(f"{nome:>12} | {mm_:13.4f} | {vv_:8.4f} | {cc_:8.4f}")
-print("\nCompositions (weights > 1%):")
-for nome, w in [("mean-CVaR", w_cv)]:
-    print(f"  {nome:>10}: " + ", ".join(f"{titoli[i]} {w[i]:.1%}"
-                                        for i in range(n) if w[i] > 0.01))
+def porta_cvar(b, alpha=alpha_c):
+    """min CVaR_alpha of the loss -R x  subject to  expected return >= b, weights summing to 1.
 
-# histogram of the losses of the mean-CVaR portfolio
-conteggi, bordi = np.histogram(perd_cv * 100, bins=30)
-salva_dat(pd.DataFrame({"center": (bordi[:-1] + bordi[1:]) / 2, "freq": conteggi}),
-          "cap09_istogramma")
-mm_, var_cv, cvar_cv = stat_perdite(perd_cv)
+    Returns the weights, the CVaR (optimal value) and the shadow price of the return constraint,
+    or None if no portfolio returns at least b."""
+    m = gp.Model("min_cvar")
+    m.Params.OutputFlag = 0
+    x = m.addVars(n, name="x")
+    eta = m.addVar(lb=-GRB.INFINITY, name="eta")
+    xi = m.addVars(k, name="xi")
+    m.addConstr(x.sum() == 1, name="budget")
+    ret = m.addConstr(gp.quicksum(mu[i] * x[i] for i in range(n)) >= b, name="return")
+    m.addConstrs((xi[s] >= -gp.quicksum(R[s, i] * x[i] for i in range(n)) - eta
+                  for s in range(k)), name="tail")
+    m.setObjective(eta + gp.quicksum(xi[s] for s in range(k)) / (k * (1 - alpha)),
+                   GRB.MINIMIZE)
+    m.optimize()
+    if m.Status != GRB.OPTIMAL:
+        return None
+    return np.array([x[i].X for i in range(n)]), m.ObjVal, ret.Pi
+
+
+x_ott, cvar_ott, ombra = porta_cvar(b_obb)
+perd = -R @ x_ott
+var_ott, _ = var_cvar(perd, alpha_c)
+print(f"\nalpha = {alpha_c}, b = {b_obb:.0f}%: {n + 1 + k} variables, {k + 2} constraints")
+print("Optimal weights: " + ", ".join(f"{titoli[i]} {x_ott[i]:.1%}" for i in range(n)))
+print(f"{'s':>3} {'loss %':>10} {'xi_s':>6}")
+for s in range(k):
+    print(f"{s + 1:3d} {perd[s]:10.2f} {max(perd[s] - var_ott, 0):6.2f}")
+print(f"mean loss {perd.mean():.2f}% (expected return {-perd.mean():.2f}%), "
+      f"VaR80 {var_ott:.2f}%, CVaR80 {cvar_ott:.2f}%")
+print(f"Shadow price of the return constraint: {ombra:.4f} "
+      f"(one more point of return costs {ombra:.2f} points of CVaR)")
+# the losses in increasing order; tail = 1 for the 2 worst scenarios (on a tie, the last in the order)
+ordine = np.argsort(perd, kind="stable")
+salva_dat(pd.DataFrame({"rank": range(1, k + 1), "scenario": ordine + 1, "loss": perd[ordine],
+                        "tail": [0] * (k - 2) + [1, 1]}), "cap09_perdite")
 salva_dat(pd.DataFrame({"stat": ["mean", "VaR", "CVaR"],
-                        "value": [mm_ * 100, var_cv * 100, cvar_cv * 100]}), "cap09_soglie")
+                        "value": [perd.mean(), var_ott, cvar_ott]}), "cap09_soglie")
 
 # ----------------------------------------------------------------------
-# 3. RETURN-CVaR FRONTIER
+# 3. RETURN-CVaR FRONTIER AND EFFECT OF ALPHA
 # ----------------------------------------------------------------------
-intestazione("Return-CVaR frontier")
-r_grid = np.linspace(0.02, mu.max() * 0.999, 25)
-punti = []
-for r in r_grid:
-    w, cv = porta_cvar(r)
-    if w is not None:
-        punti.append((cv * 100, r * 100))
-front = pd.DataFrame(punti, columns=["cvar", "ret"])
+intestazione("Return-CVaR frontier (alpha = 0.8)")
+righe = []
+for b in np.arange(0, mu.max() + 1e-9, 0.25):
+    x, cv, pi = porta_cvar(b)
+    righe.append((b, cv, *x, pi))
+front = pd.DataFrame(righe, columns=["ret", "cvar", *titoli, "shadow"])
 salva_dat(front, "cap09_frontiera")
-print(f"{len(front)} points computed; minimum CVaR {front['cvar'].min():.2f}% "
-      f"at return {front.loc[front['cvar'].idxmin(), 'ret']:.1f}%")
+print(f"{'b':>5} {'CVaR':>7} " + "".join(f"{t:>7}" for t in titoli) + f" {'shadow':>7}")
+for r in front.itertuples(index=False):
+    if r.ret in (0, 2.5, 3, 3.5, 4.25, 5, 6, 7):
+        print(f"{r.ret:5.2f} {r.cvar:7.2f} " + "".join(f"{q:7.1%}" for q in r[2:2 + n]) + f" {r.shadow:7.2f}")
+x0, cv0, _ = porta_cvar(0)
+print(f"Minimum CVaR {cv0:.2f}% with expected return {mu @ x0:.2f}%: for b below this value "
+      f"the return constraint is not active (shadow price 0)")
+print(f"b = {mu.max() + 0.25:.2f}%: {'infeasible' if porta_cvar(mu.max() + 0.25) is None else 'feasible'} "
+      f"(no asset returns more than {mu.max():.0f}%)")
+
+intestazione("Effect of the level alpha (b = 3%)")
+for a in [0.5, 0.6, 0.7, 0.8, 0.9]:
+    x, cv, pi = porta_cvar(b_obb, a)
+    print(f"alpha = {a:.1f} (tail of {(1 - a) * k:.0f} scenarios): CVaR {cv:6.2f}% | "
+          + ", ".join(f"{titoli[i]} {x[i]:.1%}" for i in range(n)))
 
 # ----------------------------------------------------------------------
-# 4. TWO-STAGE SUPPLY CHAIN WITH ADVERSE SCENARIOS
+# 4. TWO-STAGE SUPPLIER CHOICE
 # ----------------------------------------------------------------------
-intestazione("Two-stage supply chain: reserved capacity + recourse")
+intestazione("Two-stage suppliers: reserved capacity + recourse")
 # Two suppliers (F1 cheap but fragile, F2 expensive but reliable) -> one market.
-# 1st stage: reserved capacity x_a (€/unit).  2nd stage: flows f_as and shortage u_s.
+# 1st stage: reserved capacity x_a.  2nd stage, in each scenario: purchases f_as and unmet demand u_s.
 forn = ["F1", "F2"]
-c_pren = {"F1": 2.0, "F2": 3.2}         # reservation cost €/unit
-c_uso = {"F1": 4.0, "F2": 5.0}          # purchase cost at delivery time
-pen = 40.0                              # penalty per unit of unserved demand
-Ss = 400
-dom_s = np.maximum(rng.normal(200, 40, Ss), 0)
-# availability of the fragile supplier: in 12% of the scenarios it collapses to 30%
-disp_f1 = np.where(rng.uniform(size=Ss) < 0.12, 0.3, 1.0)
+c_pren = {"F1": 2.0, "F2": 3.0}         # reservation cost €/unit
+c_uso = {"F1": 4.0, "F2": 4.0}          # purchase cost €/unit, the same for both suppliers
+pen = 10.0                              # penalty per unit of unmet demand
+dom_s = np.array([80, 90, 100, 100, 110, 110, 120, 120, 130, 140], dtype=float)
+Ss = len(dom_s)
+# availability of the fragile supplier: in scenarios 4 and 9 it delivers only half of the capacity
+disp_f1 = np.array([1, 1, 1, 0.5, 1, 1, 1, 1, 0.5, 1])
 disp = {"F1": disp_f1, "F2": np.ones(Ss)}
+alpha_f = 0.80                          # here too the tail is the 2 most expensive scenarios
+print(f"{Ss} equally likely scenarios: demand {dom_s.astype(int).tolist()}, F1 at 50% in scenarios 4 and 9")
+print(f"{2 + 3 * Ss} variables and {3 * Ss} constraints; with the CVaR {3 + 4 * Ss} and {4 * Ss}")
 
 
-def duestadi(lam, alpha_c2=0.90):
+def duestadi(lam, alpha_c2=alpha_f):
     m = gp.Model("twostage")
     m.Params.OutputFlag = 0
-    x = m.addVars(forn, ub=400, name="x")
+    x = m.addVars(forn, name="x")
     f = m.addVars(forn, range(Ss), name="f")
     u = m.addVars(range(Ss), name="u")
     for s in range(Ss):
@@ -189,34 +209,41 @@ def duestadi(lam, alpha_c2=0.90):
     return {a: x[a].X for a in forn}, tot, serv
 
 
+# with r = 1 only the tail would count: the purchases in the other scenarios would not be determined
 righe = []
-for lam in [0.0, 0.5, 1.0]:
+for lam in [0.0, 0.5, 0.75]:
     cap, tot, serv = duestadi(lam)
-    _, cvar_t = var_cvar(tot, 0.90)
+    _, cvar_t = var_cvar(tot, alpha_f)
     righe.append((lam, cap["F1"], cap["F2"], tot.mean(), cvar_t, serv.mean()))
-    print(f"  r = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
-          f"mean cost {tot.mean():8.2f}, CVaR90 {cvar_t:8.2f} | mean service {serv.mean():.1%}")
+    print(f"  r = {lam:4.2f}: reserve F1 = {cap['F1']:5.1f}, F2 = {cap['F2']:5.1f} | "
+          f"mean cost {tot.mean():6.1f}, CVaR80 {cvar_t:6.1f} | mean service {serv.mean():.1%}")
+    print("          cost per scenario: " + " ".join(f"{c:.0f}" for c in tot))
 res2 = pd.DataFrame(righe, columns=["lam", "F1", "F2", "mean_cost", "cvar", "service"])
 salva_dat(res2, "cap09_duestadi")
 print("The risk-averse decision maker reserves more capacity from the reliable supplier:")
-print("it pays more on average, but it cuts the tail of the scenarios with shortage.")
+print("it pays more on average, but it cuts the tail of the scenarios with unmet demand.")
 
 # ----------------------------------------------------------------------
 # 5. FIGURES
 # ----------------------------------------------------------------------
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.8, 4.0))
-ax1.bar((bordi[:-1] + bordi[1:]) / 2, conteggi, width=np.diff(bordi), color=TEAL, alpha=0.75)
-ax1.axvline(mm_ * 100, color=VERDE, ls="--", label=f"mean {mm_ * 100:.2f}%")
-ax1.axvline(var_cv * 100, color=ARANCIO, ls="-.", label=f"VaR$_{{90}}$ {var_cv * 100:.2f}%")
-ax1.axvline(cvar_cv * 100, color=ROSSO, ls="-", label=f"CVaR$_{{90}}$ {cvar_cv * 100:.2f}%")
-ax1.set_xlabel("monthly loss of the portfolio (%)")
-ax1.set_ylabel("number of scenarios")
-ax1.set_title("Distribution of the losses: mean, VaR and CVaR")
-ax1.legend(fontsize=8)
+ax1.bar(range(1, k + 1), perd[ordine], color=[TEAL] * (k - 2) + [ROSSO] * 2, alpha=0.8)
+ax1.set_xticks(range(1, k + 1), [str(s + 1) for s in ordine])
+ax1.axhline(0, color=GRIGIO, lw=0.8)
+ax1.axhline(perd.mean(), color=VERDE, ls="--", label=f"mean {perd.mean():.2f}%")
+ax1.axhline(var_ott, color=ARANCIO, ls="-.", label=f"VaR$_{{0.8}}$ {var_ott:.2f}%")
+ax1.axhline(cvar_ott, color=ROSSO, ls="-", label=f"CVaR$_{{0.8}}$ {cvar_ott:.2f}%")
+ax1.set_xlabel("scenario, in increasing order of loss (in red the 2 of the tail)")
+ax1.set_ylabel("annual loss of the portfolio (%)")
+ax1.set_title(f"Losses of the optimal portfolio (b = {b_obb:.0f}%)")
+ax1.legend(fontsize=8, loc="upper left")
 ax2.plot(front["cvar"], front["ret"], "-o", color=TEAL, ms=4)
-ax2.set_xlabel("CVaR$_{0.90}$ of the monthly loss (%)")
-ax2.set_ylabel("expected annual return (%)")
+ax2.plot([cvar_ott], [b_obb], "o", ms=10, mfc="none", mec=ROSSO, mew=2,
+         label=f"b = {b_obb:.0f}%: CVaR {cvar_ott:.2f}%")
+ax2.set_xlabel("CVaR$_{0.8}$ of the annual loss (%)")
+ax2.set_ylabel("required expected return b (%)")
 ax2.set_title("Return-CVaR frontier")
+ax2.legend(fontsize=8, loc="lower right")
 salva_figura(fig, "cap09_perdite_frontiera")
 
 print("\nDone: chapter 9.")

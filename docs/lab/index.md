@@ -77,7 +77,7 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     ---
 
-    The eight assets and 220 monthly scenarios of the chapter: the loss distribution of the minimum-CVaR portfolio with mean, VaR and CVaR, and the return-CVaR frontier. Move the level α and the required return b.
+    The 3 assets and 10 annual scenarios of the chapter: the losses of the minimum-CVaR portfolio, scenario by scenario, with mean, VaR and CVaR, and the return-CVaR frontier. Move the level α and the required return b and watch the shares and the shadow price change.
 
     [Open the app →](var-cvar.md)
 

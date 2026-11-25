@@ -107,26 +107,104 @@ threshold; the equilibrium point is exactly the $\alpha$ quantile.
 
 ## Case study 1: mean-CVaR portfolio
 
-Eight sector stocks (ENE, FIN, TEC, IND, SAN, CON, UTL, MAT) and $k = 220$ monthly
-scenarios generated with **fat tails** (Student $t$ market factor, 4 degrees of
-freedom). Scenario loss $\ell_s(\boldsymbol x) = -\sum_{i=1}^{n} r_{is}\, x_i$, where
-$r_{is}$ is the return of security $i$ in scenario $s$; we minimize
-$\mathrm{CVaR}_{0.90}$ with expected return $\ge 8\%$ per year.
+Three assets — TEC (technology), UTL (utilities) and GLD (gold) — and $k = 10$
+equally likely annual scenarios ($w_s = 1/10$) of the return, in % (data in
+`data/cvar_scenari_rendimenti.csv`). In scenario 1 the markets crash and gold rises;
+in scenarios 2 and 9 gold falls. The last column is the expected return $m_i$, the
+mean of the 10 scenarios.
+
+| asset | $s = 1$ | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | $m_i$ |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| TEC ($i = 1$) | −25 | 5 | 30 | 5 | 0 | −5 | 20 | 10 | 25 | 5 | **7** |
+| UTL ($i = 2$) | −8 | 2 | 6 | 4 | 5 | −6 | 8 | 3 | 7 | 9 | **3** |
+| GLD ($i = 3$) | 15 | −10 | −5 | 4 | −3 | 8 | 0 | 2 | −6 | 5 | **1** |
+
+We decide the shares $x_i$ of the capital in the three assets. The loss of the
+scenario is $\ell_s(\boldsymbol x) = -\sum_{i=1}^{3} r_{is}\, x_i$, where $r_{is}$ is
+the return of asset $i$ in scenario $s$; the polyhedron $X$ asks for non-negative
+shares summing to 1 and an expected return $\sum_i m_i x_i$ of at least $b = 3\%$.
+We minimize $\mathrm{CVaR}_{0.8}$: with 10 scenarios the tail $1 - \alpha = 0.2$ is
+exactly the 2 worst scenarios.
+
+The LP has 14 variables ($x_1, x_2, x_3$, $\eta$ and the 10 $\xi_s$) and 12
+constraints. In the objective function each $\xi_s$ has coefficient $w_s/(1-\alpha) =
+1/(10 \cdot 0.2) = 0.5$; the tail row $\xi_s \ge -\sum_i r_{is} x_i - \eta$ is
+written with the variables on the left:
+
+$$
+\begin{array}{rrcrcrcrcrcl}
+\min & & & & & & & \eta & + & 0.5 \textstyle\sum_{s=1}^{10} \xi_s & & \\[1ex]
+\text{subject to} & 7\,x_1 & + & 3\,x_2 & + & x_3 & & & & & \ge & 3, \\
+ & x_1 & + & x_2 & + & x_3 & & & & & = & 1, \\[1ex]
+ & -25\,x_1 & - & 8\,x_2 & + & 15\,x_3 & + & \eta & + & \xi_1 & \ge & 0, \\
+ & 5\,x_1 & + & 2\,x_2 & - & 10\,x_3 & + & \eta & + & \xi_2 & \ge & 0, \\
+ & 30\,x_1 & + & 6\,x_2 & - & 5\,x_3 & + & \eta & + & \xi_3 & \ge & 0, \\
+ & 5\,x_1 & + & 4\,x_2 & + & 4\,x_3 & + & \eta & + & \xi_4 & \ge & 0, \\
+ & & & 5\,x_2 & - & 3\,x_3 & + & \eta & + & \xi_5 & \ge & 0, \\
+ & -5\,x_1 & - & 6\,x_2 & + & 8\,x_3 & + & \eta & + & \xi_6 & \ge & 0, \\
+ & 20\,x_1 & + & 8\,x_2 & & & + & \eta & + & \xi_7 & \ge & 0, \\
+ & 10\,x_1 & + & 3\,x_2 & + & 2\,x_3 & + & \eta & + & \xi_8 & \ge & 0, \\
+ & 25\,x_1 & + & 7\,x_2 & - & 6\,x_3 & + & \eta & + & \xi_9 & \ge & 0, \\
+ & 5\,x_1 & + & 9\,x_2 & + & 5\,x_3 & + & \eta & + & \xi_{10} & \ge & 0, \\[1ex]
+ & & & & & & & \eta & & & \gtreqless & 0, \\
+ & x_1, & & x_2, & & x_3, & & & & \xi_s & \ge & 0, \quad s = 1, \dots, 10.
+\end{array}
+$$
 
 ```text
-            | mean loss     | VaR90  | CVaR90   (monthly losses)
-  mean-CVaR |       -0.0067 | 0.0327 | 0.0511
-Composition: ENE 9.9 FIN 1.9 TEC 10.5 SAN 8.6 UTL 46.5 MAT 22.5
+alpha = 0.8, b = 3%: 14 variables, 12 constraints
+optimal weights: TEC 26.0%   UTL 22.0%   GLD 52.0%
+  s     1     2     3     4     5     6     7     8     9    10
+loss 0.46  3.46 -6.52 -4.26  0.46 -1.54 -6.96 -4.30 -4.92 -5.88
+mean loss -3.00%   VaR80 0.46%   CVaR80 1.96%
+shadow price of the return constraint: 1.51
 ```
 
-![Loss distribution and frontier](img/cap09_perdite_frontiera.png)
+![Losses of the optimal portfolio and frontier](img/cap09_perdite_frontiera.png)
 
-With an expected return of 8% per year the portfolio gains 0.67% per month on
-average, but in the worst 10% of the months it loses 5.11% on average: this is the
-number the mean hides. The CVaR concentrates the portfolio on UTL and MAT and keeps a
-share of TEC which, although mediocre on average, moves against the trend in the
-worst scenarios of this sample. The CVaR looks only where it hurts: the losses above
-the VaR.
+The tail is scenario 2, where gold loses 10% (loss 3.46%), and the mass that remains
+on the VaR, 0.46%, the loss shared by scenarios 1 and 5: CVaR $= (3.46 + 0.46)/2 =
+1.96\%$. The optimum equalizes the losses of scenarios 1 and 5: moving capital from
+one to the other would worsen the tail.
+
+The portfolio diversifies. Gold returns only 1% on average, but weighs 52%: it gains
+in the crash of scenario 1, where TEC loses 25%. The CVaR looks only where it hurts,
+the losses beyond the VaR.
+
+**The shadow price and the frontier.** The shadow price of the return constraint is
+1.51: one more point of required return costs about 1.51 points of CVaR. The frontier
+repeats the LP for $b$ from 0 to 7%, in steps of 0.25:
+
+```text
+    b    CVaR     TEC    UTL    GLD  shadow
+ 0.00    1.29   12.2%  41.1%  46.7%    0.00
+ 2.50    1.29   12.2%  41.1%  46.7%    0.00
+ 3.00    1.96   26.0%  22.0%  52.0%    1.51
+ 4.25    4.27   54.2%   0.0%  45.8%    2.08
+ 5.00    6.33   66.7%   0.0%  33.3%    3.08
+ 6.00   10.58   83.3%   0.0%  16.7%    4.42
+ 7.00   15.00  100.0%   0.0%   0.0%    4.42
+b = 7.25%: infeasible (no asset returns more than 7%)
+```
+
+Up to $b = 2.56\%$ the constraint is not active: the minimum-CVaR portfolio (CVaR
+1.29%) already returns 2.56%, and the shadow price is 0. Beyond, raising $b$ moves the
+capital to TEC: UTL leaves just above 3.5%, and the shadow price grows on each piece
+(1.51, 2.08, 3.08, 4.42), because the frontier is convex. With $b = 7\%$ only TEC is
+left; above 7% the LP is infeasible.
+
+**The level $\alpha$.** With $b = 3\%$, the level decides how many scenarios form the tail:
+
+```text
+alpha = 0.5 (tail of 5 scenarios): CVaR -0.53% | TEC 33.3%  UTL  0.0%  GLD 66.7%
+alpha = 0.7 (tail of 3 scenarios): CVaR  1.29% | TEC 22.0%  UTL 34.0%  GLD 44.0%
+alpha = 0.8 (tail of 2 scenarios): CVaR  1.96% | TEC 26.0%  UTL 22.0%  GLD 52.0%
+alpha = 0.9 (tail of 1 scenario):  CVaR  2.20% | TEC 20.0%  UTL 40.0%  GLD 40.0%
+```
+
+With $\alpha = 0.9$ the tail is only the crash of scenario 1, and the shares move to
+UTL, which loses little there. With $\alpha = 0.5$ the tail is half of the scenarios
+and the CVaR is negative: in the 5 worst years the portfolio still gains, on average.
 
 Measuring risk with the variance instead of the CVaR leads to the Markowitz
 portfolio, a quadratic model: it is in the module *NLP Modelling*, page
@@ -135,16 +213,23 @@ portfolio, a quadratic model: it is in the module *NLP Modelling*, page
 ## Case study 2: two-stage supply chain
 
 Before observing the scenario we *book* capacity from the suppliers; then, having
-seen the scenario, we decide the recourse. F1 is cheap but fragile (in 12% of the
-scenarios its availability collapses to 30%); F2 is expensive but reliable. Shortage
-penalty 40 €/unit; $k = 400$ scenarios.
+seen the scenario, we decide the recourse. F1 is cheap but fragile: in scenarios 4
+and 9 it delivers only half of the booked capacity. F2 is expensive but reliable.
+Booking costs 2 € per unit from F1 and 3 € from F2; buying costs 4 € per unit from
+both; each unit of unmet demand costs 10 €. There are $k = 10$ equally likely
+scenarios, and the level is $\alpha = 0.8$, as in the portfolio.
+
+| scenario $s$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| demand $d_s$ | 80 | 90 | 100 | 100 | 110 | 110 | 120 | 120 | 130 | 140 |
+| availability of F1, $q_{1s}$ | 1 | 1 | 1 | **0.5** | 1 | 1 | 1 | 1 | **0.5** | 1 |
 
 **Data.** Two suppliers indexed by $a \in \{1, 2\}$ with booking costs
 $c^{\mathrm{pre}}_a \in \mathbb{Q}_{>0}$ and purchase costs
 $c^{\mathrm{uso}}_a \in \mathbb{Q}_{>0}$; $k$ scenarios $s \in \{1, 2, \dots, k\}$
 with demand $d_s \in \mathbb{Q}_{\ge 0}$ and availability $q_{as} \in (0, 1]$
-(the datum that models the failure); shortage penalty $g \in \mathbb{Q}_{>0}$; risk
-weight $r \in [0, 1]$ and level $\alpha \in (0.1)$.
+(the datum that models the failure); penalty for unmet demand $g \in \mathbb{Q}_{>0}$;
+risk weight $r \in [0, 1]$ and level $\alpha \in (0, 1)$.
 
 **Decision variables.** The non-negative variables $x_a$ (capacity booked from
 supplier $a$, *first-stage*: the same in all scenarios), $f_{as}$ (purchase from
@@ -171,26 +256,32 @@ Description of the objective function and of the constraints:
 - the linear **capacity** constraints impose that in scenario $s$ supplier $a$ can be
   used only up to the booked capacity $x_a$, reduced by the availability
   $q_{as}$ ($2\,k$ linear constraints);
-- the linear **demand** constraints impose that $d_s$ be covered by the flows or,
-  failing that, be counted as a shortage $u_s$, which in the objective pays the
+- the linear **demand** constraints impose that $d_s$ be covered by the purchases or,
+  failing that, be counted as unmet demand $u_s$, which in the objective pays the
   penalty: the model is never infeasible, it "buys" infeasibility at the price of the
   penalty ($k$ linear constraints);
 - the non-negativity constraints on $x_a$, $f_{as}$ and $u_s$ define the variables of
   the model.
 
+With the 10 scenarios the model has 32 variables ($x_1$, $x_2$, 20 purchases and 10
+unmet demands) and 30 constraints; the CVaR adds $\eta$, the 10 $\xi_s$ and 10 rows:
+43 variables and 40 constraints. For scenario 4, for instance: $f_{14} \le 0.5\,x_1$,
+$f_{24} \le x_2$ and $f_{14} + f_{24} + u_4 \ge 100$.
+
 ```text
-r = 0.0: book suppl.1 161.5  suppl.2 134.2
-              mean cost 1724   CVaR90 2902   service 98.7%
-r = 0.5: book suppl.1  92.7  suppl.2 212.7
-              mean cost 1803   CVaR90 2221   service 99.9%
-r = 1.0: book suppl.1  68.5  suppl.2 236.9
-              mean cost 1906   CVaR90 2203   service 99.0%
+r = 0.00: book F1 120  F2   0   mean cost 758   CVaR80 1050   service  89.2%
+r = 0.50: book F1  80  F2  60   mean cost 798   CVaR80  970   service  97.7%
+r = 0.75: book F1  20  F2 120   mean cost 840   CVaR80  940   service 100.0%
 ```
 
-The risk-neutral decision maker buys from the cheap supplier and accepts that in 12%
-of the scenarios the shortage makes the costs explode (CVaR 2902). As $r$
-grows, capacity migrates towards the reliable supplier: **+79 € of average cost buy
-−681 € of CVaR** — the cost of resilience, quantified.
+The risk-neutral decision maker ($r = 0$) books 120 units from F1 alone and accepts
+the two most expensive scenarios: scenario 9, a failure with demand 130 (1180 €), and
+scenario 10, demand 140 above the capacity (920 €). CVaR $= (1180 + 920)/2 = 1050$ €.
+As $r$ grows, capacity migrates towards the reliable supplier: with $r = 0.5$,
+**+40 € of average cost buy −80 € of CVaR** — the cost of resilience, quantified.
+With $r = 0.75$ all the demand is served, for another 42 € of average cost and 30 € less
+of CVaR. With $r = 1$ only the tail would count: the purchases in the other scenarios
+would no longer be determined.
 
 ## Sensitivity analysis
 
@@ -202,9 +293,9 @@ grows, capacity migrates towards the reliable supplier: **+79 € of average cos
 | $k$ | statistical stability: repeat with different samples, as in the Newsvendor |
 
 !!! warning "Statistical limits"
-    With $\alpha = 0{,}99$ and $k = 220$ scenarios the tail contains only 2–3
-    scenarios: the estimated CVaR is almost noise. Rule of thumb: at least a few
-    dozen scenarios are needed *beyond* the quantile. Moreover, with discrete
+    With $\alpha = 0.9$ and $k = 10$ scenarios the tail contains a single scenario:
+    the estimated CVaR is the loss of that year. With real data at least a few dozen
+    scenarios are needed *beyond* the quantile. Moreover, with discrete
     distributions the VaR may not be unique ($\tilde\eta$ is *a* VaR): always compare
     $\tilde\eta$ with the empirical quantile.
 
@@ -237,9 +328,11 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
     Contents:
       1. Example with 6 scenarios: VaR = 12, CVaR = 18.67,
          checked with the linear formulation of Rockafellar-Uryasev
-      2. Mean-CVaR portfolio (LP)
-      3. Return-CVaR frontier
-      4. Two-stage supply chain with adverse scenarios: the cost of resilience
+      2. Minimum-CVaR portfolio: 3 assets (TEC, UTL, GLD), 10 equally likely annual scenarios,
+         alpha = 0.8 (the tail is the 2 worst scenarios), expected return at least b = 3%
+      3. Return-CVaR frontier as b varies, shadow price of the return constraint
+         and effect of the level alpha
+      4. Two-stage supplier choice (2 suppliers, 10 scenarios): the cost of resilience
     """
     import gurobipy as gp
     import numpy as np
@@ -248,8 +341,6 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
 
     from stile import (ARANCIO, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dat,
                        salva_dati, salva_figura)
-
-    rng = np.random.default_rng(42)
 
     # ----------------------------------------------------------------------
     # 1. EXAMPLE WITH 6 SCENARIOS
@@ -279,49 +370,6 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
     print(f"Expected value of the loss: {perdite.mean():.2f} "
           f"-> the CVaR tells the story of the tail, the mean does not.")
 
-    # ----------------------------------------------------------------------
-    # 2. MEAN-CVaR PORTFOLIO
-    # ----------------------------------------------------------------------
-    intestazione("Mean-CVaR portfolio (LP)")
-    titoli = ["ENE", "FIN", "TEC", "IND", "SAN", "CON", "UTL", "MAT"]
-    n = len(titoli)
-    beta_f = np.array([1.1, 1.3, 1.5, 1.0, 0.6, 0.8, 0.4, 1.2])
-    alfa_ann = np.array([0.05, 0.06, 0.11, 0.05, 0.045, 0.05, 0.035, 0.06])
-    sigma_idio = np.array([0.05, 0.055, 0.07, 0.04, 0.03, 0.035, 0.02, 0.06])
-    S = 220                                   # monthly scenarios (pip licence: n+2+S constraints)
-    # market factor with FAT TAILS (Student t): realistic extreme scenarios
-    mercato = 0.004 + 0.035 * rng.standard_t(4, S) / np.sqrt(2)
-    R = alfa_ann[None, :] / 12 + np.outer(mercato, beta_f) + rng.normal(0, sigma_idio, (S, n))
-    salva_dati(pd.DataFrame(R, columns=titoli), "cvar_scenari_rendimenti")
-
-    mu = R.mean(axis=0) * 12
-    alpha_c = 0.90
-
-
-    def porta_cvar(r_min):
-        """min CVaR_alpha of the monthly loss -R x  subject to  expected return >= r_min."""
-        m = gp.Model("mean_cvar")
-        m.Params.OutputFlag = 0
-        x = m.addVars(n, name="x")
-        eta = m.addVar(lb=-GRB.INFINITY, name="eta")
-        xi = m.addVars(S, name="xi")
-        m.addConstr(x.sum() == 1)
-        m.addConstr(gp.quicksum(mu[i] * x[i] for i in range(n)) >= r_min)
-        m.addConstrs((xi[s] >= -gp.quicksum(R[s, i] * x[i] for i in range(n)) - eta
-                      for s in range(S)), name="tail")
-        m.setObjective(eta + gp.quicksum(xi[s] for s in range(S)) / (S * (1 - alpha_c)),
-                       GRB.MINIMIZE)
-        m.optimize()
-        if m.Status != GRB.OPTIMAL:
-            return None, None
-        w = np.array([x[i].X for i in range(n)])
-        return w, m.ObjVal
-
-
-    r_obb = 0.08
-    w_cv, cvar_ott = porta_cvar(r_obb)
-    perd_cv = -R @ w_cv
-
 
     def var_cvar(perd, alpha):
         """VaR_alpha and exact CVaR_alpha of k equiprobable scenarios.
@@ -337,65 +385,128 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
         return var_, cvar_
 
 
-    def stat_perdite(perd):
-        var_, cvar_ = var_cvar(perd, alpha_c)
-        return perd.mean(), var_, cvar_
+    # ----------------------------------------------------------------------
+    # 2. MINIMUM-CVaR PORTFOLIO
+    # ----------------------------------------------------------------------
+    intestazione("Minimum-CVaR portfolio (LP): 3 assets, 10 scenarios")
+    titoli = ["TEC", "UTL", "GLD"]
+    # annual return r_is (%) of asset i in scenario s, 10 equally likely scenarios:
+    # in scenario 1 the markets crash and gold rises; in scenarios 2 and 9 gold falls
+    R = np.array([[-25, -8, 15],
+                  [5, 2, -10],
+                  [30, 6, -5],
+                  [5, 4, 4],
+                  [0, 5, -3],
+                  [-5, -6, 8],
+                  [20, 8, 0],
+                  [10, 3, 2],
+                  [25, 7, -6],
+                  [5, 9, 5]], dtype=float)
+    k, n = R.shape
+    dati = pd.DataFrame(R, columns=titoli)
+    dati.insert(0, "scenario", range(1, k + 1))
+    salva_dati(dati, "cvar_scenari_rendimenti")
+    mu = R.mean(axis=0)                       # expected return m_i (%): 7, 3, 1
+    alpha_c = 0.80                            # the tail: (1 - 0.8) * 10 = 2 scenarios
+    b_obb = 3.0                               # minimum required expected return (%)
+
+    print(" s  " + "".join(f"{t:>6}" for t in titoli))
+    for s in range(k):
+        print(f"{s + 1:2d}  " + "".join(f"{R[s, i]:6.0f}" for i in range(n)))
+    print("m_i " + "".join(f"{mu[i]:6.0f}" for i in range(n)) + "   (expected return, %)")
 
 
-    print(f"Required minimum return: {r_obb:.0%} per year, alpha = {alpha_c}")
-    print(f"{'':>12} | {'mean loss':>13} | {'VaR90':>8} | {'CVaR90':>8}  (monthly losses)")
-    for nome, perd in [("mean-CVaR", perd_cv)]:
-        mm_, vv_, cc_ = stat_perdite(perd)
-        print(f"{nome:>12} | {mm_:13.4f} | {vv_:8.4f} | {cc_:8.4f}")
-    print("\nCompositions (weights > 1%):")
-    for nome, w in [("mean-CVaR", w_cv)]:
-        print(f"  {nome:>10}: " + ", ".join(f"{titoli[i]} {w[i]:.1%}"
-                                            for i in range(n) if w[i] > 0.01))
+    def porta_cvar(b, alpha=alpha_c):
+        """min CVaR_alpha of the loss -R x  subject to  expected return >= b, weights summing to 1.
 
-    # histogram of the losses of the mean-CVaR portfolio
-    conteggi, bordi = np.histogram(perd_cv * 100, bins=30)
-    salva_dat(pd.DataFrame({"center": (bordi[:-1] + bordi[1:]) / 2, "freq": conteggi}),
-              "cap09_istogramma")
-    mm_, var_cv, cvar_cv = stat_perdite(perd_cv)
+        Returns the weights, the CVaR (optimal value) and the shadow price of the return constraint,
+        or None if no portfolio returns at least b."""
+        m = gp.Model("min_cvar")
+        m.Params.OutputFlag = 0
+        x = m.addVars(n, name="x")
+        eta = m.addVar(lb=-GRB.INFINITY, name="eta")
+        xi = m.addVars(k, name="xi")
+        m.addConstr(x.sum() == 1, name="budget")
+        ret = m.addConstr(gp.quicksum(mu[i] * x[i] for i in range(n)) >= b, name="return")
+        m.addConstrs((xi[s] >= -gp.quicksum(R[s, i] * x[i] for i in range(n)) - eta
+                      for s in range(k)), name="tail")
+        m.setObjective(eta + gp.quicksum(xi[s] for s in range(k)) / (k * (1 - alpha)),
+                       GRB.MINIMIZE)
+        m.optimize()
+        if m.Status != GRB.OPTIMAL:
+            return None
+        return np.array([x[i].X for i in range(n)]), m.ObjVal, ret.Pi
+
+
+    x_ott, cvar_ott, ombra = porta_cvar(b_obb)
+    perd = -R @ x_ott
+    var_ott, _ = var_cvar(perd, alpha_c)
+    print(f"\nalpha = {alpha_c}, b = {b_obb:.0f}%: {n + 1 + k} variables, {k + 2} constraints")
+    print("Optimal weights: " + ", ".join(f"{titoli[i]} {x_ott[i]:.1%}" for i in range(n)))
+    print(f"{'s':>3} {'loss %':>10} {'xi_s':>6}")
+    for s in range(k):
+        print(f"{s + 1:3d} {perd[s]:10.2f} {max(perd[s] - var_ott, 0):6.2f}")
+    print(f"mean loss {perd.mean():.2f}% (expected return {-perd.mean():.2f}%), "
+          f"VaR80 {var_ott:.2f}%, CVaR80 {cvar_ott:.2f}%")
+    print(f"Shadow price of the return constraint: {ombra:.4f} "
+          f"(one more point of return costs {ombra:.2f} points of CVaR)")
+    # the losses in increasing order; tail = 1 for the 2 worst scenarios (on a tie, the last in the order)
+    ordine = np.argsort(perd, kind="stable")
+    salva_dat(pd.DataFrame({"rank": range(1, k + 1), "scenario": ordine + 1, "loss": perd[ordine],
+                            "tail": [0] * (k - 2) + [1, 1]}), "cap09_perdite")
     salva_dat(pd.DataFrame({"stat": ["mean", "VaR", "CVaR"],
-                            "value": [mm_ * 100, var_cv * 100, cvar_cv * 100]}), "cap09_soglie")
+                            "value": [perd.mean(), var_ott, cvar_ott]}), "cap09_soglie")
 
     # ----------------------------------------------------------------------
-    # 3. RETURN-CVaR FRONTIER
+    # 3. RETURN-CVaR FRONTIER AND EFFECT OF ALPHA
     # ----------------------------------------------------------------------
-    intestazione("Return-CVaR frontier")
-    r_grid = np.linspace(0.02, mu.max() * 0.999, 25)
-    punti = []
-    for r in r_grid:
-        w, cv = porta_cvar(r)
-        if w is not None:
-            punti.append((cv * 100, r * 100))
-    front = pd.DataFrame(punti, columns=["cvar", "ret"])
+    intestazione("Return-CVaR frontier (alpha = 0.8)")
+    righe = []
+    for b in np.arange(0, mu.max() + 1e-9, 0.25):
+        x, cv, pi = porta_cvar(b)
+        righe.append((b, cv, *x, pi))
+    front = pd.DataFrame(righe, columns=["ret", "cvar", *titoli, "shadow"])
     salva_dat(front, "cap09_frontiera")
-    print(f"{len(front)} points computed; minimum CVaR {front['cvar'].min():.2f}% "
-          f"at return {front.loc[front['cvar'].idxmin(), 'ret']:.1f}%")
+    print(f"{'b':>5} {'CVaR':>7} " + "".join(f"{t:>7}" for t in titoli) + f" {'shadow':>7}")
+    for r in front.itertuples(index=False):
+        if r.ret in (0, 2.5, 3, 3.5, 4.25, 5, 6, 7):
+            print(f"{r.ret:5.2f} {r.cvar:7.2f} " + "".join(f"{q:7.1%}" for q in r[2:2 + n]) + f" {r.shadow:7.2f}")
+    x0, cv0, _ = porta_cvar(0)
+    print(f"Minimum CVaR {cv0:.2f}% with expected return {mu @ x0:.2f}%: for b below this value "
+          f"the return constraint is not active (shadow price 0)")
+    print(f"b = {mu.max() + 0.25:.2f}%: {'infeasible' if porta_cvar(mu.max() + 0.25) is None else 'feasible'} "
+          f"(no asset returns more than {mu.max():.0f}%)")
+
+    intestazione("Effect of the level alpha (b = 3%)")
+    for a in [0.5, 0.6, 0.7, 0.8, 0.9]:
+        x, cv, pi = porta_cvar(b_obb, a)
+        print(f"alpha = {a:.1f} (tail of {(1 - a) * k:.0f} scenarios): CVaR {cv:6.2f}% | "
+              + ", ".join(f"{titoli[i]} {x[i]:.1%}" for i in range(n)))
 
     # ----------------------------------------------------------------------
-    # 4. TWO-STAGE SUPPLY CHAIN WITH ADVERSE SCENARIOS
+    # 4. TWO-STAGE SUPPLIER CHOICE
     # ----------------------------------------------------------------------
-    intestazione("Two-stage supply chain: reserved capacity + recourse")
+    intestazione("Two-stage suppliers: reserved capacity + recourse")
     # Two suppliers (F1 cheap but fragile, F2 expensive but reliable) -> one market.
-    # 1st stage: reserved capacity x_a (€/unit).  2nd stage: flows f_as and shortage u_s.
+    # 1st stage: reserved capacity x_a.  2nd stage, in each scenario: purchases f_as and unmet demand u_s.
     forn = ["F1", "F2"]
-    c_pren = {"F1": 2.0, "F2": 3.2}         # reservation cost €/unit
-    c_uso = {"F1": 4.0, "F2": 5.0}          # purchase cost at delivery time
-    pen = 40.0                              # penalty per unit of unserved demand
-    Ss = 400
-    dom_s = np.maximum(rng.normal(200, 40, Ss), 0)
-    # availability of the fragile supplier: in 12% of the scenarios it collapses to 30%
-    disp_f1 = np.where(rng.uniform(size=Ss) < 0.12, 0.3, 1.0)
+    c_pren = {"F1": 2.0, "F2": 3.0}         # reservation cost €/unit
+    c_uso = {"F1": 4.0, "F2": 4.0}          # purchase cost €/unit, the same for both suppliers
+    pen = 10.0                              # penalty per unit of unmet demand
+    dom_s = np.array([80, 90, 100, 100, 110, 110, 120, 120, 130, 140], dtype=float)
+    Ss = len(dom_s)
+    # availability of the fragile supplier: in scenarios 4 and 9 it delivers only half of the capacity
+    disp_f1 = np.array([1, 1, 1, 0.5, 1, 1, 1, 1, 0.5, 1])
     disp = {"F1": disp_f1, "F2": np.ones(Ss)}
+    alpha_f = 0.80                          # here too the tail is the 2 most expensive scenarios
+    print(f"{Ss} equally likely scenarios: demand {dom_s.astype(int).tolist()}, F1 at 50% in scenarios 4 and 9")
+    print(f"{2 + 3 * Ss} variables and {3 * Ss} constraints; with the CVaR {3 + 4 * Ss} and {4 * Ss}")
 
 
-    def duestadi(lam, alpha_c2=0.90):
+    def duestadi(lam, alpha_c2=alpha_f):
         m = gp.Model("twostage")
         m.Params.OutputFlag = 0
-        x = m.addVars(forn, ub=400, name="x")
+        x = m.addVars(forn, name="x")
         f = m.addVars(forn, range(Ss), name="f")
         u = m.addVars(range(Ss), name="u")
         for s in range(Ss):
@@ -423,34 +534,41 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
         return {a: x[a].X for a in forn}, tot, serv
 
 
+    # with r = 1 only the tail would count: the purchases in the other scenarios would not be determined
     righe = []
-    for lam in [0.0, 0.5, 1.0]:
+    for lam in [0.0, 0.5, 0.75]:
         cap, tot, serv = duestadi(lam)
-        _, cvar_t = var_cvar(tot, 0.90)
+        _, cvar_t = var_cvar(tot, alpha_f)
         righe.append((lam, cap["F1"], cap["F2"], tot.mean(), cvar_t, serv.mean()))
-        print(f"  r = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
-              f"mean cost {tot.mean():8.2f}, CVaR90 {cvar_t:8.2f} | mean service {serv.mean():.1%}")
+        print(f"  r = {lam:4.2f}: reserve F1 = {cap['F1']:5.1f}, F2 = {cap['F2']:5.1f} | "
+              f"mean cost {tot.mean():6.1f}, CVaR80 {cvar_t:6.1f} | mean service {serv.mean():.1%}")
+        print("          cost per scenario: " + " ".join(f"{c:.0f}" for c in tot))
     res2 = pd.DataFrame(righe, columns=["lam", "F1", "F2", "mean_cost", "cvar", "service"])
     salva_dat(res2, "cap09_duestadi")
     print("The risk-averse decision maker reserves more capacity from the reliable supplier:")
-    print("it pays more on average, but it cuts the tail of the scenarios with shortage.")
+    print("it pays more on average, but it cuts the tail of the scenarios with unmet demand.")
 
     # ----------------------------------------------------------------------
     # 5. FIGURES
     # ----------------------------------------------------------------------
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.8, 4.0))
-    ax1.bar((bordi[:-1] + bordi[1:]) / 2, conteggi, width=np.diff(bordi), color=TEAL, alpha=0.75)
-    ax1.axvline(mm_ * 100, color=VERDE, ls="--", label=f"mean {mm_ * 100:.2f}%")
-    ax1.axvline(var_cv * 100, color=ARANCIO, ls="-.", label=f"VaR$_{{90}}$ {var_cv * 100:.2f}%")
-    ax1.axvline(cvar_cv * 100, color=ROSSO, ls="-", label=f"CVaR$_{{90}}$ {cvar_cv * 100:.2f}%")
-    ax1.set_xlabel("monthly loss of the portfolio (%)")
-    ax1.set_ylabel("number of scenarios")
-    ax1.set_title("Distribution of the losses: mean, VaR and CVaR")
-    ax1.legend(fontsize=8)
+    ax1.bar(range(1, k + 1), perd[ordine], color=[TEAL] * (k - 2) + [ROSSO] * 2, alpha=0.8)
+    ax1.set_xticks(range(1, k + 1), [str(s + 1) for s in ordine])
+    ax1.axhline(0, color=GRIGIO, lw=0.8)
+    ax1.axhline(perd.mean(), color=VERDE, ls="--", label=f"mean {perd.mean():.2f}%")
+    ax1.axhline(var_ott, color=ARANCIO, ls="-.", label=f"VaR$_{{0.8}}$ {var_ott:.2f}%")
+    ax1.axhline(cvar_ott, color=ROSSO, ls="-", label=f"CVaR$_{{0.8}}$ {cvar_ott:.2f}%")
+    ax1.set_xlabel("scenario, in increasing order of loss (in red the 2 of the tail)")
+    ax1.set_ylabel("annual loss of the portfolio (%)")
+    ax1.set_title(f"Losses of the optimal portfolio (b = {b_obb:.0f}%)")
+    ax1.legend(fontsize=8, loc="upper left")
     ax2.plot(front["cvar"], front["ret"], "-o", color=TEAL, ms=4)
-    ax2.set_xlabel("CVaR$_{0.90}$ of the monthly loss (%)")
-    ax2.set_ylabel("expected annual return (%)")
+    ax2.plot([cvar_ott], [b_obb], "o", ms=10, mfc="none", mec=ROSSO, mew=2,
+             label=f"b = {b_obb:.0f}%: CVaR {cvar_ott:.2f}%")
+    ax2.set_xlabel("CVaR$_{0.8}$ of the annual loss (%)")
+    ax2.set_ylabel("required expected return b (%)")
     ax2.set_title("Return-CVaR frontier")
+    ax2.legend(fontsize=8, loc="lower right")
     salva_figura(fig, "cap09_perdite_frontiera")
 
     print("\nDone: chapter 9.")
@@ -458,16 +576,17 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
 
 ## Exercises
 
-1. Six scenarios with $\alpha = 0{,}90$: VaR = CVaR = 20 (the tail lies entirely on
+1. Six scenarios with $\alpha = 0.90$: VaR = CVaR = 20 (the tail lies entirely on
    the last point).
 2. Build an example in which the VaR violates subadditivity (two independent loans)
    and check that the CVaR does not.
-3. Optimal CVaR for $\alpha \in \{0{,}8;\, 0{,}9;\, 0{,}95;\, 0{,}99\}$: when do the
-   instabilities begin?
-4. Constrained form $\max \sum_i m_i x_i$ subject to $\mathrm{CVaR} \le k$: the
-   same frontier, dual = marginal return of risk.
-5. Stress test: an extreme scenario with probability 1% — how does the booking
-   change?
+3. Portfolio with $b = 3\%$: optimal CVaR and shares for
+   $\alpha \in \{0.5, 0.6, 0.7, 0.8, 0.9\}$. On how many scenarios is the tail
+   estimated in each case?
+4. Constrained form $\max \sum_i m_i x_i$ subject to $\mathrm{CVaR}_{0.8} \le \bar c$:
+   the same frontier, dual = marginal return of risk.
+5. Stress test: an eleventh scenario for the suppliers (demand 150, F1 at 10%) with
+   probability 1% — how does the booking change with $r = 0.5$?
 
 <!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
 
