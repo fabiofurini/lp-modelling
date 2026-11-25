@@ -32,13 +32,16 @@ costo_prod = {"1": 10.0, "2": 15.0, "3": 20.0}   # €/unit
 costo_giac = {"1": 1.0, "2": 1.2, "3": 1.2}      # €/unit/month
 ore_unit = {"1": 1.0, "2": 1.5, "3": 2.0}        # machine hours per unit
 capacita = {1: 400, 2: 400, 3: 400}  # hours/month
-scorta_iniziale = {"1": 0, "2": 0, "3": 0}
+scorta_iniziale = {"1": 0, "2": 0, "3": 0}      # r_i0: stock at the start of the horizon (units)
+scorta_finale = {"1": 0, "2": 0, "3": 0}        # r_im: stock required at the end of the horizon (units)
+ultimo = mesi[-1]                               # month m
+mesi_s = mesi[:-1]                              # months 1..m-1: only here the stock s_it is a variable
 
 df = pd.DataFrame(
-    [(i, t, domanda[i, t], costo_prod[i], costo_giac[i], ore_unit[i], scorta_iniziale[i])
+    [(i, t, domanda[i, t], costo_prod[i], costo_giac[i], ore_unit[i], scorta_iniziale[i], scorta_finale[i])
      for i in prodotti for t in mesi],
     columns=["product", "month", "demand", "production_cost", "holding_cost", "hours_unit",
-             "initial_stock"])
+             "initial_stock", "final_stock"])
 salva_dati(df, "produzione_domanda")
 salva_dati(pd.DataFrame({"month": mesi, "capacity_hours": [capacita[t] for t in mesi]}),
            "produzione_capacita")
@@ -49,18 +52,21 @@ def costruisci_lp():
     m = gp.Model("production_inventory")
     m.Params.OutputFlag = 0
     x = m.addVars(prodotti, mesi, name="x")           # quantity produced
-    s = m.addVars(prodotti, mesi, name="s")           # stock at the end of the month
-    # inventory balance: s_{i,t-1} + x_it = d_it + s_it
-    m.addConstrs(
-        ((scorta_iniziale[i] if t == 1 else s[i, t - 1]) + x[i, t] == domanda[i, t] + s[i, t]
-         for i in prodotti for t in mesi), name="balance")
+    s = m.addVars(prodotti, mesi_s, name="s")         # stock at the end of the month, months 1..m-1
+    # inventory balance (variables on the left, data on the right): first month, middle months, last month
+    m.addConstrs((x[i, 1] - s[i, 1] == domanda[i, 1] - scorta_iniziale[i]
+                  for i in prodotti), name="balance_first")
+    m.addConstrs((x[i, t] + s[i, t - 1] - s[i, t] == domanda[i, t]
+                  for i in prodotti for t in mesi[1:-1]), name="balance")
+    m.addConstrs((x[i, ultimo] + s[i, ultimo - 1] == domanda[i, ultimo] + scorta_finale[i]
+                  for i in prodotti), name="balance_last")
     # capacity of the shared resource
     v_cap = m.addConstrs(
         (gp.quicksum(ore_unit[i] * x[i, t] for i in prodotti) <= capacita[t]
          for t in mesi), name="capacity")
     m.setObjective(
-        gp.quicksum(costo_prod[i] * x[i, t] + costo_giac[i] * s[i, t]
-                    for i in prodotti for t in mesi), GRB.MINIMIZE)
+        gp.quicksum(costo_prod[i] * x[i, t] for i in prodotti for t in mesi)
+        + gp.quicksum(costo_giac[i] * s[i, t] for i in prodotti for t in mesi_s), GRB.MINIMIZE)
     return m, x, s, v_cap
 
 
@@ -73,13 +79,18 @@ m.optimize()
 assert m.Status == GRB.OPTIMAL
 print(f"Optimal total cost: {m.ObjVal:,.2f} €")
 
+def scorta(i, t):
+    """stock at the end of month t: the variable s_it for t < m, the datum r_im for t = m"""
+    return s[i, t].X if t < ultimo else scorta_finale[i]
+
+
 piano = pd.DataFrame(
-    [(i, t, x[i, t].X, s[i, t].X) for i in prodotti for t in mesi],
+    [(i, t, x[i, t].X, scorta(i, t)) for i in prodotti for t in mesi],
     columns=["product", "month", "production", "stock"])
 salva_dati(piano, "produzione_piano_ottimo")
 print("\nProduction plan (units/month):")
 print(piano.pivot(index="product", columns="month", values="production").round(1))
-print("\nEnd-of-month stock:")
+print(f"\nEnd-of-month stock (month {ultimo}: the required final stock r_i{ultimo}, a datum):")
 print(piano.pivot(index="product", columns="month", values="stock").round(1))
 
 print("\nCapacity constraints: utilisation, shadow price and validity range")
@@ -110,7 +121,7 @@ print(f"\nCheck: +1 hour in month {t_star} -> cost goes from {m.ObjVal:.2f} to {
 salva_dat(pd.DataFrame({
     "month": mesi,
     **{f"x{i}": [x[i, t].X for t in mesi] for i in prodotti},
-    **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
+    **{f"s{i}": [scorta(i, t) for t in mesi] for i in prodotti},       # month m: the datum r_im
     **{f"d{i}": [domanda[i, t] for t in mesi] for i in prodotti},
     "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
 }), "cap05_piano")
@@ -147,11 +158,15 @@ ax2.set_ylim(0, max(domanda.values()) * 1.6)
 ax2.set_xticks(mesi); ax2.set_xlabel("month"); ax2.set_ylabel("units")
 ax2.set_title("Production and demand by product")
 ax2.legend(fontsize=7, ncol=2, loc="upper left")
-for i in prodotti:
-    ax3.plot(mesi, [s[i, t].X for t in mesi], marker="o", color=colori[i], label=f"product {i}")
+for i in prodotti:                        # stock s_it (months 1..m-1) and, hollow, the datum r_im of month m
+    ax3.plot(mesi_s, [s[i, t].X for t in mesi_s], marker="o", color=colori[i], label=f"product {i}")
+    ax3.plot([mesi_s[-1], ultimo], [s[i, mesi_s[-1]].X, scorta_finale[i]], "--", color=colori[i], lw=1)
+    ax3.plot([ultimo], [scorta_finale[i]], "o", color=colori[i], mfc="white")
+ax3.plot([], [], "o", color=GRIGIO, mfc="white", label=f"month {ultimo}: final stock $r_{{i{ultimo}}}$ (datum)")
 ax3.set_xticks(mesi); ax3.set_xlabel("month"); ax3.set_ylabel("units in stock")
 ax3.set_title("End-of-month inventory")
-ax3.legend(fontsize=8)
+ax3.set_ylim(-3, max([s[i, t].X for i in prodotti for t in mesi_s] + [10]) * 1.6)
+ax3.legend(fontsize=8, loc="upper left")
 salva_figura(fig, "cap05_piano_scorte")
 
 # sensitivity: optimal cost as the uniform capacity varies

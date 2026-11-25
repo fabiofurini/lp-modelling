@@ -48,17 +48,20 @@ demand served in full) and available machine hours.
 | $h_{it}$ | $\in \mathbb{Q}_{> 0}$ | holding cost of one unit of $i$ for month $t$ (€) |
 | $a_i$ | $\in \mathbb{Q}_{> 0}$ | machine hours needed to produce one unit of product $i$ |
 | $b_t$ | $\in \mathbb{Q}_{\ge 0}$ | machine hours available in month $t$ |
-| $r_i$ | $\in \mathbb{Q}_{\ge 0}$ | initial inventory of product $i$ (units) |
+| $r_{i0}$ | $\in \mathbb{Q}_{\ge 0}$ | initial inventory of product $i$ (units) |
+| $r_{im}$ | $\in \mathbb{Q}_{\ge 0}$ | required final inventory of product $i$, at the end of month $m$ (units) |
 
-**Decision variables.** We introduce the following $2\,n\,m$ non-negative variables:
+**Decision variables.** We introduce the following $n\,m + n\,(m-1) = n\,(2m-1)$ non-negative variables:
 
 $$
 \begin{cases}
-x_{it} = \text{units of product } i \text{ produced in month } t\\[1ex]
-s_{it} = \text{units of product } i \text{ in inventory at the end of month } t
+x_{it} = \text{units of } i \text{ produced in month } t, & \forall t \in \{1, \dots, m\},\\[1ex]
+s_{it} = \text{units of } i \text{ in inventory at the end of month } t, & \forall t \in \{1, \dots, m-1\},
 \end{cases}
-\qquad \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}.
+\quad \forall i \in \{1, \dots, n\}.
 $$
+
+At the end of the horizon the inventory is not a variable: it is the datum $r_{im}$.
 
 !!! nota "Continuous quantities"
 
@@ -68,28 +71,31 @@ Using these variables, an LP model for the problem is the following:
 
 $$
 \begin{aligned}
-\min ~~ \sum_{i=1}^{n} \sum_{t=1}^{m} \bigl( c_{it}\, x_{it} + h_{it}\, s_{it} \bigr) & & \\
-\text{subject to} \quad x_{i1} - s_{i1} &= d_{i1} - r_i, & \forall i \in \{1, 2, \dots, n\}, \\
-x_{it} + s_{i,t-1} - s_{it} &= d_{it}, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{2, 3, \dots, m\}, \\
+\min ~~ \sum_{i=1}^{n} \sum_{t=1}^{m} c_{it}\, x_{it} + \sum_{i=1}^{n} \sum_{t=1}^{m-1} h_{it}\, s_{it} & & \\
+\text{subject to} \quad x_{i1} - s_{i1} &= d_{i1} - r_{i0}, & \forall i \in \{1, 2, \dots, n\}, \\
+x_{it} + s_{i,t-1} - s_{it} &= d_{it}, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{2, 3, \dots, m-1\}, \\
+x_{im} + s_{i,m-1} &= d_{im} + r_{im}, & \forall i \in \{1, 2, \dots, n\}, \\
 \sum_{i=1}^{n} a_i\, x_{it} &\le b_t, & \forall t \in \{1, 2, \dots, m\}, \\
 x_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}, \\
-s_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}.
+s_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m-1\}.
 \end{aligned}
 $$
 
 Description of the objective function and of the constraints:
 
 - the linear objective function minimizes the total cost of the plan, the sum of the
-  production costs $c_{it}\, x_{it}$ and of the holding costs $h_{it}\, s_{it}$ over
-  all products and months;
-- the linear **balance** constraints are those of the technique
-  [4.5 Multi-period planning](techniques-05.md), one per product and month; for
-  $t = 1$ the initial inventory $r_i$ is a datum and moves to the right-hand side
-  ($n\,m$ linear constraints);
+  production costs $c_{it}\, x_{it}$ over all products and months and of the holding
+  costs $h_{it}\, s_{it}$ over months $1$ to $m-1$;
+- the linear **balance** constraints of the first month: the initial inventory
+  $r_{i0}$ is a datum and moves to the right-hand side ($n$ linear constraints);
+- the linear **balance** constraints of the middle months are those of the technique
+  [4.5 Multi-period planning](techniques-05.md) ($n\,(m-2)$ linear constraints);
+- the linear **balance** constraints of the last month: the required final inventory
+  $r_{im}$ is a datum and sits on the right-hand side, with the demand ($n$ linear constraints);
 - the linear **capacity** constraints ensure that, in every month, the machine hours
   used by all the products do not exceed those available ($m$ linear constraints);
-- the non-negativity constraints on $x_{it}$ and $s_{it}$ define the variables of the
-  model.
+- the non-negativity constraints on $x_{it}$ and on $s_{it}$, $t \le m-1$, define the
+  variables of the model.
 
 The balance is the inventory accounting and links the months to one another; capacity
 is the scarce shared resource, and its shadow price will tell how much an extra hour is worth.
@@ -102,16 +108,16 @@ is the scarce shared resource, and its shadow price will tell how much an extra 
 
 ## Case study
 
-Three products × three months ($n = m = 3$: 18 variables, 9 balances and 3 capacity
+Three products × three months ($n = m = 3$: 15 variables, 9 balances and 3 capacity
 constraints), demand increasing towards a peak in month 3, 400 machine hours per month,
-zero initial inventory (data in `data/produzione_domanda.csv` and
+zero initial and final inventory (data in `data/produzione_domanda.csv` and
 `data/produzione_capacita.csv`).
 
-| Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $r_i$ (units) |
-|---|---|---|---|---|
-| 1 | 10 | 1 | 1 | 0 |
-| 2 | 15 | 1.2 | 1.5 | 0 |
-| 3 | 20 | 1.2 | 2 | 0 |
+| Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $r_{i0}$ (units) | $r_{im}$ (units) |
+|---|---|---|---|---|---|
+| 1 | 10 | 1 | 1 | 0 | 0 |
+| 2 | 15 | 1.2 | 1.5 | 0 | 0 |
+| 3 | 20 | 1.2 | 2 | 0 | 0 |
 
 | month $t$ | 1 | 2 | 3 |
 |---|---|---|---|
@@ -135,11 +141,12 @@ prod.3   70.0   70.0   10.0     (inventory of product 3: 30 and 60 units at the 
 
 At the top, the machine hours $a_i\, x_{it}$ used by each product, stacked, with the capacity $b_t$
 dashed: months 2 and 3 are binding, month 1 uses 340 of its 400 hours. At the bottom left, the
-production $x_{it}$ (bars) and the demand $d_{it}$ (dashed) of each product; on the right, the inventory $s_{it}$.
+production $x_{it}$ (bars) and the demand $d_{it}$ (dashed) of each product; on the right, the inventory $s_{it}$
+of months 1 and 2 and, with the hollow marker, the required final inventory $r_{i3} = 0$, which is a datum.
 
 The solver discovers the **pre-build** all by itself: product 3 (2 hours/unit) is
 produced in advance, 30 units in month 1 and 30 in month 2, to free 120 hours in the
-peak month; the inventory goes back to zero in the final month. Product 3 is the one
+peak month; at the end of the horizon the inventory is the required one, $r_{i3} = 0$. Product 3 is the one
 to stock because bringing one machine hour forward costs $h_i/a_i$ per month: $1$,
 $0.8$ and $0.6$ € for products 1, 2 and 3.
 
@@ -177,7 +184,7 @@ quadratic variant of this model, in the module *NLP Modelling*, page
 
     - The inventory balance links the months: the problem cannot be solved one month at a time.
 
-    - Inventory moves capacity from the light months to the peak months; emptying the warehouse at the end is always optimal.
+    - Inventory moves capacity from the light months to the peak months; the inventory at the end of the horizon is the datum $r_{im}$, not a variable.
 
     - The shadow price of a capacity is checked by adding one hour and re-optimizing; a non-binding capacity has a null shadow price.
 
@@ -228,13 +235,16 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     costo_giac = {"1": 1.0, "2": 1.2, "3": 1.2}      # €/unit/month
     ore_unit = {"1": 1.0, "2": 1.5, "3": 2.0}        # machine hours per unit
     capacita = {1: 400, 2: 400, 3: 400}  # hours/month
-    scorta_iniziale = {"1": 0, "2": 0, "3": 0}
+    scorta_iniziale = {"1": 0, "2": 0, "3": 0}      # r_i0: stock at the start of the horizon (units)
+    scorta_finale = {"1": 0, "2": 0, "3": 0}        # r_im: stock required at the end of the horizon (units)
+    ultimo = mesi[-1]                               # month m
+    mesi_s = mesi[:-1]                              # months 1..m-1: only here the stock s_it is a variable
 
     df = pd.DataFrame(
-        [(i, t, domanda[i, t], costo_prod[i], costo_giac[i], ore_unit[i], scorta_iniziale[i])
+        [(i, t, domanda[i, t], costo_prod[i], costo_giac[i], ore_unit[i], scorta_iniziale[i], scorta_finale[i])
          for i in prodotti for t in mesi],
         columns=["product", "month", "demand", "production_cost", "holding_cost", "hours_unit",
-                 "initial_stock"])
+                 "initial_stock", "final_stock"])
     salva_dati(df, "produzione_domanda")
     salva_dati(pd.DataFrame({"month": mesi, "capacity_hours": [capacita[t] for t in mesi]}),
                "produzione_capacita")
@@ -245,18 +255,21 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         m = gp.Model("production_inventory")
         m.Params.OutputFlag = 0
         x = m.addVars(prodotti, mesi, name="x")           # quantity produced
-        s = m.addVars(prodotti, mesi, name="s")           # stock at the end of the month
-        # inventory balance: s_{i,t-1} + x_it = d_it + s_it
-        m.addConstrs(
-            ((scorta_iniziale[i] if t == 1 else s[i, t - 1]) + x[i, t] == domanda[i, t] + s[i, t]
-             for i in prodotti for t in mesi), name="balance")
+        s = m.addVars(prodotti, mesi_s, name="s")         # stock at the end of the month, months 1..m-1
+        # inventory balance (variables on the left, data on the right): first month, middle months, last month
+        m.addConstrs((x[i, 1] - s[i, 1] == domanda[i, 1] - scorta_iniziale[i]
+                      for i in prodotti), name="balance_first")
+        m.addConstrs((x[i, t] + s[i, t - 1] - s[i, t] == domanda[i, t]
+                      for i in prodotti for t in mesi[1:-1]), name="balance")
+        m.addConstrs((x[i, ultimo] + s[i, ultimo - 1] == domanda[i, ultimo] + scorta_finale[i]
+                      for i in prodotti), name="balance_last")
         # capacity of the shared resource
         v_cap = m.addConstrs(
             (gp.quicksum(ore_unit[i] * x[i, t] for i in prodotti) <= capacita[t]
              for t in mesi), name="capacity")
         m.setObjective(
-            gp.quicksum(costo_prod[i] * x[i, t] + costo_giac[i] * s[i, t]
-                        for i in prodotti for t in mesi), GRB.MINIMIZE)
+            gp.quicksum(costo_prod[i] * x[i, t] for i in prodotti for t in mesi)
+            + gp.quicksum(costo_giac[i] * s[i, t] for i in prodotti for t in mesi_s), GRB.MINIMIZE)
         return m, x, s, v_cap
 
 
@@ -269,13 +282,18 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     assert m.Status == GRB.OPTIMAL
     print(f"Optimal total cost: {m.ObjVal:,.2f} €")
 
+    def scorta(i, t):
+        """stock at the end of month t: the variable s_it for t < m, the datum r_im for t = m"""
+        return s[i, t].X if t < ultimo else scorta_finale[i]
+
+
     piano = pd.DataFrame(
-        [(i, t, x[i, t].X, s[i, t].X) for i in prodotti for t in mesi],
+        [(i, t, x[i, t].X, scorta(i, t)) for i in prodotti for t in mesi],
         columns=["product", "month", "production", "stock"])
     salva_dati(piano, "produzione_piano_ottimo")
     print("\nProduction plan (units/month):")
     print(piano.pivot(index="product", columns="month", values="production").round(1))
-    print("\nEnd-of-month stock:")
+    print(f"\nEnd-of-month stock (month {ultimo}: the required final stock r_i{ultimo}, a datum):")
     print(piano.pivot(index="product", columns="month", values="stock").round(1))
 
     print("\nCapacity constraints: utilisation, shadow price and validity range")
@@ -306,7 +324,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     salva_dat(pd.DataFrame({
         "month": mesi,
         **{f"x{i}": [x[i, t].X for t in mesi] for i in prodotti},
-        **{f"s{i}": [s[i, t].X for t in mesi] for i in prodotti},
+        **{f"s{i}": [scorta(i, t) for t in mesi] for i in prodotti},       # month m: the datum r_im
         **{f"d{i}": [domanda[i, t] for t in mesi] for i in prodotti},
         "domtot": [sum(domanda[i, t] for i in prodotti) for t in mesi],
     }), "cap05_piano")
@@ -343,11 +361,15 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     ax2.set_xticks(mesi); ax2.set_xlabel("month"); ax2.set_ylabel("units")
     ax2.set_title("Production and demand by product")
     ax2.legend(fontsize=7, ncol=2, loc="upper left")
-    for i in prodotti:
-        ax3.plot(mesi, [s[i, t].X for t in mesi], marker="o", color=colori[i], label=f"product {i}")
+    for i in prodotti:                        # stock s_it (months 1..m-1) and, hollow, the datum r_im of month m
+        ax3.plot(mesi_s, [s[i, t].X for t in mesi_s], marker="o", color=colori[i], label=f"product {i}")
+        ax3.plot([mesi_s[-1], ultimo], [s[i, mesi_s[-1]].X, scorta_finale[i]], "--", color=colori[i], lw=1)
+        ax3.plot([ultimo], [scorta_finale[i]], "o", color=colori[i], mfc="white")
+    ax3.plot([], [], "o", color=GRIGIO, mfc="white", label=f"month {ultimo}: final stock $r_{{i{ultimo}}}$ (datum)")
     ax3.set_xticks(mesi); ax3.set_xlabel("month"); ax3.set_ylabel("units in stock")
     ax3.set_title("End-of-month inventory")
-    ax3.legend(fontsize=8)
+    ax3.set_ylim(-3, max([s[i, t].X for i in prodotti for t in mesi_s] + [10]) * 1.6)
+    ax3.legend(fontsize=8, loc="upper left")
     salva_figura(fig, "cap05_piano_scorte")
 
     # sensitivity: optimal cost as the uniform capacity varies
@@ -387,8 +409,8 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
    demand is it worth *not* serving?
 4. **Emissions** — add $w \sum_{i,t} e_i x_{it}$ and draw the cost-emissions
    frontier.
-5. **Safety stock** — impose $s_{it} \ge 0.1\, d_{i,t+1}$: how much does the
-   policy cost?
+5. **Safety stock** — impose $s_{it} \ge 0.1\, d_{i,t+1}$ for $t \le m-1$: how much
+   does the policy cost?
 
 <!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
 
