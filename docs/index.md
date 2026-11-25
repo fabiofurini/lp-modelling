@@ -33,7 +33,7 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-The transportation problem from warehouses to customers, solved to optimality in the browser on an instance with two warehouses and three customers: change one cost and the capacity of a warehouse with the sliders and the simplex method recomputes the optimal shipments and their cost.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. The sliders change the data and the solution is recomputed.
 
 <div class="gi" data-grafico="pl-trasporto"></div>
 
