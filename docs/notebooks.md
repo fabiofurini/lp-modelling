@@ -8,8 +8,9 @@ being written to a file.
 
 !!! tip "The pip licence is enough"
     The licence bundled with `gurobipy` is limited to 2000 variables and 2000
-    constraints, and every model of the lab fits: the largest one — the scenario
-    newsvendor — uses 1803 and 1801. Raising the number of scenarios can exceed it:
+    constraints, and every model of the lab fits: the largest one — the two-stage
+    supplier choice of chapter 9 — uses 1603 and 1600. Raising the number of
+    scenarios can exceed it:
     in that case activate the free academic licence at
     [portal.gurobi.com](https://portal.gurobi.com).
 

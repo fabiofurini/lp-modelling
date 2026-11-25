@@ -65,11 +65,11 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
 <div class="grid cards" markdown>
 
--   :material-bread-slice: **Newsvendor: optimal order over 600 scenarios**
+-   :material-bread-slice: **Newsvendor: optimal order over 10 scenarios**
 
     ---
 
-    The expected cost and the CVaR of the cost as functions of the order quantity, over the demand scenarios of the chapter: move the price and the risk aversion and watch the optimal order move.
+    The expected cost and the CVaR of the cost as functions of the order quantity, over the 10 demand scenarios of the chapter: move the price and the risk aversion and watch the optimal order jump from one scenario to another.
 
     [Open the app →](newsvendor-scenarios.md)
 
