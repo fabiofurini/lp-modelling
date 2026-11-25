@@ -33,9 +33,9 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-Three LP models of the course solved to optimality in the browser: production and inventory, electric vehicle charging and the scenario newsvendor. Choose the model at the top right, change demand, capacity, costs or prices with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices.
+The six-month production and inventory plan, solved to optimality in the browser: change demand, capacity and holding cost with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices of the machine hours.
 
-<div class="gi" data-grafico="pl-modelli"></div>
+<div class="gi" data-grafico="pl-produzione"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
