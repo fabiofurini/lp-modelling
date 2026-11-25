@@ -35,7 +35,7 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 
 The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. The sliders change the data and the solution is recomputed.
 
-<div class="gi" data-grafico="pl-trasporto"></div>
+<div class="gi" data-grafico="pl-trasporto" data-vetrina="compatta"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
