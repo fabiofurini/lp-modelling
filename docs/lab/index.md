@@ -21,14 +21,6 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     [Open the app →](transportation.md)
 
--   :material-chart-timeline-variant: **Three LP models solved to optimality**
-
-    ---
-
-    Production and inventory, electric vehicle charging and the scenario newsvendor: pick the model, change the data with the sliders and the simplex method, in the browser, recomputes the optimal solution and the shadow prices.
-
-    [Open the app →](three-lp-models.md)
-
 -   :material-format-list-numbered: **Nine worked LP models**
 
     ---
