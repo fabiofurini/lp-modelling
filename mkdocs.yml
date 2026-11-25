@@ -142,6 +142,7 @@ extra_javascript:
   - javascripts/gi-pl-modelli.js?v=574e57b3ed
   - javascripts/gi-pl-app.js?v=212be57416
   - javascripts/gi-pl-finanza.js?v=e7740c01ec
+  - javascripts/gi-pl-tecniche.js?v=8266864afb
   - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry

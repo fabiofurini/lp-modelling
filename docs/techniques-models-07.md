@@ -60,3 +60,11 @@
     - the next eight linear constraints enforce the daily production and storage capacity limits;
 
     - the final constraints define the variables of the optimization model.
+
+<!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
+
+## Interactive lab { #interactive-lab }
+
+The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+
+<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="torte"></div>

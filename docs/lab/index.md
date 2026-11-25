@@ -21,6 +21,14 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     [Open the app →](three-lp-models.md)
 
+-   :material-format-list-numbered: **Nine worked LP models**
+
+    ---
+
+    The nine worked models of chapter 4: production, transportation, diets, multi-period planning, blending and ratios. Change the data with the sliders: the simplex method, in the browser, recomputes the optimal solution, the optimal value and the shadow prices.
+
+    [Open the app →](techniques.md)
+
 </div>
 
 ## Deterministic models
