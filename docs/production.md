@@ -48,7 +48,7 @@ demand served in full) and available machine hours.
 | $h_{it}$ | $\in \mathbb{Q}_{> 0}$ | holding cost of one unit of $i$ for month $t$ (€) |
 | $a_i$ | $\in \mathbb{Q}_{> 0}$ | machine hours needed to produce one unit of product $i$ |
 | $b_t$ | $\in \mathbb{Q}_{\ge 0}$ | machine hours available in month $t$ |
-| $s_{i0}$ | $\in \mathbb{Q}_{\ge 0}$ | initial inventory of product $i$ (units) |
+| $r_i$ | $\in \mathbb{Q}_{\ge 0}$ | initial inventory of product $i$ (units) |
 
 **Decision variables.** We introduce the following $2\,n\,m$ non-negative variables:
 
@@ -69,7 +69,7 @@ Using these variables, an LP model for the problem is the following:
 $$
 \begin{aligned}
 \min ~~ \sum_{i=1}^{n} \sum_{t=1}^{m} \bigl( c_{it}\, x_{it} + h_{it}\, s_{it} \bigr) & & \\
-\text{subject to} \quad x_{i1} - s_{i1} &= d_{i1} - s_{i0}, & \forall i \in \{1, 2, \dots, n\}, \\
+\text{subject to} \quad x_{i1} - s_{i1} &= d_{i1} - r_i, & \forall i \in \{1, 2, \dots, n\}, \\
 x_{it} + s_{i,t-1} - s_{it} &= d_{it}, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{2, 3, \dots, m\}, \\
 \sum_{i=1}^{n} a_i\, x_{it} &\le b_t, & \forall t \in \{1, 2, \dots, m\}, \\
 x_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}, \\
@@ -84,7 +84,7 @@ Description of the objective function and of the constraints:
   all products and months;
 - the linear **balance** constraints are those of the technique
   [4.5 Multi-period planning](techniques-05.md), one per product and month; for
-  $t = 1$ the initial inventory $s_{i0}$ is a datum and moves to the right-hand side
+  $t = 1$ the initial inventory $r_i$ is a datum and moves to the right-hand side
   ($n\,m$ linear constraints);
 - the linear **capacity** constraints ensure that, in every month, the machine hours
   used by all the products do not exceed those available ($m$ linear constraints);
@@ -107,7 +107,7 @@ constraints), demand increasing towards a peak in month 3, 400 machine hours per
 zero initial inventory (data in `data/produzione_domanda.csv` and
 `data/produzione_capacita.csv`).
 
-| Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $s_{i0}$ (units) |
+| Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $r_i$ (units) |
 |---|---|---|---|---|
 | 1 | 10 | 1 | 1 | 0 |
 | 2 | 15 | 1.2 | 1.5 | 0 |
