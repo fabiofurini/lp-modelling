@@ -104,24 +104,51 @@ equality.
 
 ## Case study
 
-Six vans with different night windows, meter $k = 120$ kW, $r = 0{,}95$.
+Three vans ($n = 3$) in the six hours from midnight to 6 am ($m = 6$, $d = 1$ h, hour
+$t$ runs from $t-1$ to $t$), meter $k = 30$ kW, efficiency $r = 0.9$ (data in
+`data/ev_prezzi_base.csv` and `data/ev_flotta.csv`). There are 18 variables, but 6 of
+them are 0 because the van is not plugged in ($a_{vt} = 0$): 12 variables remain, with
+3 energy constraints and 6 grid constraints.
+
+| hour $t$ | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| from–to | 0–1 | 1–2 | 2–3 | 3–4 | 4–5 | 5–6 |
+| $c_t$ (€/kWh) | 0.20 | 0.15 | 0.11 | 0.07 | 0.09 | 0.13 |
+| $b_t$ (kW) | 14 | 12 | 10 | 8 | 8 | 10 |
+
+| Van $v$ | plugged in | hours with $a_{vt} = 1$ | $e_v$ (kWh) | $e_v/r$ (kWh drawn) | $\bar p_v$ (kW) |
+|---|---|---|---|---|---|
+| 1 | from 0:00 to 6:00 | 1–6 | 36 | 40 | 11 |
+| 2 | from 0:00 to 3:00 | 1–3 | 18 | 20 | 11 |
+| 3 | from 3:00 to 6:00 | 4–6 | 18 | 20 | 16 |
+
+Without the meter limit every van would charge in its cheapest hours and the draw
+would reach 35 kW in hour 4 (8 of base load, 11 of van 1, 16 of van 3): with
+$k = 30$ kW part of the charging has to move.
 
 ```text
-Minimum cost   : 20.36 EUR/night   peak draw 103.4 kW (limit 120)
-Peak shaving   : minimum possible peak 68.0 kW
-Shadow prices of the energy requirement (EUR/kWh):
-  V1 0.0947   V2 0.0842   V3 0.0842   V4 0.0947   V5 0.0947   V6 0.0842
+Minimum cost   : 8.06 EUR/night   peak draw 30.0 kW (limit 30)
+Power x[v,t] (kW), hours t = 1..6:
+  V1:   0.0   0.0   9.0  11.0  11.0   9.0
+  V2:   0.0   9.0  11.0     .     .     .
+  V3:     .     .     .  11.0   9.0   0.0
+Shadow prices of the energy requirement (EUR/kWh):  V1 0.1444   V2 0.1667   V3 0.1000
+Shadow prices of the grid (EUR/kW)               :  hours 3 and 4: 0.02   other hours: 0
+Peak shaving   : minimum possible peak 23.7 kW
 ```
 
 ![Draw profiles](img/cap06_profili.png)
 
-The shadow prices of the energy requirement are equal to $0{,}0842 = 0{,}08/r$ or
-$0{,}0947 = 0{,}09/r$: they are the prices of the **marginal hours** of each
-vehicle (the cheapest hour still free within its window), corrected for the
-efficiency. V2, V3 and V6 have windows that cover the hours at $0{,}08$; V1, V4 and
-V5 arrive late or leave early and their marginal hour costs $0{,}09$. One additional
-kWh of requirement therefore costs between 8.4 and 9.5 cents depending on the
-vehicle.
+Hours 3 and 4 are binding: the draw reaches the 30 kW of the meter. The shadow prices
+of the energy requirement are $0.1444 = 0.13/r$, $0.1667 = 0.15/r$ and
+$0.1000 = 0.09/r$: they are the prices of the **marginal hours** of each van (the
+most expensive hour it uses below the power of its charger), corrected for the
+efficiency. Van 1 completes its charge in hour 6, van 2 in hour 2, van 3 in hour 5.
+
+The shadow prices of the grid are price differences between two hours as well. One
+more kW in hour 3 lets van 1 move one kWh from hour 6 to hour 3
+($0.13 - 0.11 = 0.02$ €); one more kW in hour 4 lets van 3 move it from hour 5 to
+hour 4 ($0.09 - 0.07 = 0.02$ €).
 
 ## Sensitivity
 
@@ -129,18 +156,24 @@ vehicle.
 
 ```text
 Trade-off cost + w*peak:
-  w = 0.00: cost 20.36  peak 103.4     w = 0.20: cost 22.15  peak 68.0
-  w = 0.05: cost 20.69  peak  86.5     w = 0.50: cost 22.15  peak 68.0
-  w = 0.10: cost 21.39  peak  74.9
+  w = 0.00: cost 8.06  peak 30.0     w = 0.15: cost 8.45  peak 26.3
+  w = 0.05: cost 8.10  peak 29.0     w = 0.20: cost 8.60  peak 25.6
+  w = 0.10: cost 8.10  peak 29.0     w = 0.50: cost 9.47  peak 23.7
 Meter capacity:
-  k = 60, 65 kW: INFEASIBLE     k = 80: 21.09     k = 120: 20.36
-  k = 70 kW    : 21.93          k = 90: 20.63
+  k = 23 kW: INFEASIBLE     k = 28: 8.22     k = 32: 7.98
+  k = 24 kW: 9.32           k = 30: 8.06     k = 35: 7.92
+  k = 26 kW: 8.52
 ```
 
-Cutting the peak from 103 to 75 kW (−28%) costs only one euro per night; getting
-down to 68 kW costs less than two. The pure minimax (peak 68) without the cost term
-would spend 27.79 €: the trade-off with $w = 0{,}2$ achieves the *same* peak at
-22.15 € — never optimize a single objective when there are two of them.
+Cutting the peak from 30 to 29 kW costs 4 cents per night; going down to 25.6 kW
+(−15%) costs 54. The minimum peak, 23.7 kW, costs 9.47 € (+1.41 €): the draw is flat,
+that is the 142 kWh of the night (62 of base load and 80 for the vans) divided by the
+6 hours. The cost depends only on the draw in each hour, so every plan with the
+minimum peak costs 9.47 €.
+
+The meter behaves the same way: from 35 to 30 kW the expenditure grows by 14 cents,
+from 30 to 24 kW by 1.26 €. Below 23.7 kW the problem is infeasible, because not even
+the flat draw fits under the limit.
 
 !!! warning "An instructive bug (which really happened)"
     In the constraint `quicksum(x) + base[t] <= C` Gurobi moves the constant into the
@@ -179,8 +212,8 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     ```python
     """Chapter 6 — Smart charging of electric vehicles (LP).
 
-    Case study: a company depot with 6 electric vans to be charged overnight;
-    hourly energy prices; base load of the building.
+    Case study: a company depot with 3 electric vans to be charged in the 6 hours
+    from midnight to 6 am; hourly energy prices; base load of the building.
 
     Contents:
       1. Minimum-cost LP: charging chases the cheap hours
@@ -189,7 +222,6 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
       4. Shadow prices: grid capacity and energy requirement
     """
     import gurobipy as gp
-    import numpy as np
     import pandas as pd
     from gurobipy import GRB
 
@@ -199,26 +231,25 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     # ----------------------------------------------------------------------
     # 1. DATA
     # ----------------------------------------------------------------------
-    ore = list(range(24))                      # hour t = [t, t+1)
-    # price €/kWh: high during the day and in the evening peak, low at night
-    prezzo = np.array([0.09, 0.08, 0.07, 0.07, 0.08, 0.10, 0.14, 0.18, 0.20, 0.19,
-                       0.17, 0.16, 0.15, 0.15, 0.16, 0.18, 0.21, 0.24, 0.26, 0.24,
-                       0.20, 0.15, 0.12, 0.10])
+    ore = list(range(1, 7))                    # hour t = from t-1 to t (t = 1: from 0:00 to 1:00)
+    # price €/kWh: high in the first hours (tail of the evening peak), lowest from 3 to 4 am
+    prezzo = pd.Series([0.20, 0.15, 0.11, 0.07, 0.09, 0.13], index=ore)
     # base load of the building (kW)
-    base = np.array([22, 20, 19, 19, 20, 24, 35, 48, 60, 63, 65, 64,
-                     62, 61, 62, 64, 66, 68, 62, 55, 45, 36, 30, 25], dtype=float)
+    base = pd.Series([14.0, 12.0, 10.0, 8.0, 8.0, 10.0], index=ore)
 
-    veicoli = [f"V{k}" for k in range(1, 7)]
+    veicoli = ["V1", "V2", "V3"]
     # (arrival hour, departure hour, required energy kWh, max power kW)
     flotta = {
-        "V1": (18, 7, 46, 11), "V2": (19, 6, 38, 11), "V3": (20, 8, 55, 22),
-        "V4": (17, 6, 30, 7.4), "V5": (21, 7, 42, 11), "V6": (22, 8, 50, 22),
+        "V1": (0, 6, 36, 11),     # plugged in all night
+        "V2": (0, 3, 18, 11),     # leaves at 3 am for the first shift
+        "V3": (3, 6, 18, 16),     # back at 3 am from the last shift
     }
-    eta = 0.95            # charging efficiency
-    C_rete = 120.0        # maximum power that can be drawn from the meter (kW)
+    eta = 0.9             # charging efficiency
+    C_rete = 30.0         # maximum power that can be drawn from the meter (kW)
 
-    disp = {(v, t): 1 if (flotta[v][0] <= t or t < flotta[v][1]) else 0
-            for v in veicoli for t in ore}      # windows that straddle midnight
+    # plugged in during hour t (from t-1 to t) if it arrived by t-1 and leaves at t or later
+    disp = {(v, t): 1 if flotta[v][0] < t <= flotta[v][1] else 0
+            for v in veicoli for t in ore}
 
     salva_dati(pd.DataFrame({"hour": ore, "price": prezzo, "base_load": base}), "ev_prezzi_base")
     salva_dati(pd.DataFrame([(v, *flotta[v]) for v in veicoli],
@@ -241,7 +272,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
 
 
     def profilo(x):
-        return np.array([sum(x[v, t].X for v in veicoli) for t in ore])
+        return pd.Series([sum(x[v, t].X for v in veicoli) for t in ore], index=ore)
 
 
     # ----------------------------------------------------------------------
@@ -257,9 +288,14 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     picco_costo = (prof_costo + base).max()
     print(f"Charging cost: {costo_min:.2f} €   peak withdrawal: {picco_costo:.1f} kW "
           f"(limit {C_rete:.0f})")
+    print("\nPower x[v, t] (kW), hours t = 1..6:")
+    for v in veicoli:
+        print(f"  {v}: " + "  ".join(f"{x[v, t].X:5.1f}" if disp[v, t] else "    ." for t in ore))
     print("\nShadow prices of the energy requirement (marginal cost of 1 more kWh per vehicle):")
     for v in veicoli:
         print(f"  {v}: {v_ene[v].Pi:.4f} €/kWh")
+    print("Shadow prices of the grid (saving for 1 more kW in hour t):")
+    print("  " + "  ".join(f"t={t}: {abs(v_rete[t].Pi):.3f}" for t in ore))
 
     # ----------------------------------------------------------------------
     # 3. PEAK SHAVING (minimax) and COST-PEAK TRADE-OFF
@@ -278,7 +314,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
 
     intestazione("Trade-off: cost + w · peak")
     compromessi = []
-    for rho in [0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]:
+    for rho in [0, 0.05, 0.1, 0.15, 0.2, 0.5, 1.0]:
         mc, xc, _, _ = costruisci()
         zc = mc.addVar(name="peak")
         mc.addConstrs((gp.quicksum(xc[v, t] for v in veicoli) + base[t] <= zc for t in ore))
@@ -296,7 +332,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     intestazione("Sensitivity: capacity of the grid connection")
     # careful: in the constraint "sum x + base[t] <= C" Gurobi moves the constant base[t]
     # into the right-hand side; the stored RHS is C - base[t], so it must be updated like this:
-    for CC in [60, 65, 70, 80, 90, 120]:
+    for CC in [23, 24, 26, 28, 30, 32, 35]:
         ms, xs_, _, vr = costruisci()
         for t in ore:
             vr[t].RHS = CC - base[t]
@@ -313,20 +349,29 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
                             "totcost": base + prof_costo, "totpeak": base + prof_picco}),
               "cap06_profili")
     salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap06_frontiera")
+    # one-hour-wide steps for pgfplots (const plot): edges 0.5, 1.5, ..., 6.5, the last value repeated
+    bordi = [t - 0.5 for t in ore] + [ore[-1] + 0.5]
+
+
+    def gradino(serie):
+        return list(serie) + [serie.iloc[-1]]
+
+
+    salva_dat(pd.DataFrame({"x": bordi, "base": gradino(base), "totcost": gradino(base + prof_costo),
+                            "totpeak": gradino(base + prof_picco)}), "cap06_gradini")
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.2, 6.4), sharex=True)
     ax1.bar(ore, prezzo * 100, color=GRIGIO, alpha=0.6)
     ax1.set_ylabel("price $c_t$ (c€/kWh)")
     ax1.set_title("Hourly energy price")
     # same entries, colours and title as the lab app; legend above the meter limit
-    ax2.plot(ore, base, color=GRIGIO, ls="--", label="base load $b_t$")
-    ax2.plot(ore, base + prof_costo, color=TEAL, lw=2, drawstyle="steps-mid",
-             label="minimum cost")
-    ax2.plot(ore, base + prof_picco, color=ARANCIO, lw=2, drawstyle="steps-mid",
-             label="peak shaving")
+    # one column per hour: steps one hour wide, from t-1 to t (edges as above)
+    ax2.stairs(base, bordi, baseline=None, color=GRIGIO, ls="--", label="base load $b_t$")
+    ax2.stairs(base + prof_costo, bordi, baseline=None, color=TEAL, lw=2, label="minimum cost")
+    ax2.stairs(base + prof_picco, bordi, baseline=None, color=ARANCIO, lw=2, label="peak shaving")
     ax2.axhline(C_rete, color=ROSSO, ls=":", label=f"meter power $k$ = {C_rete:.0f} kW")
     ax2.set_ylim(0, C_rete * 1.45)
-    ax2.set_xlabel("hour of the day"); ax2.set_ylabel("total withdrawal (kW)")
+    ax2.set_xticks(ore); ax2.set_xlabel("hour $t$ (from $t-1$ to $t$)"); ax2.set_ylabel("total withdrawal (kW)")
     ax2.set_title("Power withdrawn from the grid")
     ax2.legend(fontsize=8, ncol=2, loc="upper right")
     salva_figura(fig, "cap06_profili")
@@ -336,9 +381,9 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     ax.plot(comp["peak"], comp["cost"], "-o", color=TEAL)
     # weights with the same point (same peak and cost) in a single label
     groups = comp.groupby([comp["peak"].round(3), comp["cost"].round(4)], sort=False)
-    for (pk, cc), g in groups:
+    for k, ((pk, cc), g) in enumerate(groups):
         weights = ", ".join(f"{w:.2f}" for w in g["rho"])
-        ax.annotate(f"$w$ = {weights}", (pk, cc), textcoords="offset points", xytext=(8, -3),
+        ax.annotate(f"$w$ = {weights}", (pk, cc), textcoords="offset points", xytext=(8, -3 if k == 0 else 4),
                     fontsize=8)
     ax.set_xlim(comp["peak"].min() - 3, comp["peak"].max() + 6)
     ax.set_xlabel("peak withdrawal (kW)")
@@ -351,10 +396,10 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
 
 ## Exercises
 
-1. $e_1: 46 \to 47$ kWh: cost $+0{,}0947 = 0{,}09/0{,}95$ (verified).
-2. V3 arrives at 23: how do cost and peak change?
+1. $e_1: 36 \to 37$ kWh: cost from 8.06 to 8.2044 €, $+0.1444 = 0.13/0.9$ (verified).
+2. Van 3 comes back at 4 am instead of 3 am: how do the cost, the binding hours and the shadow prices change?
 3. Cost-emissions frontier with an hourly carbon intensity $g_t$.
-4. Minimum feasible capacity by bisection: $\tilde k = 68$ kW.
+4. Minimum feasible capacity by bisection: $\tilde k = 142/6 \approx 23.67$ kW.
 
 <!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
 

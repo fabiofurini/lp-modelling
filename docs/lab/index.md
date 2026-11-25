@@ -47,7 +47,7 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     ---
 
-    Six vans to charge overnight: charging follows the cheap hours as far as the meter limit allows. Change the limit and the energy needed and see the profile, the cost and the shadow prices.
+    Three vans to charge in the six hours from midnight to 6 am: charging follows the cheap hours as far as the meter limit allows. Change the limit, the energy needed and the prices and see the profile, the cost and the shadow prices.
 
     [Open the app →](ev-charging.md)
 

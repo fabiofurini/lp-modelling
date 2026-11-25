@@ -1,7 +1,7 @@
 """Chapter 6 — Smart charging of electric vehicles (LP).
 
-Case study: a company depot with 6 electric vans to be charged overnight;
-hourly energy prices; base load of the building.
+Case study: a company depot with 3 electric vans to be charged in the 6 hours
+from midnight to 6 am; hourly energy prices; base load of the building.
 
 Contents:
   1. Minimum-cost LP: charging chases the cheap hours
@@ -10,7 +10,6 @@ Contents:
   4. Shadow prices: grid capacity and energy requirement
 """
 import gurobipy as gp
-import numpy as np
 import pandas as pd
 from gurobipy import GRB
 
@@ -20,26 +19,25 @@ from stile import (ARANCIO, GRIGIO, ROSSO, TEAL, intestazione, plt, salva_dat, s
 # ----------------------------------------------------------------------
 # 1. DATA
 # ----------------------------------------------------------------------
-ore = list(range(24))                      # hour t = [t, t+1)
-# price €/kWh: high during the day and in the evening peak, low at night
-prezzo = np.array([0.09, 0.08, 0.07, 0.07, 0.08, 0.10, 0.14, 0.18, 0.20, 0.19,
-                   0.17, 0.16, 0.15, 0.15, 0.16, 0.18, 0.21, 0.24, 0.26, 0.24,
-                   0.20, 0.15, 0.12, 0.10])
+ore = list(range(1, 7))                    # hour t = from t-1 to t (t = 1: from 0:00 to 1:00)
+# price €/kWh: high in the first hours (tail of the evening peak), lowest from 3 to 4 am
+prezzo = pd.Series([0.20, 0.15, 0.11, 0.07, 0.09, 0.13], index=ore)
 # base load of the building (kW)
-base = np.array([22, 20, 19, 19, 20, 24, 35, 48, 60, 63, 65, 64,
-                 62, 61, 62, 64, 66, 68, 62, 55, 45, 36, 30, 25], dtype=float)
+base = pd.Series([14.0, 12.0, 10.0, 8.0, 8.0, 10.0], index=ore)
 
-veicoli = [f"V{k}" for k in range(1, 7)]
+veicoli = ["V1", "V2", "V3"]
 # (arrival hour, departure hour, required energy kWh, max power kW)
 flotta = {
-    "V1": (18, 7, 46, 11), "V2": (19, 6, 38, 11), "V3": (20, 8, 55, 22),
-    "V4": (17, 6, 30, 7.4), "V5": (21, 7, 42, 11), "V6": (22, 8, 50, 22),
+    "V1": (0, 6, 36, 11),     # plugged in all night
+    "V2": (0, 3, 18, 11),     # leaves at 3 am for the first shift
+    "V3": (3, 6, 18, 16),     # back at 3 am from the last shift
 }
-eta = 0.95            # charging efficiency
-C_rete = 120.0        # maximum power that can be drawn from the meter (kW)
+eta = 0.9             # charging efficiency
+C_rete = 30.0         # maximum power that can be drawn from the meter (kW)
 
-disp = {(v, t): 1 if (flotta[v][0] <= t or t < flotta[v][1]) else 0
-        for v in veicoli for t in ore}      # windows that straddle midnight
+# plugged in during hour t (from t-1 to t) if it arrived by t-1 and leaves at t or later
+disp = {(v, t): 1 if flotta[v][0] < t <= flotta[v][1] else 0
+        for v in veicoli for t in ore}
 
 salva_dati(pd.DataFrame({"hour": ore, "price": prezzo, "base_load": base}), "ev_prezzi_base")
 salva_dati(pd.DataFrame([(v, *flotta[v]) for v in veicoli],
@@ -62,7 +60,7 @@ def costruisci():
 
 
 def profilo(x):
-    return np.array([sum(x[v, t].X for v in veicoli) for t in ore])
+    return pd.Series([sum(x[v, t].X for v in veicoli) for t in ore], index=ore)
 
 
 # ----------------------------------------------------------------------
@@ -78,9 +76,14 @@ costo_min = m.ObjVal
 picco_costo = (prof_costo + base).max()
 print(f"Charging cost: {costo_min:.2f} €   peak withdrawal: {picco_costo:.1f} kW "
       f"(limit {C_rete:.0f})")
+print("\nPower x[v, t] (kW), hours t = 1..6:")
+for v in veicoli:
+    print(f"  {v}: " + "  ".join(f"{x[v, t].X:5.1f}" if disp[v, t] else "    ." for t in ore))
 print("\nShadow prices of the energy requirement (marginal cost of 1 more kWh per vehicle):")
 for v in veicoli:
     print(f"  {v}: {v_ene[v].Pi:.4f} €/kWh")
+print("Shadow prices of the grid (saving for 1 more kW in hour t):")
+print("  " + "  ".join(f"t={t}: {abs(v_rete[t].Pi):.3f}" for t in ore))
 
 # ----------------------------------------------------------------------
 # 3. PEAK SHAVING (minimax) and COST-PEAK TRADE-OFF
@@ -99,7 +102,7 @@ print(f"Lowest achievable peak: {mp.ObjVal:.1f} kW   cost: {costo_picco:.2f} €
 
 intestazione("Trade-off: cost + w · peak")
 compromessi = []
-for rho in [0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]:
+for rho in [0, 0.05, 0.1, 0.15, 0.2, 0.5, 1.0]:
     mc, xc, _, _ = costruisci()
     zc = mc.addVar(name="peak")
     mc.addConstrs((gp.quicksum(xc[v, t] for v in veicoli) + base[t] <= zc for t in ore))
@@ -117,7 +120,7 @@ salva_dati(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "ev_compr
 intestazione("Sensitivity: capacity of the grid connection")
 # careful: in the constraint "sum x + base[t] <= C" Gurobi moves the constant base[t]
 # into the right-hand side; the stored RHS is C - base[t], so it must be updated like this:
-for CC in [60, 65, 70, 80, 90, 120]:
+for CC in [23, 24, 26, 28, 30, 32, 35]:
     ms, xs_, _, vr = costruisci()
     for t in ore:
         vr[t].RHS = CC - base[t]
@@ -134,20 +137,29 @@ salva_dat(pd.DataFrame({"hour": ore, "price_cent": prezzo * 100, "base": base,
                         "totcost": base + prof_costo, "totpeak": base + prof_picco}),
           "cap06_profili")
 salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap06_frontiera")
+# one-hour-wide steps for pgfplots (const plot): edges 0.5, 1.5, ..., 6.5, the last value repeated
+bordi = [t - 0.5 for t in ore] + [ore[-1] + 0.5]
+
+
+def gradino(serie):
+    return list(serie) + [serie.iloc[-1]]
+
+
+salva_dat(pd.DataFrame({"x": bordi, "base": gradino(base), "totcost": gradino(base + prof_costo),
+                        "totpeak": gradino(base + prof_picco)}), "cap06_gradini")
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.2, 6.4), sharex=True)
 ax1.bar(ore, prezzo * 100, color=GRIGIO, alpha=0.6)
 ax1.set_ylabel("price $c_t$ (c€/kWh)")
 ax1.set_title("Hourly energy price")
 # same entries, colours and title as the lab app; legend above the meter limit
-ax2.plot(ore, base, color=GRIGIO, ls="--", label="base load $b_t$")
-ax2.plot(ore, base + prof_costo, color=TEAL, lw=2, drawstyle="steps-mid",
-         label="minimum cost")
-ax2.plot(ore, base + prof_picco, color=ARANCIO, lw=2, drawstyle="steps-mid",
-         label="peak shaving")
+# one column per hour: steps one hour wide, from t-1 to t (edges as above)
+ax2.stairs(base, bordi, baseline=None, color=GRIGIO, ls="--", label="base load $b_t$")
+ax2.stairs(base + prof_costo, bordi, baseline=None, color=TEAL, lw=2, label="minimum cost")
+ax2.stairs(base + prof_picco, bordi, baseline=None, color=ARANCIO, lw=2, label="peak shaving")
 ax2.axhline(C_rete, color=ROSSO, ls=":", label=f"meter power $k$ = {C_rete:.0f} kW")
 ax2.set_ylim(0, C_rete * 1.45)
-ax2.set_xlabel("hour of the day"); ax2.set_ylabel("total withdrawal (kW)")
+ax2.set_xticks(ore); ax2.set_xlabel("hour $t$ (from $t-1$ to $t$)"); ax2.set_ylabel("total withdrawal (kW)")
 ax2.set_title("Power withdrawn from the grid")
 ax2.legend(fontsize=8, ncol=2, loc="upper right")
 salva_figura(fig, "cap06_profili")
@@ -157,9 +169,9 @@ fig, ax = plt.subplots()
 ax.plot(comp["peak"], comp["cost"], "-o", color=TEAL)
 # weights with the same point (same peak and cost) in a single label
 groups = comp.groupby([comp["peak"].round(3), comp["cost"].round(4)], sort=False)
-for (pk, cc), g in groups:
+for k, ((pk, cc), g) in enumerate(groups):
     weights = ", ".join(f"{w:.2f}" for w in g["rho"])
-    ax.annotate(f"$w$ = {weights}", (pk, cc), textcoords="offset points", xytext=(8, -3),
+    ax.annotate(f"$w$ = {weights}", (pk, cc), textcoords="offset points", xytext=(8, -3 if k == 0 else 4),
                 fontsize=8)
 ax.set_xlim(comp["peak"].min() - 3, comp["peak"].max() + 6)
 ax.set_xlabel("peak withdrawal (kW)")
