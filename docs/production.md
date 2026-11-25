@@ -109,15 +109,16 @@ is the scarce shared resource, and its shadow price will tell how much an extra 
 ## Case study
 
 Three products × three months ($n = m = 3$: 15 variables, 9 balances and 3 capacity
-constraints), demand increasing towards a peak in month 3, 400 machine hours per month,
-zero initial and final inventory (data in `data/produzione_domanda.csv` and
+constraints), demand increasing towards a peak in month 3, 400 machine hours per month.
+The warehouse starts with 20 units of products 1 and 2 and must close the horizon with 10
+units of product 1 and 20 of product 3 (data in `data/produzione_domanda.csv` and
 `data/produzione_capacita.csv`).
 
 | Product | $c_i$ (€/unit) | $h_i$ (€/unit/month) | $a_i$ (hours/unit) | $r_{i0}$ (units) | $r_{im}$ (units) |
 |---|---|---|---|---|---|
-| 1 | 10 | 1 | 1 | 0 | 0 |
-| 2 | 15 | 1.2 | 1.5 | 0 | 0 |
-| 3 | 20 | 1.2 | 2 | 0 | 0 |
+| 1 | 10 | 1 | 1 | 20 | 10 |
+| 2 | 15 | $\frac{6}{5}$ | $\frac{3}{2}$ | 20 | 0 |
+| 3 | 20 | $\frac{6}{5}$ | 2 | 0 | 20 |
 
 | month $t$ | 1 | 2 | 3 |
 |---|---|---|---|
@@ -126,15 +127,26 @@ zero initial and final inventory (data in `data/produzione_domanda.csv` and
 | $d_{2t}$ | 60 | 80 | 120 |
 | $d_{3t}$ | 40 | 40 | 70 |
 
-Serving each month with its own production alone would need 280, 340 and 520 hours:
-month 3 is 120 hours short, while months 1 and 2 leave 120 and 60 hours free.
+Serving each month with its own production alone, net of the initial inventory and with
+the required final inventory, would need 230, 340 and 570 hours: month 3 is 170 hours
+short, while months 1 and 2 leave 170 and 60 hours free.
 
 ```text
-Optimal total cost: 11,508.00 EUR
-month       1      2      3
-prod.1  110.0  140.0  200.0
-prod.2   60.0   80.0  120.0
-prod.3   70.0   70.0   10.0     (inventory of product 3: 30 and 60 units at the end of months 1 and 2)
+Optimal total cost: 11568 €
+
+Production plan (units/month):
+month     1    2    3
+product
+1        90  140  210
+2        40   80  120
+3        95   70    5
+
+End-of-month stock (month 3: the required final stock r_i3, a datum):
+month     1   2   3
+product
+1         0   0  10
+2         0   0   0
+3        55  85  20
 ```
 
 ![Machine hours, production and demand, inventory](img/cap05_piano_scorte.png)
@@ -142,35 +154,35 @@ prod.3   70.0   70.0   10.0     (inventory of product 3: 30 and 60 units at the 
 At the top, the machine hours $a_i\, x_{it}$ used by each product, stacked, with the capacity $b_t$
 dashed: months 2 and 3 are binding, month 1 uses 340 of its 400 hours. At the bottom left, the
 production $x_{it}$ (bars) and the demand $d_{it}$ (dashed) of each product; on the right, the inventory $s_{it}$
-of months 1 and 2 and, with the hollow marker, the required final inventory $r_{i3} = 0$, which is a datum.
+of months 1 and 2 and, with the hollow marker, the required final inventory $r_{i3}$ (10, 0 and 20 units), which is a datum.
 
 The solver discovers the **pre-build** all by itself: product 3 (2 hours/unit) is
-produced in advance, 30 units in month 1 and 30 in month 2, to free 120 hours in the
-peak month; at the end of the horizon the inventory is the required one, $r_{i3} = 0$. Product 3 is the one
-to stock because bringing one machine hour forward costs $h_i/a_i$ per month: $1$,
-$0.8$ and $0.6$ € for products 1, 2 and 3.
+produced in advance, 55 units in month 1 and 30 in month 2, to free 170 hours in the
+peak month; at the end of the horizon the required inventory is left, 10 units of product 1
+and 20 of product 3. Product 3 is the one to stock because bringing one machine hour forward
+costs $h_i/a_i$ per month: $1$, $\frac{4}{5}$ and $\frac{3}{5}$ € for products 1, 2 and 3.
 
 ## Sensitivity
 
 ```text
-month 1: use 340.0/400  | Pi =  0.000 EUR/hour | valid for b_t in [340.0, +inf]
-month 2: use 400.0/400  | Pi = -0.600 EUR/hour | valid for b_t in [340.0, 460.0]
-month 3: use 400.0/400  | Pi = -1.200 EUR/hour | valid for b_t in [380.0, 460.0]
+month 1: usage 340 hours of 400 | shadow price 0 €/hour | valid for b_t in [340, inf]
+month 2: usage 400 hours of 400 | shadow price -3/5 €/hour | valid for b_t in [340, 510]
+month 3: usage 400 hours of 400 | shadow price -6/5 €/hour | valid for b_t in [390, 510]
 
-Check: +1 hour in month 3 -> cost from 11508.00 to 11506.80 (delta -1.200)
+Check: +1 hour in month 3 -> the cost changes by -6/5 € (= shadow price -6/5)
 ```
 
-The duals grow by $0.6 = h_3/a_3$ per month: one more hour in month $t$ allows us
+The duals grow by $\frac{3}{5} = h_3/a_3$ per month: one more hour in month $t$ allows us
 to produce $1/a_3$ units of product 3 *one month later*, saving one month of
-holding. The dual of month 3 is $2 \times 0.6 = 1.2$: one hour there avoids two
+holding. The dual of month 3 is $2 \times \frac{3}{5} = \frac{6}{5}$: one hour there avoids two
 months of holding for half a unit produced in month 1. The capacity value curve is
 convex and decreasing; below 95% of the current capacity (1140 hours needed out of
 1200) the problem becomes **infeasible**.
 
 !!! tip "Managerial take-away"
-    It is worth buying overtime hours in month 3 up to 1.2 €/hour below the internal
-    price, and in month 2 up to 0.6 €/hour; below 95% of the capacity full service
-    cannot be guaranteed.
+    It is worth buying overtime hours in month 3 up to $\frac{6}{5}$ €/hour below the internal
+    price, and in month 2 up to $\frac{3}{5}$ €/hour, for at most 110 extra hours per month;
+    below 95% of the capacity full service cannot be guaranteed.
 
 A *smooth* plan, which penalizes the changes of production from one month to the
 next, requires a quadratic term in the objective and is no longer an LP: it is the
@@ -211,6 +223,8 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
       2. Shadow prices of capacity and analysis of the duals
       3. Sensitivity: optimal cost as capacity varies
     """
+    from fractions import Fraction
+
     import gurobipy as gp
     import numpy as np
     import pandas as pd
@@ -218,6 +232,14 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
 
     from stile import (ARANCIO, GRIGIO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dat, salva_dati,
                        salva_figura)
+
+
+    def frazione(x):
+        """a non-integer number as a fraction with denominator at most 12 (6/5, -3/5); otherwise with two decimals"""
+        if not np.isfinite(x):
+            return "inf" if x > 0 else "-inf"
+        q = Fraction(x).limit_denominator(12)
+        return str(q) if abs(float(q) - x) < 1e-9 else f"{x:.2f}"
 
     # ----------------------------------------------------------------------
     # 1. DATA
@@ -231,12 +253,12 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         ("2", 1): 60,  ("2", 2): 80,  ("2", 3): 120,
         ("3", 1): 40,  ("3", 2): 40,  ("3", 3): 70,
     }
-    costo_prod = {"1": 10.0, "2": 15.0, "3": 20.0}   # €/unit
-    costo_giac = {"1": 1.0, "2": 1.2, "3": 1.2}      # €/unit/month
-    ore_unit = {"1": 1.0, "2": 1.5, "3": 2.0}        # machine hours per unit
+    costo_prod = {"1": 10, "2": 15, "3": 20}          # €/unit
+    costo_giac = {"1": 1, "2": 6 / 5, "3": 6 / 5}      # €/unit/month
+    ore_unit = {"1": 1, "2": 3 / 2, "3": 2}              # machine hours per unit
     capacita = {1: 400, 2: 400, 3: 400}  # hours/month
-    scorta_iniziale = {"1": 0, "2": 0, "3": 0}      # r_i0: stock at the start of the horizon (units)
-    scorta_finale = {"1": 0, "2": 0, "3": 0}        # r_im: stock required at the end of the horizon (units)
+    scorta_iniziale = {"1": 20, "2": 20, "3": 0}    # r_i0: stock at the start of the horizon (units)
+    scorta_finale = {"1": 10, "2": 0, "3": 20}      # r_im: stock required at the end of the horizon (units)
     ultimo = mesi[-1]                               # month m
     mesi_s = mesi[:-1]                              # months 1..m-1: only here the stock s_it is a variable
 
@@ -280,7 +302,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     m, x, s, v_cap = costruisci_lp()
     m.optimize()
     assert m.Status == GRB.OPTIMAL
-    print(f"Optimal total cost: {m.ObjVal:,.2f} €")
+    print(f"Optimal total cost: {frazione(m.ObjVal)} €")
 
     def scorta(i, t):
         """stock at the end of month t: the variable s_it for t < m, the datum r_im for t = m"""
@@ -292,9 +314,9 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         columns=["product", "month", "production", "stock"])
     salva_dati(piano, "produzione_piano_ottimo")
     print("\nProduction plan (units/month):")
-    print(piano.pivot(index="product", columns="month", values="production").round(1))
+    print(piano.pivot(index="product", columns="month", values="production").apply(lambda c: c.map(frazione)))
     print(f"\nEnd-of-month stock (month {ultimo}: the required final stock r_i{ultimo}, a datum):")
-    print(piano.pivot(index="product", columns="month", values="stock").round(1))
+    print(piano.pivot(index="product", columns="month", values="stock").apply(lambda c: c.map(frazione)))
 
     print("\nCapacity constraints: utilisation, shadow price and validity range")
     righe_duali = []
@@ -302,8 +324,8 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
         uso = sum(ore_unit[i] * x[i, t].X for i in prodotti)
         c = v_cap[t]
         righe_duali.append((t, uso, capacita[t], c.Pi, c.SARHSLow, c.SARHSUp))
-        print(f"  month {t}: usage {uso:6.1f}/{capacita[t]} hours | "
-              f"shadow price {c.Pi:6.3f} €/hour | valid for b_t in [{c.SARHSLow:6.1f}, {c.SARHSUp:6.1f}]")
+        print(f"  month {t}: usage {frazione(uso)} hours of {capacita[t]} | "
+              f"shadow price {frazione(c.Pi)} €/hour | valid for b_t in [{frazione(c.SARHSLow)}, {frazione(c.SARHSUp)}]")
     duali = pd.DataFrame(righe_duali, columns=["month", "hours_used", "capacity", "shadow_price",
                                                "rhs_min", "rhs_max"])
     salva_dati(duali, "produzione_duali_capacita")
@@ -315,8 +337,8 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
     m2, x2, s2, v2 = costruisci_lp()
     v2[t_star].RHS = capacita[t_star] + 1
     m2.optimize()
-    print(f"\nCheck: +1 hour in month {t_star} -> cost goes from {m.ObjVal:.2f} to {m2.ObjVal:.2f} "
-          f"(change {m2.ObjVal - m.ObjVal:+.3f} = shadow price {pi_star:.3f})")
+    print(f"\nCheck: +1 hour in month {t_star} -> the cost changes by {frazione(m2.ObjVal - m.ObjVal)} € "
+          f"(= shadow price {frazione(pi_star)})")
 
     # ----------------------------------------------------------------------
     # 3. FIGURES (data for pgfplots + matplotlib preview)
@@ -374,21 +396,22 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
 
     # sensitivity: optimal cost as the uniform capacity varies
     intestazione("Sensitivity: optimal cost as capacity varies")
-    fattori = np.linspace(0.90, 1.35, 19)
+    percenti = np.arange(90, 136)
     costi = []
-    for f in fattori:
+    for p in percenti:
         ms, xs_, ss_, vs = costruisci_lp()
         for t in mesi:
-            vs[t].RHS = capacita[t] * f
+            vs[t].RHS = capacita[t] * p / 100
         ms.optimize()
         costi.append(ms.ObjVal if ms.Status == GRB.OPTIMAL else np.nan)
-        print(f"  capacity x{f:4.2f}: cost {costi[-1]:10.2f} €")
+        if p % 5 == 0:
+            print(f"  capacity at {p}%: " + (f"cost {frazione(costi[-1])} €" if ms.Status == GRB.OPTIMAL else "infeasible"))
 
-    tab_cap = pd.DataFrame({"percent": fattori * 100, "cost": costi}).dropna()
+    tab_cap = pd.DataFrame({"percent": percenti, "cost": costi}).dropna()
     salva_dat(tab_cap, "cap05_capacita")
 
     fig, ax = plt.subplots()
-    ax.plot(fattori * 100, costi, "-o", color=TEAL)
+    ax.plot(percenti, costi, "-o", ms=3, color=TEAL)
     ax.axvline(100, color=ARANCIO, linestyle="--", label="current capacity")
     ax.set_xlabel("available capacity (% of the current one)")
     ax.set_ylabel("optimal total cost (€)")
@@ -409,7 +432,7 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
    demand is it worth *not* serving?
 4. **Emissions** — add $w \sum_{i,t} e_i x_{it}$ and draw the cost-emissions
    frontier.
-5. **Safety stock** — impose $s_{it} \ge 0.1\, d_{i,t+1}$ for $t \le m-1$: how much
+5. **Safety stock** — impose $s_{it} \ge \frac{1}{10}\, d_{i,t+1}$ for $t \le m-1$: how much
    does the policy cost?
 
 <!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
