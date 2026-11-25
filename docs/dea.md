@@ -692,3 +692,12 @@ The same code is also available as a notebook — [`notebooks/lab07_dea.ipynb`](
 4. **Weight restrictions** — add $u_2 \ge u_1$: which branches remain efficient?
 5. **Super-efficiency** — remove DMU $o$ from the reference set to rank the efficient
    branches: which one is the most robust?
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to “branch” goes through all of them.
+It also opens full page in the [interactive lab](lab/index.md): [DEA: efficiency and peers of a branch](lab/dea-efficiency.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-dea"></div>

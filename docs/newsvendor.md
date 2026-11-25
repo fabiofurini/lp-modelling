@@ -433,18 +433,23 @@ The same code is also available as a notebook — [`notebooks/lab08_newsvendor.i
                  capsize=3)
     ax2.axhline(q_star, color=ROSSO, ls="-.", label="theoretical q*")
     ax2.set_xscale("log")
-    ax2.set_xlabel("number of scenarios S"); ax2.set_ylabel("optimal q")
+    ax2.set_xlabel("number of scenarios $k$"); ax2.set_ylabel("optimal q")
     ax2.set_title("Stability of the scenario solution")
     ax2.legend(fontsize=8)
     salva_figura(fig, "cap08_quantile_stabilita")
 
     fig, ax = plt.subplots()
-    ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL)
+    # as in the lab app: same curve, same labels, legend in the empty top-right corner
+    weights = ", ".join(f"{w:g}" for w in front["lam"])
+    ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL, label=f"frontier ($r$ = {weights})")
     for _, r in front.iterrows():
-        ax.annotate(f"  $r$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
-                    fontsize=8)
+        ax.annotate(f"$r$ = {r['lam']:.2f}: $q$ = {r['q']:.0f}",
+                    (r["cvar"], r["mean_cost"]), textcoords="offset points", xytext=(8, -3), fontsize=8)
+    dx = front["cvar"].max() - front["cvar"].min()
+    ax.set_xlim(front["cvar"].min() - 0.06 * dx, front["cvar"].max() + 0.32 * dx)
     ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)")
-    ax.set_title("Mean cost - tail risk frontier")
+    ax.set_title("Mean cost – tail risk frontier")
+    ax.legend(fontsize=8, loc="upper right")
     salva_figura(fig, "cap08_frontiera")
 
     print("\nDone: chapter 8.")
@@ -459,3 +464,12 @@ The same code is also available as a notebook — [`notebooks/lab08_newsvendor.i
 4. EVPI: how much is a perfect forecast worth at most? (88.33 €/cycle.)
 5. Fill rate constraint at 98% vs cycle service level at 98%: compare them.
 6. Multi-product with $\rho = 0$: why does the cost go down?
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to a slider makes it move by itself.
+It also opens full page in the [interactive lab](lab/index.md): [Newsvendor: optimal order over 600 scenarios](lab/newsvendor-scenarios.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-newsvendor"></div>

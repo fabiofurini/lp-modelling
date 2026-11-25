@@ -137,24 +137,31 @@ salva_dat(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "cap06_fro
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.2, 6.4), sharex=True)
 ax1.bar(ore, prezzo * 100, color=GRIGIO, alpha=0.6)
-ax1.set_ylabel("price (c€/kWh)")
+ax1.set_ylabel("price $c_t$ (c€/kWh)")
 ax1.set_title("Hourly energy price")
-ax2.plot(ore, base, color=GRIGIO, ls="--", label="base load")
+# same entries, colours and title as the lab app; legend above the meter limit
+ax2.plot(ore, base, color=GRIGIO, ls="--", label="base load $b_t$")
 ax2.plot(ore, base + prof_costo, color=TEAL, lw=2, drawstyle="steps-mid",
          label="minimum cost")
 ax2.plot(ore, base + prof_picco, color=ARANCIO, lw=2, drawstyle="steps-mid",
          label="peak shaving")
-ax2.axhline(C_rete, color=ROSSO, ls=":", label=f"grid limit {C_rete:.0f} kW")
+ax2.axhline(C_rete, color=ROSSO, ls=":", label=f"meter power $k$ = {C_rete:.0f} kW")
+ax2.set_ylim(0, C_rete * 1.45)
 ax2.set_xlabel("hour of the day"); ax2.set_ylabel("total withdrawal (kW)")
-ax2.set_title("Withdrawal profile: chasing prices creates a night-time peak")
-ax2.legend(fontsize=8, ncol=2)
+ax2.set_title("Power withdrawn from the grid")
+ax2.legend(fontsize=8, ncol=2, loc="upper right")
 salva_figura(fig, "cap06_profili")
 
 comp = pd.DataFrame(compromessi, columns=["rho", "cost", "peak"])
 fig, ax = plt.subplots()
 ax.plot(comp["peak"], comp["cost"], "-o", color=TEAL)
-for _, r in comp.iterrows():
-    ax.annotate(f"  $w$={r['rho']:.2f}", (r["peak"], r["cost"]), fontsize=8)
+# weights with the same point (same peak and cost) in a single label
+groups = comp.groupby([comp["peak"].round(3), comp["cost"].round(4)], sort=False)
+for (pk, cc), g in groups:
+    weights = ", ".join(f"{w:.2f}" for w in g["rho"])
+    ax.annotate(f"$w$ = {weights}", (pk, cc), textcoords="offset points", xytext=(8, -3),
+                fontsize=8)
+ax.set_xlim(comp["peak"].min() - 3, comp["peak"].max() + 6)
 ax.set_xlabel("peak withdrawal (kW)")
 ax.set_ylabel("charging cost (€)")
 ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")

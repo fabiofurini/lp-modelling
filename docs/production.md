@@ -367,3 +367,12 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
    frontier.
 5. **Safety stock** — impose $s_{it} \ge 0.1\, d_{i,t+1}$: how much does the
    policy cost?
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to a slider makes it move by itself.
+It also opens full page in the [interactive lab](lab/index.md): [Production plan and shadow prices](lab/production-plan.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-produzione"></div>

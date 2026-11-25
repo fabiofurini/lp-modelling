@@ -487,18 +487,19 @@ The same code is also available as a notebook — [`notebooks/lab11_regression.i
     salva_dat(points, "cap11_panetteria")
 
     fig, ax = plt.subplots()
-    ax.scatter(temperature[normal], demand[normal], s=18, color=TEAL,
+    # as in the lab app: normal days grey, strikes red crosses, support points circled in green
+    ax.scatter(temperature[normal], demand[normal], s=18, color=GRIGIO,
                label="normal days")
     ax.scatter(temperature[~normal], demand[~normal], s=45, color=ROSSO, marker="X",
                label="strike days")
     ax.scatter(temperature[support], demand[support], s=95, facecolors="none",
                edgecolors=VERDE, linewidths=1.6, label="support points")
     gr = np.linspace(9, 35, 2)
-    ax.plot(gr, b_lad + w_lad[0] * gr, color=BLU, lw=2, label="absolute deviations (LP)")
-    ax.set_xlabel("maximum temperature (degrees)")
-    ax.set_ylabel("demand (pieces)")
+    ax.plot(gr, b_lad + w_lad[0] * gr, color=BLU, lw=2, label=r"absolute deviations (LP, $\tau = 1/2$)")
+    ax.set_xlabel("maximum temperature $x_i$ (°C)")
+    ax.set_ylabel("demand $y_i$ (pieces)")
     ax.set_title("Five strike days do not move the LP line")
-    ax.legend(loc="upper right", fontsize=8)
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.13), fontsize=8)
     salva_figura(fig, "cap11_regressione_robusta")
 
     lines = []
@@ -513,14 +514,15 @@ The same code is also available as a notebook — [`notebooks/lab11_regression.i
                label="55 normal days")
     colours = {0.10: ARANCIO, 0.50: BLU, TAU_NV: VERDE}
     for _, row in lines.iterrows():
-        label = ("tau = 9/13 (critical fractile)" if abs(row["tau"] - TAU_NV) < 1e-9
-                 else f"tau = {row['tau']:.2f}")
+        label = (r"$\tau$ = 9/13: critical fractile" if abs(row["tau"] - TAU_NV) < 1e-9
+                 else r"$\tau$ = 1/2: absolute deviations" if abs(row["tau"] - 0.5) < 1e-9
+                 else rf"$\tau$ = {row['tau']:.2f}")
         ax.plot(gr, row["intercetta"] + row["pendenza"] * gr,
                 color=colours[row["tau"]], lw=2, label=label)
-    ax.set_xlabel("maximum temperature (degrees)")
-    ax.set_ylabel("demand (pieces)")
+    ax.set_xlabel("maximum temperature $x_i$ (°C)")
+    ax.set_ylabel("demand $y_i$ (pieces)")
     ax.set_title("One line per quantile: the fan of demand")
-    ax.legend(loc="upper right", fontsize=8)
+    ax.legend(loc="lower left", fontsize=8)
     salva_figura(fig, "cap11_quantili")
 
     fig, ax = plt.subplots()
@@ -528,7 +530,7 @@ The same code is also available as a notebook — [`notebooks/lab11_regression.i
     for name, t in sorted(entries.items(), key=lambda kv: kv[1]):
         row = curve[curve["budget"] == t].iloc[0]
         ax.plot([t], [row["scarto_medio"]], "o", color=ROSSO, ms=5)
-        ax.annotate(name, (t, row["scarto_medio"]), textcoords="offset points",
+        ax.annotate(name.replace("_", " "), (t, row["scarto_medio"]), textcoords="offset points",
                     xytext=(6, 8), fontsize=8, color=ROSSO)
     ax.set_xlabel("budget on the coefficients")
     ax.set_ylabel("mean absolute deviation (pieces)")
@@ -568,3 +570,12 @@ The same code is also available as a notebook — [`notebooks/lab11_regression.i
 5. Split the 55 normal days into estimation (40) and validation (15) and plot the
    mean absolute deviation on the two sets for $t \in \{5, 10, \dots, 55\}$:
    which budget do you choose?
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. Drag a point; ▶ next to τ sweeps the quantile.
+It also opens full page in the [interactive lab](lab/index.md): [Least absolute deviations and quantile regression](lab/quantile-regression.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-regressione"></div>

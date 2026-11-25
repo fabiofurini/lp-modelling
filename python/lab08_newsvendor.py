@@ -198,18 +198,23 @@ ax2.errorbar(stab["S"], stab["q_mean"], yerr=stab["q_std"], fmt="-o", color=TEAL
              capsize=3)
 ax2.axhline(q_star, color=ROSSO, ls="-.", label="theoretical q*")
 ax2.set_xscale("log")
-ax2.set_xlabel("number of scenarios S"); ax2.set_ylabel("optimal q")
+ax2.set_xlabel("number of scenarios $k$"); ax2.set_ylabel("optimal q")
 ax2.set_title("Stability of the scenario solution")
 ax2.legend(fontsize=8)
 salva_figura(fig, "cap08_quantile_stabilita")
 
 fig, ax = plt.subplots()
-ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL)
+# as in the lab app: same curve, same labels, legend in the empty top-right corner
+weights = ", ".join(f"{w:g}" for w in front["lam"])
+ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL, label=f"frontier ($r$ = {weights})")
 for _, r in front.iterrows():
-    ax.annotate(f"  $r$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
-                fontsize=8)
+    ax.annotate(f"$r$ = {r['lam']:.2f}: $q$ = {r['q']:.0f}",
+                (r["cvar"], r["mean_cost"]), textcoords="offset points", xytext=(8, -3), fontsize=8)
+dx = front["cvar"].max() - front["cvar"].min()
+ax.set_xlim(front["cvar"].min() - 0.06 * dx, front["cvar"].max() + 0.32 * dx)
 ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)")
-ax.set_title("Mean cost - tail risk frontier")
+ax.set_title("Mean cost – tail risk frontier")
+ax.legend(fontsize=8, loc="upper right")
 salva_figura(fig, "cap08_frontiera")
 
 print("\nDone: chapter 8.")
