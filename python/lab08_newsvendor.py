@@ -136,11 +136,25 @@ print(f"  fill rate at q*: {1 - perdita_att / mu_d:.2%} "
 # ----------------------------------------------------------------------
 intestazione("Mean cost - CVaR frontier (alpha = 0.90)")
 alpha_cv = 0.90
+
+
+def var_cvar(costi, alpha):
+    """VaR_alpha and exact CVaR_alpha of k equiprobable scenarios.
+
+    VaR = alpha-quantile (the (ceil(alpha*k))-th cost in increasing order);
+    CVaR = VaR + 1/((1-alpha) k) * sum_s max(c_s - VaR, 0), the value of the
+    Rockafellar-Uryasev formula: the exact mean of the (1-alpha) k most expensive scenarios.
+    """
+    ordered = np.sort(costi)
+    k = len(ordered)
+    var_ = ordered[int(np.ceil(alpha * k - 1e-9)) - 1]
+    return var_, var_ + np.maximum(ordered - var_, 0).sum() / ((1 - alpha) * k)
+
+
 front = []
 for lam in [0, 0.25, 0.5, 0.75, 1.0]:
     q_l, cm, costi_l = newsvendor_lp(dom, lam=lam, alpha_cvar=alpha_cv)
-    var_l = np.quantile(costi_l, alpha_cv)
-    cvar_l = costi_l[costi_l >= var_l - 1e-9].mean()
+    _, cvar_l = var_cvar(costi_l, alpha_cv)
     front.append((lam, q_l, cm, cvar_l))
     print(f"  r = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
           f"CVaR90 = {cvar_l:6.2f}")

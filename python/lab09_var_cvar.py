@@ -89,9 +89,22 @@ w_cv, cvar_ott = porta_cvar(r_obb)
 perd_cv = -R @ w_cv
 
 
+def var_cvar(perd, alpha):
+    """VaR_alpha and exact CVaR_alpha of k equiprobable scenarios.
+
+    VaR = alpha-quantile (the (ceil(alpha*k))-th loss in increasing order);
+    CVaR = VaR + 1/((1-alpha) k) * sum_s max(l_s - VaR, 0), the value of the
+    Rockafellar-Uryasev formula: with losses tied at the VaR it counts exactly (1-alpha) k scenarios.
+    """
+    ordered = np.sort(perd)
+    k = len(ordered)
+    var_ = ordered[int(np.ceil(alpha * k - 1e-9)) - 1]
+    cvar_ = var_ + np.maximum(ordered - var_, 0).sum() / ((1 - alpha) * k)
+    return var_, cvar_
+
+
 def stat_perdite(perd):
-    var_ = np.quantile(perd, alpha_c)
-    cvar_ = perd[perd >= var_ - 1e-12].mean()
+    var_, cvar_ = var_cvar(perd, alpha_c)
     return perd.mean(), var_, cvar_
 
 
@@ -179,8 +192,7 @@ def duestadi(lam, alpha_c2=0.90):
 righe = []
 for lam in [0.0, 0.5, 1.0]:
     cap, tot, serv = duestadi(lam)
-    var_t = np.quantile(tot, 0.90)
-    cvar_t = tot[tot >= var_t - 1e-9].mean()
+    _, cvar_t = var_cvar(tot, 0.90)
     righe.append((lam, cap["F1"], cap["F2"], tot.mean(), cvar_t, serv.mean()))
     print(f"  r = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
           f"mean cost {tot.mean():8.2f}, CVaR90 {cvar_t:8.2f} | mean service {serv.mean():.1%}")
