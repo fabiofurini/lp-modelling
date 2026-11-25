@@ -139,8 +139,8 @@ extra_javascript:
   - javascripts/gi-comune.js?v=74d7bb93a0
   - javascripts/gi-ott.js?v=4e022c9162
   - javascripts/gi-pl-dati.js?v=3bb3aa7015
-  - javascripts/gi-pl-modelli.js?v=15fa2bd78d
-  - javascripts/gi-pl-app.js?v=820e65b150
+  - javascripts/gi-pl-modelli.js?v=574e57b3ed
+  - javascripts/gi-pl-app.js?v=8efb351594
   - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry
