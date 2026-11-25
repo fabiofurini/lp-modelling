@@ -17,7 +17,7 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     ---
 
-    Transportation from two warehouses to three customers, solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the optimal shipments and their cost.
+    Transportation from warehouses to customers, solved to optimality in the browser on an instance with two warehouses and three customers: the problem, the data, the symbolic and the numerical model, the optimal shipments and their cost.
 
     [Open the app →](transportation.md)
 
