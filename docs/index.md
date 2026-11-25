@@ -33,9 +33,9 @@ Prerequisites: [Linear Programming](https://fabiofurini.github.io/linear-program
 <!-- collana-app -->
 ## Try it now
 
-A production and inventory model, solved to optimality in the browser: change demand, capacity and holding cost with the sliders and the simplex method recomputes the optimal plan, the cost and the shadow prices of the machine hours.
+The transportation problem from two warehouses to three customers, solved to optimality in the browser: change one cost and the capacity of a warehouse with the sliders and the simplex method recomputes the optimal shipments and their cost.
 
-<div class="gi" data-grafico="pl-produzione"></div>
+<div class="gi" data-grafico="pl-trasporto"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
