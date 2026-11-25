@@ -65,6 +65,22 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     [Open the app →](newsvendor-scenarios.md)
 
+-   :material-chart-bell-curve: **VaR and CVaR: minimum tail-risk portfolio**
+
+    ---
+
+    The eight assets and 220 monthly scenarios of the chapter: the loss distribution of the minimum-CVaR portfolio with mean, VaR and CVaR, and the return-CVaR frontier. Move the level α and the required return b.
+
+    [Open the app →](var-cvar.md)
+
+-   :material-scale-balance: **Arbitrage and coherent prices**
+
+    ---
+
+    A risk-free asset, two risky assets and three states: the normalized LP detects arbitrage, the shadow prices give the risk-neutral probabilities. Move the prices and the rate r and watch the interval of coherent prices.
+
+    [Open the app →](arbitrage.md)
+
 </div>
 
 ## Optimization and machine learning

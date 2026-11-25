@@ -456,3 +456,12 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
    same frontier, dual = marginal return of risk.
 5. Stress test: an extreme scenario with probability 1% — how does the booking
    change?
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to a slider makes it move by itself.
+It also opens full page in the [interactive lab](lab/index.md): [VaR and CVaR: minimum tail-risk portfolio](lab/var-cvar.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-var-cvar"></div>

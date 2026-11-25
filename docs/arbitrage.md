@@ -303,3 +303,12 @@ The same code is also available as a notebook — [`notebooks/lab10_arbitrage.ip
    optimum is 0 and compute the pricing measure. What happens at $21{,}60$?
 3. In the complete market, price a call on security 2 with strike 20 and check the
    price with the risk-neutral probabilities.
+
+<!-- laboratorio-interattivo: sezione generata da genera_laboratorio.py -->
+
+## Interactive lab { #interactive-lab }
+
+The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to a slider makes it move by itself.
+It also opens full page in the [interactive lab](lab/index.md): [Arbitrage and coherent prices](lab/arbitrage.md).
+
+<div class="gi gi-capitolo" data-grafico="pl-arbitraggio"></div>

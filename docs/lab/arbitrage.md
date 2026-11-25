@@ -9,6 +9,6 @@ title: "Arbitrage and coherent prices"
 
 # Arbitrage and coherent prices
 
-The market of the chapter, with a risk-free asset, two risky assets and three states: the normalized LP tells whether there is an arbitrage, the shadow prices give the risk-neutral probabilities. Move the prices and the rate r and watch the interval of coherent prices. ▶ next to a slider makes it move by itself.
+A risk-free asset, two risky assets and three states: the normalized LP detects arbitrage, the shadow prices give the risk-neutral probabilities. Move the prices and the rate r and watch the interval of coherent prices. ▶ next to a slider makes it move by itself.
 
 <div class="gi gi-app-intera" data-grafico="pl-arbitraggio"></div>
