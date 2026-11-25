@@ -69,7 +69,8 @@ Using these variables, an LP model for the problem is the following:
 $$
 \begin{aligned}
 \min ~~ \sum_{i=1}^{n} \sum_{t=1}^{m} \bigl( c_{it}\, x_{it} + h_{it}\, s_{it} \bigr) & & \\
-\text{subject to} \quad s_{i,t-1} + x_{it} &= d_{it} + s_{it}, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}, \\
+\text{subject to} \quad x_{i1} - s_{i1} &= d_{i1} - s_{i0}, & \forall i \in \{1, 2, \dots, n\}, \\
+x_{it} + s_{i,t-1} - s_{it} &= d_{it}, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{2, 3, \dots, m\}, \\
 \sum_{i=1}^{n} a_i\, x_{it} &\le b_t, & \forall t \in \{1, 2, \dots, m\}, \\
 x_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}, \\
 s_{it} &\ge 0, & \forall i \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}.
@@ -83,7 +84,8 @@ Description of the objective function and of the constraints:
   all products and months;
 - the linear **balance** constraints are those of the technique
   [4.5 Multi-period planning](techniques-05.md), one per product and month; for
-  $t = 1$ the initial inventory $s_{i0}$ is used ($n\,m$ linear constraints);
+  $t = 1$ the initial inventory $s_{i0}$ is a datum and moves to the right-hand side
+  ($n\,m$ linear constraints);
 - the linear **capacity** constraints ensure that, in every month, the machine hours
   used by all the products do not exceed those available ($m$ linear constraints);
 - the non-negativity constraints on $x_{it}$ and $s_{it}$ define the variables of the
