@@ -1,6 +1,6 @@
 # Example 4.10 — Production and storage of fruit cakes
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Production and storage of cakes](lab/fruit-cakes.md)
 
 **Model:** numerical · **Techniques:** [4.5 Multi-period planning](techniques-05.md) · [All the worked models](techniques.md#worked-models)
 
@@ -65,6 +65,6 @@
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Production and storage of cakes](lab/fruit-cakes.md).
 
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="torte"></div>
+<div class="gi gi-capitolo" data-grafico="pl-torte"></div>

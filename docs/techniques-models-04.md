@@ -1,6 +1,6 @@
 # Example 4.7 — Diet planning for several classes
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Diet for several classes](lab/diet-several-classes.md)
 
 **Model:** symbolic · **Techniques:** [4.3 Blending](techniques-03.md) · [All the worked models](techniques.md#worked-models)
 
@@ -219,6 +219,6 @@ $$
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Diet for several classes](lab/diet-several-classes.md).
 
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="dieta-classi"></div>
+<div class="gi gi-capitolo" data-grafico="pl-dieta-classi"></div>

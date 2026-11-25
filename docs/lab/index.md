@@ -21,13 +21,75 @@ numbers as the Python scripts and the lecture notes. Pick an app: it opens full 
 
     [Open the app →](transportation.md)
 
--   :material-format-list-numbered: **Nine worked LP models**
+</div>
+
+## Worked models of chapter 4
+
+<div class="grid cards" markdown>
+
+-   :material-clock-outline: **Production with regular time and overtime**
 
     ---
 
-    The nine worked models of chapter 4: production, transportation, diets, multi-period planning, blending and ratios. Change the data with the sliders: the simplex method, in the browser, recomputes the optimal solution, the optimal value and the shadow prices.
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
 
-    [Open the app →](techniques.md)
+    [Open the app →](overtime-production.md)
+
+-   :material-food-apple-outline: **Diet planning**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](diet.md)
+
+-   :material-account-group-outline: **Diet for several classes**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](diet-several-classes.md)
+
+-   :material-calendar-range: **Multi-period production with purchases**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](multi-period-production.md)
+
+-   :material-cupcake: **Choice of desserts**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](dessert-choice.md)
+
+-   :material-cake-variant-outline: **Production and storage of cakes**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](fruit-cakes.md)
+
+-   :material-oil: **Blending in a refinery**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](refinery.md)
+
+-   :material-pill: **Production of three drugs**
+
+    ---
+
+    The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices.
+
+    [Open the app →](three-drugs.md)
 
 </div>
 

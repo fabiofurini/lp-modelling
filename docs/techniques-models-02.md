@@ -1,6 +1,6 @@
 # Example 4.5 — Transportation from warehouses to clients
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Transportation from warehouses to customers](lab/transportation.md)
 
 **Model:** symbolic · **Techniques:** [4.4 Transportation](techniques-04.md) · [All the worked models](techniques.md#worked-models)
 
@@ -168,6 +168,4 @@
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
-
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="trasporto"></div>
+A transportation model is solved in the browser by the app [Transportation from warehouses to customers](lab/transportation.md) of the interactive lab, on an instance with two warehouses and three customers: the sliders change the data and the simplex method recomputes the optimal solution.

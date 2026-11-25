@@ -1,6 +1,6 @@
 # Example 4.8 — Multi-period production with purchases and storage
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Multi-period production with purchases](lab/multi-period-production.md)
 
 **Model:** symbolic · **Techniques:** [4.5 Multi-period planning](techniques-05.md) · [All the worked models](techniques.md#worked-models)
 
@@ -221,6 +221,6 @@
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Multi-period production with purchases](lab/multi-period-production.md).
 
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="piu-periodi"></div>
+<div class="gi gi-capitolo" data-grafico="pl-piu-periodi"></div>

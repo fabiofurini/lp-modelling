@@ -1,6 +1,6 @@
 # Example 4.11 — Blending of crude oil in a refinery
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Blending in a refinery](lab/refinery.md)
 
 **Model:** numerical · **Techniques:** [4.3 Blending](techniques-03.md) · [4.8 Ratios and percentages](techniques-08.md) · [All the worked models](techniques.md#worked-models)
 
@@ -76,6 +76,6 @@
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Blending in a refinery](lab/refinery.md).
 
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="raffineria"></div>
+<div class="gi gi-capitolo" data-grafico="pl-raffineria"></div>

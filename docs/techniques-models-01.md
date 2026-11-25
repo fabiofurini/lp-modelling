@@ -1,6 +1,6 @@
 # Example 4.4 — Production with regular time and overtime
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-04-techniques.pdf) · [:material-gesture-tap: App: Production with regular time and overtime](lab/overtime-production.md)
 
 **Model:** symbolic · **Techniques:** [4.2 Production planning](techniques-02.md) · [All the worked models](techniques.md#worked-models)
 
@@ -180,6 +180,6 @@
 
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the main data and the simplex method recomputes the optimal solution, the optimal value and the shadow prices. It also opens full page in the [interactive lab](lab/techniques.md), with the other eight worked models.
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Production with regular time and overtime](lab/overtime-production.md).
 
-<div class="gi gi-capitolo" data-grafico="pl-tecniche" data-funzione="straordinario"></div>
+<div class="gi gi-capitolo" data-grafico="pl-straordinario"></div>
