@@ -142,11 +142,11 @@ for lam in [0, 0.25, 0.5, 0.75, 1.0]:
     var_l = np.quantile(costi_l, alpha_cv)
     cvar_l = costi_l[costi_l >= var_l - 1e-9].mean()
     front.append((lam, q_l, cm, cvar_l))
-    print(f"  lambda = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
+    print(f"  r = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
           f"CVaR90 = {cvar_l:6.2f}")
 front = pd.DataFrame(front, columns=["lam", "q", "mean_cost", "cvar"])
 salva_dat(front, "cap08_frontiera_cvar")
-print("Increasing lambda means ordering more: it costs on average, it protects in the worst scenarios.")
+print("Increasing r means ordering more: it costs on average, it protects in the worst scenarios.")
 
 # ----------------------------------------------------------------------
 # 6. MULTI-PRODUCT WITH BUDGET AND CORRELATED DEMANDS
@@ -206,7 +206,7 @@ salva_figura(fig, "cap08_quantile_stabilita")
 fig, ax = plt.subplots()
 ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL)
 for _, r in front.iterrows():
-    ax.annotate(f"  $\\lambda$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
+    ax.annotate(f"  $r$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
                 fontsize=8)
 ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)")
 ax.set_title("Mean cost - tail risk frontier")

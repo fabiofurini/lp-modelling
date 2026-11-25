@@ -41,14 +41,14 @@ total draw below the power of the meter.
 | Symbol | Type | Meaning |
 |---|---|---|
 | $n$ | $\in \mathbb{Z}_{\ge 1}$ | number of vehicles, indexed by $v \in \{1, 2, \dots, n\}$ |
-| $m$ | $\in \mathbb{Z}_{\ge 1}$ | number of hourly intervals, indexed by $t \in \{1, 2, \dots, m\}$, of duration $\Delta t$ (here $\Delta t = 1$ h) |
-| $\pi_t$ | $\in \mathbb{Q}_{\ge 0}$ | energy price in hour $t$ (€/kWh) |
+| $m$ | $\in \mathbb{Z}_{\ge 1}$ | number of hourly intervals, indexed by $t \in \{1, 2, \dots, m\}$, of duration $d$ (here $d = 1$ h) |
+| $c_t$ | $\in \mathbb{Q}_{\ge 0}$ | energy price in hour $t$ (€/kWh) |
 | $a_{vt}$ | $\in \{0, 1\}$ | observed *datum*: $1$ if vehicle $v$ is plugged in during hour $t$, $0$ otherwise |
 | $e_v$ | $\in \mathbb{Q}_{> 0}$ | energy required by vehicle $v$ before departure (kWh) |
 | $\bar p_v$ | $\in \mathbb{Q}_{> 0}$ | maximum charging power of vehicle $v$ (kW) |
 | $b_t$ | $\in \mathbb{Q}_{\ge 0}$ | base load of the building in hour $t$ (kW) |
 | $k$ | $\in \mathbb{Q}_{> 0}$ | maximum power that can be drawn from the meter (kW) |
-| $\eta$ | $\in \mathbb{Q},\ 0 < \eta \le 1$ | charging efficiency |
+| $r$ | $\in \mathbb{Q},\ 0 < r \le 1$ | charging efficiency |
 
 **Decision variables.** We introduce the following $n\,m$ non-negative variables:
 
@@ -61,8 +61,8 @@ Using these variables, an LP model for the problem is the following:
 
 $$
 \begin{aligned}
-\min ~~ \sum_{v=1}^{n} \sum_{t=1}^{m} \pi_t\, \Delta t\, x_{vt} & & \\
-\text{subject to} \quad \eta \sum_{t=1}^{m} \Delta t\, x_{vt} &\ge e_v, & \forall v \in \{1, 2, \dots, n\}, \\
+\min ~~ \sum_{v=1}^{n} \sum_{t=1}^{m} c_t\, d\, x_{vt} & & \\
+\text{subject to} \quad r \sum_{t=1}^{m} d\, x_{vt} &\ge e_v, & \forall v \in \{1, 2, \dots, n\}, \\
 \sum_{v=1}^{n} x_{vt} + b_t &\le k, & \forall t \in \{1, 2, \dots, m\}, \\
 x_{vt} &\le a_{vt}\, \bar p_v, & \forall v \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}, \\
 x_{vt} &\ge 0, & \forall v \in \{1, 2, \dots, n\},~\forall t \in \{1, 2, \dots, m\}.
@@ -72,11 +72,11 @@ $$
 Description of the objective function and of the constraints:
 
 - the linear objective function minimizes the energy expenditure of the night: the
-  power $x_{vt}$ delivered for the duration $\Delta t$ costs
-  $\pi_t\, \Delta t\, x_{vt}$ euros;
+  power $x_{vt}$ delivered for the duration $d$ costs
+  $c_t\, d\, x_{vt}$ euros;
 - the linear **energy** constraints ensure that every vehicle receives all the energy
-  it requires before departure; the efficiency $\eta$ stands on the left: of the
-  energy that is drawn, only the fraction $\eta$ ends up in the battery ($n$ linear
+  it requires before departure; the efficiency $r$ stands on the left: of the
+  energy that is drawn, only the fraction $r$ ends up in the battery ($n$ linear
   constraints);
 - the linear **grid** constraints impose that the overall draw (charging plus base
   load) never exceeds the power of the meter: these are the constraints that couple
@@ -88,13 +88,13 @@ Description of the objective function and of the constraints:
 - the non-negativity constraints on $x_{vt}$ define the variables of the model.
 
 Variants: peak shaving ($\min z$ with $\sum_{v=1}^{n} x_{vt} + b_t \le z$ for every
-$t \in \{1, 2, \dots, m\}$); multi-objective cost $+\,\rho\,z$.
+$t \in \{1, 2, \dots, m\}$); multi-objective cost $+\,w\,z$.
 The energy constraint is written as $\ge$ because charging more than necessary is
 allowed but never worthwhile (the price is positive): at the optimum it holds with
 equality.
 
 !!! example "Worked example by hand (1 vehicle, 2 hours)"
-    $e = 10$ kWh ($\eta = 1$), prices $\pi_1 = 0{,}10$ and $\pi_2 = 0{,}20$ €/kWh,
+    $e = 10$ kWh ($r = 1$), prices $c_1 = 0{,}10$ and $c_2 = 0{,}20$ €/kWh,
     $\bar p = 8$ kW: we charge 8 kWh in the cheap hour and 2 in the expensive one
     (cost $8 \cdot 0{,}10 + 2 \cdot 0{,}20 = 1{,}20$ €). Shadow price of the energy
     requirement = 0.20 €/kWh (the price of the *marginal hour*); shadow price of the
@@ -104,7 +104,7 @@ equality.
 
 ## Case study
 
-Six vans with different night windows, meter $k = 120$ kW, $\eta = 0{,}95$.
+Six vans with different night windows, meter $k = 120$ kW, $r = 0{,}95$.
 
 ```text
 Minimum cost   : 20.36 EUR/night   peak draw 103.4 kW (limit 120)
@@ -115,8 +115,8 @@ Shadow prices of the energy requirement (EUR/kWh):
 
 ![Draw profiles](img/cap06_profili.png)
 
-The shadow prices of the energy requirement are equal to $0{,}0842 = 0{,}08/\eta$ or
-$0{,}0947 = 0{,}09/\eta$: they are the prices of the **marginal hours** of each
+The shadow prices of the energy requirement are equal to $0{,}0842 = 0{,}08/r$ or
+$0{,}0947 = 0{,}09/r$: they are the prices of the **marginal hours** of each
 vehicle (the cheapest hour still free within its window), corrected for the
 efficiency. V2, V3 and V6 have windows that cover the hours at $0{,}08$; V1, V4 and
 V5 arrive late or leave early and their marginal hour costs $0{,}09$. One additional
@@ -128,10 +128,10 @@ vehicle.
 ![Cost-peak frontier](img/cap06_frontiera.png)
 
 ```text
-Trade-off cost + rho*peak:
-  rho = 0.00: cost 20.36  peak 103.4     rho = 0.20: cost 22.15  peak 68.0
-  rho = 0.05: cost 20.69  peak  86.5     rho = 0.50: cost 22.15  peak 68.0
-  rho = 0.10: cost 21.39  peak  74.9
+Trade-off cost + w*peak:
+  w = 0.00: cost 20.36  peak 103.4     w = 0.20: cost 22.15  peak 68.0
+  w = 0.05: cost 20.69  peak  86.5     w = 0.50: cost 22.15  peak 68.0
+  w = 0.10: cost 21.39  peak  74.9
 Meter capacity:
   k = 60, 65 kW: INFEASIBLE     k = 80: 21.09     k = 120: 20.36
   k = 70 kW    : 21.93          k = 90: 20.63
@@ -139,7 +139,7 @@ Meter capacity:
 
 Cutting the peak from 103 to 75 kW (−28%) costs only one euro per night; getting
 down to 68 kW costs less than two. The pure minimax (peak 68) without the cost term
-would spend 27.79 €: the trade-off with $\rho = 0{,}2$ achieves the *same* peak at
+would spend 27.79 €: the trade-off with $w = 0{,}2$ achieves the *same* peak at
 22.15 € — never optimize a single objective when there are two of them.
 
 !!! warning "An instructive bug (which really happened)"
@@ -160,9 +160,9 @@ the quadratic variant of this model, in the module *NLP Modelling*, page
 
     - Smart charging is a pure LP: the decision is how much power, and availability is a datum, not a binary variable.
 
-    - The cheap hours are filled first; the shadow price of the energy requirement is the price of the marginal hour, divided by $\eta$.
+    - The cheap hours are filled first; the shadow price of the energy requirement is the price of the marginal hour, divided by $r$.
 
-    - Cost $+\,\rho\,$peak traces the cost-peak frontier: the peak drops a lot for a small increase in cost.
+    - Cost $+\,w\,$peak traces the cost-peak frontier: the peak drops a lot for a small increase in cost.
 
     - The constants of the constraints end up in the right-hand side: if a sensitivity analysis changes nothing, check the code first.
 
@@ -276,7 +276,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     print(f"Lowest achievable peak: {mp.ObjVal:.1f} kW   cost: {costo_picco:.2f} € "
           f"(+{costo_picco - costo_min:.2f} € with respect to the minimum cost)")
 
-    intestazione("Trade-off: cost + rho · peak")
+    intestazione("Trade-off: cost + w · peak")
     compromessi = []
     for rho in [0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]:
         mc, xc, _, _ = costruisci()
@@ -287,7 +287,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
         mc.optimize()
         cc = sum(prezzo[t] * xc[v, t].X for v in veicoli for t in ore)
         compromessi.append((rho, cc, zc.X))
-        print(f"  rho = {rho:4.2f}: cost {cc:6.2f} €, peak {zc.X:6.1f} kW")
+        print(f"  w = {rho:4.2f}: cost {cc:6.2f} €, peak {zc.X:6.1f} kW")
     salva_dati(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "ev_compromessi")
 
     # ----------------------------------------------------------------------
@@ -333,7 +333,7 @@ The same code is also available as a notebook — [`notebooks/lab06_ev_charging.
     fig, ax = plt.subplots()
     ax.plot(comp["peak"], comp["cost"], "-o", color=TEAL)
     for _, r in comp.iterrows():
-        ax.annotate(f"  $\\rho$={r['rho']:.2f}", (r["peak"], r["cost"]), fontsize=8)
+        ax.annotate(f"  $w$={r['rho']:.2f}", (r["peak"], r["cost"]), fontsize=8)
     ax.set_xlabel("peak withdrawal (kW)")
     ax.set_ylabel("charging cost (€)")
     ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")

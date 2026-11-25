@@ -50,7 +50,7 @@ module [NLP Modelling](https://fabiofurini.github.io/nlp-modelling/).
 
 Throughout the course the same convention applies:
 
-- **scalars and indices**: lowercase italic letters ($x_{it}$, $b_t$, $\lambda$, $i$, $t$);
+- **scalars and indices**: lowercase italic letters ($x_{it}$, $b_t$, $k$, $i$, $t$);
 - **numbered objects**: products, channels, securities, vehicles, scenarios are numbered and the indices run over explicitly enumerated sets, $i \in \{1, 2, \dots, n\}$;
 - **counts**: positive integers ($n \in \mathbb{Z}_{\ge 1}$); **numerical data**: rational values, $\mathbb{Q}_{> 0}$ or $\mathbb{Q}_{\ge 0}$;
 - **vectors**: lowercase boldface ($\boldsymbol{x}$), all column vectors, with $\boldsymbol{a}'\boldsymbol{b}$ the scalar product; **matrices**: uppercase boldface ($\boldsymbol{A}$);

@@ -97,7 +97,7 @@ costo_picco = sum(prezzo[t] * prof_picco[t] for t in ore)
 print(f"Lowest achievable peak: {mp.ObjVal:.1f} kW   cost: {costo_picco:.2f} € "
       f"(+{costo_picco - costo_min:.2f} € with respect to the minimum cost)")
 
-intestazione("Trade-off: cost + rho · peak")
+intestazione("Trade-off: cost + w · peak")
 compromessi = []
 for rho in [0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]:
     mc, xc, _, _ = costruisci()
@@ -108,7 +108,7 @@ for rho in [0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]:
     mc.optimize()
     cc = sum(prezzo[t] * xc[v, t].X for v in veicoli for t in ore)
     compromessi.append((rho, cc, zc.X))
-    print(f"  rho = {rho:4.2f}: cost {cc:6.2f} €, peak {zc.X:6.1f} kW")
+    print(f"  w = {rho:4.2f}: cost {cc:6.2f} €, peak {zc.X:6.1f} kW")
 salva_dati(pd.DataFrame(compromessi, columns=["rho", "cost", "peak"]), "ev_compromessi")
 
 # ----------------------------------------------------------------------
@@ -154,7 +154,7 @@ comp = pd.DataFrame(compromessi, columns=["rho", "cost", "peak"])
 fig, ax = plt.subplots()
 ax.plot(comp["peak"], comp["cost"], "-o", color=TEAL)
 for _, r in comp.iterrows():
-    ax.annotate(f"  $\\rho$={r['rho']:.2f}", (r["peak"], r["cost"]), fontsize=8)
+    ax.annotate(f"  $w$={r['rho']:.2f}", (r["peak"], r["cost"]), fontsize=8)
 ax.set_xlabel("peak withdrawal (kW)")
 ax.set_ylabel("charging cost (€)")
 ax.set_title("Cost-peak frontier: cutting the peak is cheap at first")

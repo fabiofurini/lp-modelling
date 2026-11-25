@@ -51,7 +51,7 @@ the same page.
 4. Getting the sign of the duals wrong in minimization problems.
 5. Updating the RHS of a constraint that contains constants on the left-hand side.
 6. Optimizing a single objective when the problem has two (pure minimax).
-7. Choosing the parameters ($\tau$, $\lambda$, the budget) by looking at the data used to decide.
+7. Choosing the parameters ($\tau$, $r$, the budget) by looking at the data used to decide.
 8. Reporting six decimal digits from estimates that wobble at the second.
 
 ## Reproducibility

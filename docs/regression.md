@@ -62,7 +62,7 @@ is the same positive-part trick as the [scenario newsvendor](newsvendor.md).
 !!! example "With no features: the empirical quantile comes back"
     With $p = 0$ only the intercept is left. Seven days of sales: 88, 96, 104,
     112, 120, 132, 148 pieces; the bakery of chapter 8 has $c_u = 9$ and
-    $c_o = 4$, hence $\tau = \alpha^* = 9/13 = 0.6923$.
+    $c_o = 4$, hence $\tau = f^* = 9/13 = 0.6923$.
 
     The optimum is $\tilde b = 120$, the fifth observation in increasing order
     ($4/7 = 0.5714 \le \tau \le 5/7 = 0.7143$), with value
@@ -560,7 +560,7 @@ The same code is also available as a notebook — [`notebooks/lab11_regression.i
    change? And if one of the two support points is moved down by $-30$? Explain
    through complementary slackness.
 3. The bakery sells its leftovers off at the end of the day and $c_o$ goes from 4
-   to 2 euros: recompute $\alpha^*$, re-run the quantile regression and say by how
+   to 2 euros: recompute $f^*$, re-run the quantile regression and say by how
    many pieces the production of the typical day changes.
 4. Plot the optimal value with a budget for $t \in \{0, 1, \dots, 60\}$ and check
    that it is convex and piecewise linear; do the breakpoints coincide with the

@@ -39,15 +39,15 @@ $$
 
 ## Fractions of the blend
 
-A requirement of the form “*the raw material $j$ has to be at least a fraction $\alpha$ of
-the blend*” is *not* written as $\frac{x_j}{\sum_{\ell} x_{\ell}} \ge \alpha$, which is not a
+A requirement of the form “*the raw material $j$ has to be at least a fraction $f$ of
+the blend*” is *not* written as $\frac{x_j}{\sum_{\ell} x_{\ell}} \ge f$, which is not a
 linear constraint. It is written instead by multiplying both sides by the denominator, which
 is positive:
 
 $$
 \begin{aligned}
-& x_j \ge \alpha \; \sum_{\ell = 1}^{r} x_{\ell} \\
-\Longleftrightarrow \quad & (1 - \alpha) \; x_j - \alpha \sum_{\ell \ne j} x_{\ell} \ge 0 .
+& x_j \ge f \; \sum_{\ell = 1}^{r} x_{\ell} \\
+\Longleftrightarrow \quad & (1 - f) \; x_j - f \sum_{\ell \ne j} x_{\ell} \ge 0 .
 \end{aligned}
 $$
 

@@ -70,9 +70,9 @@ Description of the objective function and of the constraint:
 If $F$ is continuous, the optimum satisfies the **quantile rule**:
 
 $$
-F(\tilde q) = \alpha = \frac{c_u}{c_u + c_o}
+F(\tilde q) = f = \frac{c_u}{c_u + c_o}
 \qquad\Longrightarrow\qquad
-\tilde q = F^{-1}(\alpha).
+\tilde q = F^{-1}(f).
 $$
 
 Marginal reasoning: the $q$-th extra unit yields $c_u$ if demand absorbs it
@@ -82,7 +82,7 @@ $F(q) \le c_u/(c_u + c_o)$.
 
 !!! example "Worked example by hand (discrete demand)"
     $D \in \{80, 100, 120\}$ equally likely, $c_u = 9$, $c_o = 4$ (hence
-    $\alpha = 9/13 = 0{,}6923$): $C(80) = 180$, $C(100) = 86{,}7$,
+    $f = 9/13 = 0{,}6923$): $C(80) = 180$, $C(100) = 86{,}7$,
     $C(120) = \mathbf{80}$. We order the **maximum**: with $c_u \gg c_o$ running short
     costs more than twice as much as running long. (Discrete rule: the smallest $q$
     with $F(q) \ge 0{,}6923$, that is, $\tilde q = 120$.)
@@ -105,8 +105,8 @@ expected cost at q*: 91.43 EUR    at q = mean: 103.72 EUR
 When $F$ is not known in closed form — the normal situation in a company — one uses
 scenarios. New model data: the number of scenarios $k \in \mathbb{Z}_{\ge 1}$,
 indexed by $s \in \{1, 2, \dots, k\}$; for each scenario, the demand
-$d_s \in \mathbb{Q}_{\ge 0}$ and the probability $\pi_s \in \mathbb{Q}_{\ge 0}$, with
-$\sum_{s=1}^{k} \pi_s = 1$. Besides $q$, we introduce the following $2\,k$
+$d_s \in \mathbb{Q}_{\ge 0}$ and the probability $w_s \in \mathbb{Q}_{\ge 0}$, with
+$\sum_{s=1}^{k} w_s = 1$. Besides $q$, we introduce the following $2\,k$
 non-negative variables:
 
 $$
@@ -121,7 +121,7 @@ Using these variables, an LP model for the problem is the following:
 
 $$
 \begin{aligned}
-\min ~~ \sum_{s=1}^{k} \pi_s \bigl( c_o\, o_s + c_u\, u_s \bigr) & & \\
+\min ~~ \sum_{s=1}^{k} w_s \bigl( c_o\, o_s + c_u\, u_s \bigr) & & \\
 \text{subject to} \quad o_s &\ge q - d_s, & \forall s \in \{1, 2, \dots, k\}, \\
 u_s &\ge d_s - q, & \forall s \in \{1, 2, \dots, k\}, \\
 q &\ge 0, & \\
@@ -173,20 +173,20 @@ fill rate at q*: 96.06%   probability of no stockout at q*: 69.23%
     is almost free. Read the SLA carefully before signing it.
 
 With the linear formulation of the CVaR we minimize
-$(1-\lambda)\,\mathbb{E}[\text{cost}] + \lambda\, \mathrm{CVaR}_{0.90}(\text{cost})$:
+$(1-r)\,\mathbb{E}[\text{cost}] + r\, \mathrm{CVaR}_{0.90}(\text{cost})$:
 
 ```text
-lambda = 0.00: q = 108.61  mean cost 88.33  CVaR90 245.93
-lambda = 0.25: q = 112.45  mean cost 90.37  CVaR90 229.29
-lambda = 0.50: q = 114.48  mean cost 92.52  CVaR90 225.49
-lambda = 1.00: q = 116.17  mean cost 94.87  CVaR90 224.56
+r = 0.00: q = 108.61  mean cost 88.33  CVaR90 245.93
+r = 0.25: q = 112.45  mean cost 90.37  CVaR90 229.29
+r = 0.50: q = 114.48  mean cost 92.52  CVaR90 225.49
+r = 1.00: q = 116.17  mean cost 94.87  CVaR90 224.56
 ```
 
 ![Cost-CVaR frontier](img/cap08_frontiera.png)
 
 The risk-averse decision maker orders more (from 108.6 to 116.2 units): pays 6.5 €
 more on average in order to cut by 21.4 € the mean cost of the worst 10% of the
-scenarios. Most of the protection is already obtained with $\lambda = 0{,}25$: the
+scenarios. Most of the protection is already obtained with $r = 0{,}25$: the
 frontier is steep at the beginning and flat afterwards.
 
 ## Multi-product with a shared budget
@@ -377,11 +377,11 @@ The same code is also available as a notebook — [`notebooks/lab08_newsvendor.i
         var_l = np.quantile(costi_l, alpha_cv)
         cvar_l = costi_l[costi_l >= var_l - 1e-9].mean()
         front.append((lam, q_l, cm, cvar_l))
-        print(f"  lambda = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
+        print(f"  r = {lam:4.2f}: q = {q_l:7.2f}, mean cost = {cm:6.2f}, "
               f"CVaR90 = {cvar_l:6.2f}")
     front = pd.DataFrame(front, columns=["lam", "q", "mean_cost", "cvar"])
     salva_dat(front, "cap08_frontiera_cvar")
-    print("Increasing lambda means ordering more: it costs on average, it protects in the worst scenarios.")
+    print("Increasing r means ordering more: it costs on average, it protects in the worst scenarios.")
 
     # ----------------------------------------------------------------------
     # 6. MULTI-PRODUCT WITH BUDGET AND CORRELATED DEMANDS
@@ -441,7 +441,7 @@ The same code is also available as a notebook — [`notebooks/lab08_newsvendor.i
     fig, ax = plt.subplots()
     ax.plot(front["cvar"], front["mean_cost"], "-o", color=TEAL)
     for _, r in front.iterrows():
-        ax.annotate(f"  $\\lambda$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
+        ax.annotate(f"  $r$={r['lam']:.2f}, q={r['q']:.0f}", (r["cvar"], r["mean_cost"]),
                     fontsize=8)
     ax.set_xlabel("CVaR$_{0.90}$ of the cost (€)"); ax.set_ylabel("mean cost (€)")
     ax.set_title("Mean cost - tail risk frontier")
@@ -452,10 +452,10 @@ The same code is also available as a notebook — [`notebooks/lab08_newsvendor.i
 
 ## Exercises
 
-1. Penalty $b = 3$ €: $\alpha = 0{,}75$, $\tilde q = 113{,}5$.
+1. Penalty $b = 3$ €: $f = 0{,}75$, $\tilde q = 113{,}5$.
 2. Scenarios from 24 historical observations vs an estimated distribution: which one
    would you recommend?
-3. Perishables ($v = -1$): $\alpha = 0{,}5625$, $\tilde q = 103{,}2$.
+3. Perishables ($v = -1$): $f = 0{,}5625$, $\tilde q = 103{,}2$.
 4. EVPI: how much is a perfect forecast worth at most? (88.33 €/cycle.)
 5. Fill rate constraint at 98% vs cycle service level at 98%: compare them.
 6. Multi-product with $\rho = 0$: why does the cost go down?

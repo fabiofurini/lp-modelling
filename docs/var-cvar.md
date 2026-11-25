@@ -59,7 +59,7 @@ $$
 
 **Data (input of the model).** The number of scenarios $k \in \mathbb{Z}_{\ge 1}$,
 indexed by $s \in \{1, 2, \dots, k\}$; for each scenario, the probability
-$\pi_s \in \mathbb{Q}_{\ge 0}$ (with $\sum_{s=1}^{k} \pi_s = 1$) and the loss
+$w_s \in \mathbb{Q}_{\ge 0}$ (with $\sum_{s=1}^{k} w_s = 1$) and the loss
 $\ell_s(\boldsymbol x)$, a linear function of the decision vector
 $\boldsymbol x$, constrained to a polyhedron $X$; the confidence level
 $\alpha \in (0, 1)$.
@@ -79,7 +79,7 @@ Using these variables, the Rockafellar–Uryasev LP model is the following:
 
 $$
 \begin{aligned}
-\min ~~ \eta + \frac{1}{1-\alpha} \sum_{s=1}^{k} \pi_s\, \xi_s & & \\
+\min ~~ \eta + \frac{1}{1-\alpha} \sum_{s=1}^{k} w_s\, \xi_s & & \\
 \text{subject to} \quad \xi_s &\ge \ell_s(\boldsymbol x) - \eta, & \forall s \in \{1, 2, \dots, k\}, \\
 \boldsymbol x &\in X, & \\
 \eta &\gtreqless 0, & \\
@@ -142,9 +142,9 @@ penalty 40 €/unit; $k = 400$ scenarios.
 **Data.** Two suppliers indexed by $a \in \{1, 2\}$ with booking costs
 $c^{\mathrm{pre}}_a \in \mathbb{Q}_{>0}$ and purchase costs
 $c^{\mathrm{uso}}_a \in \mathbb{Q}_{>0}$; $k$ scenarios $s \in \{1, 2, \dots, k\}$
-with demand $d_s \in \mathbb{Q}_{\ge 0}$ and availability $\delta_{as} \in (0, 1]$
+with demand $d_s \in \mathbb{Q}_{\ge 0}$ and availability $q_{as} \in (0, 1]$
 (the datum that models the failure); shortage penalty $g \in \mathbb{Q}_{>0}$; risk
-weight $\lambda \in [0, 1]$ and level $\alpha \in (0.1)$.
+weight $r \in [0, 1]$ and level $\alpha \in (0.1)$.
 
 **Decision variables.** The non-negative variables $x_a$ (capacity booked from
 supplier $a$, *first-stage*: the same in all scenarios), $f_{as}$ (purchase from
@@ -153,8 +153,8 @@ two being *recourse* variables.
 
 $$
 \begin{aligned}
-\min ~~ (1-\lambda) \Bigl[ \sum_{a=1}^{2} c^{\mathrm{pre}}_a x_a + \sum_{s=1}^{k} \pi_s\, \phi_s \Bigr] + \lambda\, \mathrm{CVaR}_\alpha & & \\
-\text{subject to} \quad f_{as} &\le \delta_{as}\, x_a, & \forall a \in \{1, 2\},~\forall s \in \{1, 2, \dots, k\}, \\
+\min ~~ (1-r) \Bigl[ \sum_{a=1}^{2} c^{\mathrm{pre}}_a x_a + \sum_{s=1}^{k} w_s\, \phi_s \Bigr] + r\, \mathrm{CVaR}_\alpha & & \\
+\text{subject to} \quad f_{as} &\le q_{as}\, x_a, & \forall a \in \{1, 2\},~\forall s \in \{1, 2, \dots, k\}, \\
 f_{1s} + f_{2s} + u_s &\ge d_s, & \forall s \in \{1, 2, \dots, k\}, \\
 x_a,\ f_{as},\ u_s &\ge 0, & \forall a \in \{1, 2\},~\forall s \in \{1, 2, \dots, k\},
 \end{aligned}
@@ -166,11 +166,11 @@ linearized with the variables $\eta$ and $\xi_s$ of the Rockafellar–Uryasev mo
 
 Description of the objective function and of the constraints:
 
-- the objective function combines, with weight $\lambda$, the average cost (bookings
+- the objective function combines, with weight $r$, the average cost (bookings
   plus the expected value of purchases and penalties) and the CVaR of the total cost;
 - the linear **capacity** constraints impose that in scenario $s$ supplier $a$ can be
   used only up to the booked capacity $x_a$, reduced by the availability
-  $\delta_{as}$ ($2\,k$ linear constraints);
+  $q_{as}$ ($2\,k$ linear constraints);
 - the linear **demand** constraints impose that $d_s$ be covered by the flows or,
   failing that, be counted as a shortage $u_s$, which in the objective pays the
   penalty: the model is never infeasible, it "buys" infeasibility at the price of the
@@ -179,16 +179,16 @@ Description of the objective function and of the constraints:
   the model.
 
 ```text
-lambda = 0.0: book suppl.1 161.5  suppl.2 134.2
+r = 0.0: book suppl.1 161.5  suppl.2 134.2
               mean cost 1724   CVaR90 2902   service 98.7%
-lambda = 0.5: book suppl.1  92.7  suppl.2 212.7
+r = 0.5: book suppl.1  92.7  suppl.2 212.7
               mean cost 1803   CVaR90 2217   service 99.9%
-lambda = 1.0: book suppl.1  68.5  suppl.2 236.9
+r = 1.0: book suppl.1  68.5  suppl.2 236.9
               mean cost 1906   CVaR90 2139   service 99.0%
 ```
 
 The risk-neutral decision maker buys from the cheap supplier and accepts that in 12%
-of the scenarios the shortage makes the costs explode (CVaR 2902). As $\lambda$
+of the scenarios the shortage makes the costs explode (CVaR 2902). As $r$
 grows, capacity migrates towards the reliable supplier: **+79 € of average cost buy
 −685 € of CVaR** — the cost of resilience, quantified.
 
@@ -197,8 +197,8 @@ grows, capacity migrates towards the reliable supplier: **+79 € of average cos
 | Parameter | Expected effect |
 |---|---|
 | $\alpha$ | higher ⇒ a more extreme tail estimated from fewer scenarios: more scenarios are needed for stable estimates |
-| $\lambda$ | controls the trade-off between average performance and protection |
-| $\pi_s$ | reweighted scenarios or stress tests (adding extreme scenarios) |
+| $r$ | controls the trade-off between average performance and protection |
+| $w_s$ | reweighted scenarios or stress tests (adding extreme scenarios) |
 | $k$ | statistical stability: repeat with different samples, as in the Newsvendor |
 
 !!! warning "Statistical limits"
@@ -416,7 +416,7 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
         var_t = np.quantile(tot, 0.90)
         cvar_t = tot[tot >= var_t - 1e-9].mean()
         righe.append((lam, cap["F1"], cap["F2"], tot.mean(), cvar_t, serv.mean()))
-        print(f"  lambda = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
+        print(f"  r = {lam:3.1f}: reserve F1 = {cap['F1']:6.1f}, F2 = {cap['F2']:6.1f} | "
               f"mean cost {tot.mean():8.2f}, CVaR90 {cvar_t:8.2f} | mean service {serv.mean():.1%}")
     res2 = pd.DataFrame(righe, columns=["lam", "F1", "F2", "mean_cost", "cvar", "service"])
     salva_dat(res2, "cap09_duestadi")
@@ -452,7 +452,7 @@ The same code is also available as a notebook — [`notebooks/lab09_var_cvar.ipy
    and check that the CVaR does not.
 3. Optimal CVaR for $\alpha \in \{0{,}8;\, 0{,}9;\, 0{,}95;\, 0{,}99\}$: when do the
    instabilities begin?
-4. Constrained form $\max \sum_i \mu_i x_i$ subject to $\mathrm{CVaR} \le k$: the
+4. Constrained form $\max \sum_i m_i x_i$ subject to $\mathrm{CVaR} \le k$: the
    same frontier, dual = marginal return of risk.
 5. Stress test: an extreme scenario with probability 1% — how does the booking
    change?
