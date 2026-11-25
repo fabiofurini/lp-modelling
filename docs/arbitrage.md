@@ -1,6 +1,6 @@
 # Arbitrage and arbitrage-free pricing
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-arbitrage.pdf)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-10-arbitrage.pdf) · [:material-gesture-tap: App: Arbitrage and coherent prices](lab/arbitrage.md)
 
 **Class: LP** · Script: `python/lab10_arbitrage.py`
 
