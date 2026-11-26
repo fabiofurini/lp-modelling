@@ -9,6 +9,6 @@ title: "Blending in a refinery"
 
 # Blending in a refinery
 
-The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its graph and the shadow prices. The sliders change the data and the solution is recomputed.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. The sliders change the data and the solution is recomputed.
 
 <div class="gi gi-app-intera" data-grafico="pl-raffineria"></div>

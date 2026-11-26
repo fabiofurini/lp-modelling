@@ -9,6 +9,6 @@ title: "VaR and CVaR: minimum tail-risk portfolio"
 
 # VaR and CVaR: minimum tail-risk portfolio
 
-The 3 assets and 10 annual scenarios of the chapter: the losses of the minimum-CVaR portfolio, scenario by scenario, with mean, VaR and CVaR, and the return-CVaR frontier. Move the level α and the required return b and watch the shares and the shadow price change. ▶ next to a slider makes it move by itself.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. ▶ next to a slider makes it move by itself.
 
 <div class="gi gi-app-intera" data-grafico="pl-var-cvar"></div>

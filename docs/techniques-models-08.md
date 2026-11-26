@@ -74,8 +74,19 @@
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $325\,000$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| type 1 crude ($w_1$) | $30$ $/barrel |
+| type 2 crude ($w_2$) | $\frac{35}{2}$ $/barrel |
+| gasoline quality | $-\frac{5}{2}$ $ per point and barrel |
+| heating oil quality | $-\frac{5}{2}$ $ per point and barrel |
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Blending in a refinery](lab/refinery.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Blending in a refinery](lab/refinery.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-raffineria"></div>

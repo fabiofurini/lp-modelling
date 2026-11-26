@@ -1810,4 +1810,3 @@ Nine worked models, as in the lecture notes: the statement, the questions and th
 
             that is, the minimum cost is $10800$ euros per day. In this instance the optimal solution is integer, hence it is also an optimal plan with integer numbers of nurses.
     <!-- soluzione:fine -->
-

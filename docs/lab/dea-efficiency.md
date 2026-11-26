@@ -9,6 +9,6 @@ title: "DEA: efficiency and peers of a branch"
 
 # DEA: efficiency and peers of a branch
 
-Pick one of the 12 branches: the envelopment LP gives the efficiency θ, the peers on the frontier with their weights λ and the input targets, with constant (CCR) or variable (BCC) returns to scale. ▶ next to “branch” goes through all of them.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. ▶ next to “branch” goes through all of them.
 
 <div class="gi gi-app-intera" data-grafico="pl-dea"></div>

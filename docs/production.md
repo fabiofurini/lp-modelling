@@ -1,6 +1,6 @@
 # Multi-period production and inventory
 
-[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-production.pdf) · [:material-gesture-tap: App: Production plan and shadow prices](lab/production-plan.md)
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/lp-modelling-notes.pdf) · [:material-presentation: Chapter slides (PDF)](pdf/slides-05-production.pdf) · [:material-gesture-tap: App: Production plan and inventory](lab/production-plan.md)
 
 **Class:** LP · **Script:** `python/lab05_production.py`
 
@@ -440,6 +440,6 @@ The same code is also available as a notebook — [`notebooks/lab05_production.i
 ## Interactive lab { #interactive-lab }
 
 The app of this chapter solves the model in the browser, with the data of the case study. ▶ next to a slider makes it move by itself.
-It also opens full page in the [interactive lab](lab/index.md): [Production plan and shadow prices](lab/production-plan.md).
+It also opens full page in the [interactive lab](lab/index.md): [Production plan and inventory](lab/production-plan.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-produzione"></div>

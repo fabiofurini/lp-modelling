@@ -9,6 +9,6 @@ title: "Least absolute deviations and quantile regression"
 
 # Least absolute deviations and quantile regression
 
-The 60 days of the bakery: drag the points and see the least absolute deviations line (LP) and the τ-quantile line, with the support points and how many days stay below the line. Drag a point; ▶ next to τ sweeps the quantile.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. Drag a point; ▶ next to τ sweeps the quantile.
 
 <div class="gi gi-app-intera" data-grafico="pl-regressione"></div>

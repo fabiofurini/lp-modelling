@@ -219,8 +219,23 @@
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $2\,625$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| balance of day 1 ($d_1$) | $13$ €/L |
+| balance of day 2 ($d_2$) | $15$ €/L |
+| balance of day 3 ($d_3$) | $10$ €/L |
+| balance of day 4 ($d_4$) | $12$ €/L |
+| capacity of day 1 ($m_1$) | $-3$ €/L |
+| capacity of day 2 ($m_2$) | $-5$ €/L |
+| capacity of day 3 ($m_3$) | $0$ €/L |
+| capacity of day 4 ($m_4$) | $-2$ €/L |
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Multi-period production with purchases](lab/multi-period-production.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Multi-period production with purchases](lab/multi-period-production.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-piu-periodi"></div>

@@ -217,8 +217,22 @@ $$
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $\frac{757}{16}$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| diet 1, nutrient 1, minimum ($a_{11}$) | $\frac{9}{16}$ €/g |
+| diet 1, nutrient 2, minimum ($a_{12}$) | $\frac{13}{16}$ €/g |
+| diet 2, nutrient 1, minimum ($a_{21}$) | $\frac{9}{16}$ €/g |
+| diet 2, nutrient 2, minimum ($a_{22}$) | $\frac{13}{16}$ €/g |
+| food 2, minimum ($c_2$) | $\frac{97}{16}$ €/kg |
+
+The other 9 constraints have a zero shadow price.
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Diet for several classes](lab/diet-several-classes.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Diet for several classes](lab/diet-several-classes.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-dieta-classi"></div>

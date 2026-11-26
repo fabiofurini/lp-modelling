@@ -166,6 +166,18 @@
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $320$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| capacity of warehouse 1 ($d_1$) | $0$ €/L |
+| capacity of warehouse 2 ($d_2$) | $0$ €/L |
+| demand of customer 1 ($e_1$) | $2$ €/L |
+| demand of customer 2 ($e_2$) | $2$ €/L |
+| demand of customer 3 ($e_3$) | $1$ €/L |
+
 ## Interactive lab { #interactive-lab }
 
 A transportation model is solved in the browser by the app [Transportation from warehouses to customers](lab/transportation.md) of the interactive lab, on an instance with two warehouses and three customers: the sliders change the data and the simplex method recomputes the optimal solution.

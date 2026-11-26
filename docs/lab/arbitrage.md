@@ -9,6 +9,6 @@ title: "Arbitrage and coherent prices"
 
 # Arbitrage and coherent prices
 
-A risk-free asset, two risky assets and three states: the normalized LP detects arbitrage, the shadow prices give the risk-neutral probabilities. Move the prices and the rate r and watch the interval of coherent prices. ▶ next to a slider makes it move by itself.
+The app solves a linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance and the optimal solution with its graph. ▶ next to a slider makes it move by itself.
 
 <div class="gi gi-app-intera" data-grafico="pl-arbitraggio"></div>

@@ -198,8 +198,20 @@ $$
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $18$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| nutrient 2, minimum ($a_2$) | $\frac{1}{3}$ €/g |
+| food 1, minimum ($c_1$) | $\frac{11}{3}$ €/kg |
+| food 2, minimum ($c_2$) | $\frac{23}{3}$ €/kg |
+
+The other 11 constraints have a zero shadow price.
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Diet planning](lab/diet.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Diet planning](lab/diet.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-dieta"></div>

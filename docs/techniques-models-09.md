@@ -130,8 +130,18 @@
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $70\,000$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| working hours ($k$) | $\frac{35}{2}$ €/hour |
+| drug 1 used by drug 2 | $\frac{19}{2}$ €/unit |
+| drug 2 used by drug 3 | $0$ €/unit |
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Production of three drugs](lab/three-drugs.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Production of three drugs](lab/three-drugs.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-farmaci"></div>

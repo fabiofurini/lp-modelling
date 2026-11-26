@@ -178,8 +178,20 @@
 
 <!-- laboratorio-interattivo: sezione aggiunta per l'app dei nove modelli -->
 
+## Shadow prices of the instance { #shadow-prices }
+
+The shadow price of a constraint is the change of the optimal value for one more unit of its right-hand side, as long as the optimal basis does not change. For the instance of this page (optimal value $330$) they are, computed with Gurobi:
+
+| Constraint | Shadow price |
+|---|---|
+| maximum production of product 1 ($w_1$) | $4$ €/L |
+| maximum production of product 2 ($w_2$) | $2$ €/L |
+| maximum production of product 3 ($w_3$) | $2$ €/L |
+| treatment in regular time ($d$) | $2$ €/L |
+| treatment in overtime ($e$) | $1$ €/L |
+
 ## Interactive lab { #interactive-lab }
 
-The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution and the shadow prices. It also opens full page in the interactive lab: [Production with regular time and overtime](lab/overtime-production.md).
+The app solves this model in the browser, with the data of the example: the sliders change the data and the simplex method recomputes the optimal solution. It also opens full page in the interactive lab: [Production with regular time and overtime](lab/overtime-production.md).
 
 <div class="gi gi-capitolo" data-grafico="pl-straordinario"></div>
