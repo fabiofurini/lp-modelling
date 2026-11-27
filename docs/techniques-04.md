@@ -60,7 +60,7 @@ $$
     with optimal value
 
     $$
-    z(\mathit{LP}) = 4 \cdot 30 + 6 \cdot 20 + 5 \cdot 0 + 3 \cdot 60 = 420 .
+    z(\text{LP}) = 4 \cdot 30 + 6 \cdot 20 + 5 \cdot 0 + 3 \cdot 60 = 420 .
     $$
 
 <!-- modelli:inizio -->

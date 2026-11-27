@@ -78,7 +78,7 @@ The general rule is in the technique [4.8 Ratios and percentages](techniques-08.
     An optimal solution is $\tilde x_1 = 20$, $\tilde x_2 = 64$ and $\tilde x_3 = 16$, with optimal value
 
     $$
-    z(\mathit{LP}) = 0.80 \cdot 20 + 0.50 \cdot 64 + 0.30 \cdot 16 = 52.80 \text{ euros} .
+    z(\text{LP}) = 0.80 \cdot 20 + 0.50 \cdot 64 + 0.30 \cdot 16 = 52.80 \text{ euros} .
     $$
 
 <!-- modelli:inizio -->
